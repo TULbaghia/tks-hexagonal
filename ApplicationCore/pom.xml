@@ -10,10 +10,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <modules>
+        <module>DomainModel</module>
+        <module>ApplicationServices</module>
+    </modules>
+
     <artifactId>ApplicationCore</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ApplicationCore</name>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>
@@ -39,11 +44,6 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>pl.lodz.p.it.tks</groupId>
-            <artifactId>ApplicationPorts</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

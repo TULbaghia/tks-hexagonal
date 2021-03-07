@@ -1,22 +1,21 @@
 package pl.lodz.p.it.tks.applicationports.adapters.driven;
 
 import lombok.NonNull;
-import pl.lodz.p.it.tks.applicationcore.domainmodel.resource.FiveStarApartment;
+import pl.lodz.p.it.tks.domainmodel.resource.FiveStarApartment;
 import pl.lodz.p.it.tks.applicationports.converters.ApartmentConverter;
-import pl.lodz.p.it.tks.applicationports.out.*;
-import pl.lodz.p.it.tks.applicationports.out.ApartmentGetByDoor;
-import pl.lodz.p.it.tks.data.model.resource.FiveStarApartmentEnt;
-import pl.lodz.p.it.tks.data.repository.ApartmentEntRepositoryInterface;
-import pl.lodz.p.it.tks.data.repository.RepositoryException;
+import pl.lodz.p.it.tks.applicationports.infrastructure.*;
+import pl.lodz.p.it.tks.data.resource.FiveStarApartmentEnt;
+import pl.lodz.p.it.tks.repository.ApartmentEntRepositoryInterface;
+import pl.lodz.p.it.tks.repository.RepositoryException;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class FiveStarRepositoryAdapter implements ApartmentGetByDoor<FiveStarApartment>,
-        AddItem<FiveStarApartment>, GetAllItem<FiveStarApartment>,
-        GetItemById<FiveStarApartment>, UpdateItem<FiveStarApartment>, DeleteItem<FiveStarApartment> {
+class FiveStarRepositoryAdapter implements ApartmentGetByDoorPort<FiveStarApartment>,
+        AddItemPort<FiveStarApartment>, GetAllItemPort<FiveStarApartment>,
+        GetItemByIdPort<FiveStarApartment>, UpdateItemPort<FiveStarApartment>, DeleteItemPort<FiveStarApartment> {
 
     @Inject
     private ApartmentEntRepositoryInterface apartmentEntRepositoryInterface;

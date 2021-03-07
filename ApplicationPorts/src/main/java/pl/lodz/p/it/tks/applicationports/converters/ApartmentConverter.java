@@ -1,9 +1,9 @@
 package pl.lodz.p.it.tks.applicationports.converters;
 
-import pl.lodz.p.it.tks.applicationcore.domainmodel.resource.FiveStarApartment;
-import pl.lodz.p.it.tks.applicationcore.domainmodel.resource.ThreeStarApartment;
-import pl.lodz.p.it.tks.data.model.resource.FiveStarApartmentEnt;
-import pl.lodz.p.it.tks.data.model.resource.ThreeStarApartmentEnt;
+import pl.lodz.p.it.tks.domainmodel.resource.FiveStarApartment;
+import pl.lodz.p.it.tks.domainmodel.resource.ThreeStarApartment;
+import pl.lodz.p.it.tks.data.resource.FiveStarApartmentEnt;
+import pl.lodz.p.it.tks.data.resource.ThreeStarApartmentEnt;
 
 public class ApartmentConverter {
     public static FiveStarApartmentEnt convertDomainToEnt(FiveStarApartment fiveStarApartment) {

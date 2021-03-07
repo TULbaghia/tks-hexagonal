@@ -1,21 +1,21 @@
 package pl.lodz.p.it.tks.applicationports.adapters.driven;
 
 import lombok.NonNull;
-import pl.lodz.p.it.tks.applicationcore.domainmodel.resource.ThreeStarApartment;
+import pl.lodz.p.it.tks.domainmodel.resource.ThreeStarApartment;
 import pl.lodz.p.it.tks.applicationports.converters.ApartmentConverter;
-import pl.lodz.p.it.tks.applicationports.out.*;
-import pl.lodz.p.it.tks.data.model.resource.ThreeStarApartmentEnt;
-import pl.lodz.p.it.tks.data.repository.ApartmentEntRepositoryInterface;
-import pl.lodz.p.it.tks.data.repository.RepositoryException;
+import pl.lodz.p.it.tks.applicationports.infrastructure.*;
+import pl.lodz.p.it.tks.data.resource.ThreeStarApartmentEnt;
+import pl.lodz.p.it.tks.repository.ApartmentEntRepositoryInterface;
+import pl.lodz.p.it.tks.repository.RepositoryException;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class ThreeStarRepositoryAdapter implements ApartmentGetByDoor<ThreeStarApartment>, AddItem<ThreeStarApartment>,
-        GetAllItem<ThreeStarApartment>, GetItemById<ThreeStarApartment>, UpdateItem<ThreeStarApartment>,
-        DeleteItem<ThreeStarApartment> {
+class ThreeStarRepositoryAdapter implements ApartmentGetByDoorPort<ThreeStarApartment>, AddItemPort<ThreeStarApartment>,
+        GetAllItemPort<ThreeStarApartment>, GetItemByIdPort<ThreeStarApartment>, UpdateItemPort<ThreeStarApartment>,
+        DeleteItemPort<ThreeStarApartment> {
 
     @Inject
     private ApartmentEntRepositoryInterface apartmentEntRepositoryInterface;
