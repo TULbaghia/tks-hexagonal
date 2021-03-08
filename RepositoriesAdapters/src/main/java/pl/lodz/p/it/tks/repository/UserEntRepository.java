@@ -1,41 +1,81 @@
 package pl.lodz.p.it.tks.repository;
 
-import lombok.NonNull;
+import pl.lodz.p.it.tks.data.user.AdminEnt;
+import pl.lodz.p.it.tks.data.user.CustomerEnt;
+import pl.lodz.p.it.tks.data.user.EmployeeEnt;
 import pl.lodz.p.it.tks.data.user.UserEnt;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class UserEntRepository extends Repository<UserEnt> {
-
-    public UserEnt get(String login) {
-        return filter(x -> x.getLogin().equals(login)).stream().findFirst().orElse(null);
-    }
-
-    public List<UserEnt> getAll(boolean active) {
-        return filter(x -> x.isActive() == active);
-    }
-
+public class UserEntRepository extends EntRepository<UserEnt> {
     @Override
-    public synchronized void add(@NonNull UserEnt item) throws RepositoryException {
-        if (get(item.getLogin()) != null) {
-            throw new RepositoryException("userAlreadyExists");
-        }
+    public synchronized void add(UserEnt item) throws RepositoryEntException {
         super.add(item);
     }
 
     @Override
-    public synchronized void update(@NonNull UserEnt item) throws RepositoryException {
-        if(filter(x -> x.getLogin().equals(item.getLogin()) && !x.getId().equals(item.getId())).size() > 0) {
-            throw new RepositoryException("loginAlreadyExists");
-        }
-        super.update(item);
+    public UserEnt get(UUID id) {
+        return super.get(id);
     }
 
     @Override
-    public synchronized void delete(@NonNull UUID id) throws RepositoryException {
-        throw new RepositoryException("cannotDeleteUser");
+    public List<UserEnt> getAll() {
+        return super.getAll();
+    }
+
+    @Override
+    public synchronized void update(UserEnt item) throws RepositoryEntException, InvocationTargetException, IllegalAccessException {
+        super.update(item);
+    }
+
+    @PostConstruct
+    public void loadSampleData() {
+        try {
+            for (int i = 1; i < 5; i++) {
+                add(CustomerEnt.builder()
+                        .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7111" + i))
+                        .firstname("Customer" + i)
+                        .lastname("Kowalski" + i)
+                        .login("Klient" + i)
+                        .password("zaq1@WSX")
+                        .build()
+                );
+            }
+
+            add(CustomerEnt.builder()
+                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78475"))
+                    .firstname("TestCustomer")
+                    .lastname("TestCustomer")
+                    .login("TestCustomer")
+                    .password("zaq1@WSX")
+                    .build()
+            );
+
+            add(EmployeeEnt.builder()
+                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78476"))
+                    .firstname("TestEmployee")
+                    .lastname("TestEmployee")
+                    .login("TestEmployee")
+                    .password("zaq1@WSX")
+                    .build()
+            );
+
+            add(AdminEnt.builder()
+                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78477"))
+                    .firstname("TestAdmin")
+                    .lastname("TestAdmin")
+                    .login("TestAdmin")
+                    .password("zaq1@WSX")
+                    .build()
+            );
+        } catch (RepositoryEntException e) {
+            e.printStackTrace();
+        }
     }
 }

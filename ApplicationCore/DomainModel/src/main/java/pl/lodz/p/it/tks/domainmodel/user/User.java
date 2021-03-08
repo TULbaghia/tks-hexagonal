@@ -2,32 +2,29 @@ package pl.lodz.p.it.tks.domainmodel.user;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import pl.lodz.p.it.tks.domainmodel.trait.IdTrait;
-
-import javax.validation.constraints.NotEmpty;
+import org.json.JSONPropertyIgnore;
+import pl.lodz.p.it.tks.domainmodel.trait.ModelIdTrait;
 
 @Data
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class User extends IdTrait {
-    @NotEmpty
+public class User extends ModelIdTrait {
     @NonNull
     private String login;
-
-    @NotEmpty
     @NonNull
     private String password;
-
-    @NotEmpty
     @NonNull
     private String firstname;
-
-    @NotEmpty
     @NonNull
     private String lastname;
-
     @Builder.Default
     @NonNull
-    private boolean active = true;
+    @Getter
+    private boolean isActive = true;
+
+    @JSONPropertyIgnore
+    public String getPassword() {
+        return password;
+    }
 }
