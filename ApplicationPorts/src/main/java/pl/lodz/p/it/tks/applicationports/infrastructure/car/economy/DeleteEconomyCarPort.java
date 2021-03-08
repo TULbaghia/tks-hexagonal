@@ -5,5 +5,5 @@ import lombok.NonNull;
 import java.util.UUID;
 
 public interface DeleteEconomyCarPort {
-    void delete(@NonNull UUID id);
+    void delete(UUID id);
 }

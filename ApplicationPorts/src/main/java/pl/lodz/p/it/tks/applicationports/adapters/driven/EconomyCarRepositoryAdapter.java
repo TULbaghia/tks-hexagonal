@@ -1,6 +1,5 @@
 package pl.lodz.p.it.tks.applicationports.adapters.driven;
 
-import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.converters.CarConverter;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.economy.AddEconomyCarPort;
@@ -28,7 +27,7 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
     private CarEntRepository carEntRepository;
 
     @Override
-    public void add(@NonNull EconomyCar economyCar) throws RepositoryAdapterException {
+    public void add(EconomyCar economyCar) throws RepositoryAdapterException {
         EconomyCarEnt economyCarEnt = CarConverter.convertDomainToEnt(economyCar);
         try {
             carEntRepository.add(economyCarEnt);
@@ -38,7 +37,7 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
     }
 
     @Override
-    public void delete(@NonNull UUID id) {
+    public void delete(UUID id) {
         carEntRepository.delete(id);
     }
 
@@ -56,7 +55,7 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
     }
 
     @Override
-    public void update(@NonNull EconomyCar economyCar) throws RepositoryAdapterException {
+    public void update(EconomyCar economyCar) throws RepositoryAdapterException {
         EconomyCarEnt economyCarEnt = CarConverter.convertDomainToEnt(economyCar);
         try {
             carEntRepository.update(economyCarEnt);

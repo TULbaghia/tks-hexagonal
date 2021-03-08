@@ -5,5 +5,5 @@ import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
 
 public interface UpdateEconomyCarPort {
-    void update(@NonNull EconomyCar item) throws RepositoryAdapterException;
+    void update(EconomyCar item) throws RepositoryAdapterException;
 }

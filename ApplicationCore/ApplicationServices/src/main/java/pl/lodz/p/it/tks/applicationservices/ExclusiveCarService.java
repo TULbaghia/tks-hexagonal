@@ -25,7 +25,7 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     private DeleteExclusiveCarPort deleteExclusiveCarPort;
 
     @Override
-    public void add(@NonNull ExclusiveCar car) throws RepositoryAdapterException {
+    public void add(ExclusiveCar car) throws RepositoryAdapterException {
         addExclusiveCarPort.add(car);
     }
 
@@ -40,12 +40,12 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     }
 
     @Override
-    public void update(@NonNull ExclusiveCar car) throws RepositoryAdapterException {
+    public void update(ExclusiveCar car) throws RepositoryAdapterException {
         updateExclusiveCarPort.update(car);
     }
 
     @Override
-    public void delete(@NonNull UUID id) {
+    public void delete(UUID id) {
         deleteExclusiveCarPort.delete(id);
     }
 }

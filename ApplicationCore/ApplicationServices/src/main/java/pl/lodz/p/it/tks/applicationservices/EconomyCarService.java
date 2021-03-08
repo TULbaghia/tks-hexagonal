@@ -25,7 +25,7 @@ public class EconomyCarService implements EconomyCarUseCase {
     private DeleteEconomyCarPort deleteEconomyCarPort;
 
     @Override
-    public void add(@NonNull EconomyCar car) throws RepositoryAdapterException {
+    public void add(EconomyCar car) throws RepositoryAdapterException {
             addEconomyCarPort.add(car);
     }
 
@@ -40,12 +40,12 @@ public class EconomyCarService implements EconomyCarUseCase {
     }
 
     @Override
-    public void update(@NonNull EconomyCar car) throws RepositoryAdapterException {
+    public void update(EconomyCar car) throws RepositoryAdapterException {
             updateEconomyCarPort.update(car);
     }
 
     @Override
-    public void delete(@NonNull UUID id) {
+    public void delete(UUID id) {
         deleteEconomyCarPort.delete(id);
     }
 }

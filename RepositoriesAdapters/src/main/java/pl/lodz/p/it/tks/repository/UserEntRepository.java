@@ -16,12 +16,19 @@ import java.util.UUID;
 public class UserEntRepository extends EntRepository<UserEnt> {
     @Override
     public synchronized void add(UserEnt item) throws RepositoryEntException {
+        if(getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()))) {
+            throw new RepositoryEntException("User with this login already exists.");
+        }
         super.add(item);
     }
 
     @Override
     public UserEnt get(UUID id) {
         return super.get(id);
+    }
+
+    public UserEnt get(String login) {
+        return getAll().stream().filter(x -> x.getLogin().equals(login)).findFirst().orElse(null);
     }
 
     @Override
@@ -31,6 +38,9 @@ public class UserEntRepository extends EntRepository<UserEnt> {
 
     @Override
     public synchronized void update(UserEnt item) throws RepositoryEntException, InvocationTargetException, IllegalAccessException {
+        if(getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()) && !x.getId().equals(item.getId()))) {
+            throw new RepositoryEntException("User with this login already exists.");
+        }
         super.update(item);
     }
 

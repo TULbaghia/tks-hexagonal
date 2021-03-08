@@ -24,7 +24,7 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     private CarEntRepository carEntRepository;
 
     @Override
-    public void add(@NonNull ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
+    public void add(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
         ExclusiveCarEnt exclusiveCarEnt = CarConverter.convertDomainToEnt(exclusiveCar);
         try {
             carEntRepository.add(exclusiveCarEnt);
@@ -34,7 +34,7 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     }
 
     @Override
-    public void delete(@NonNull UUID id) {
+    public void delete(UUID id) {
         carEntRepository.delete(id);
     }
 
@@ -52,7 +52,7 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     }
 
     @Override
-    public void update(@NonNull ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
+    public void update(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
         ExclusiveCarEnt exclusiveCarEnt = CarConverter.convertDomainToEnt(exclusiveCar);
         try {
             carEntRepository.update(exclusiveCarEnt);

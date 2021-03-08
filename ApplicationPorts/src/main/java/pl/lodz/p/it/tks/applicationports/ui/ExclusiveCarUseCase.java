@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ExclusiveCarUseCase {
-    void add(@NonNull ExclusiveCar car) throws RepositoryAdapterException;
+    void add(ExclusiveCar car) throws RepositoryAdapterException;
 
     ExclusiveCar get(UUID id);
 
     List<ExclusiveCar> getAll();
 
-    void update(@NonNull ExclusiveCar car) throws RepositoryAdapterException;
+    void update(ExclusiveCar car) throws RepositoryAdapterException;
 
-    void delete(@NonNull UUID id);
+    void delete(UUID id);
 }

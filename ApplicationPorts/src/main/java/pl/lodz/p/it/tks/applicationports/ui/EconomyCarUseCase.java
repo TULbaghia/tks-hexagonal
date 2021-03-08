@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EconomyCarUseCase {
-    void add(@NonNull EconomyCar car) throws RepositoryAdapterException;
+    void add(EconomyCar car) throws RepositoryAdapterException;
 
     EconomyCar get(UUID id);
 
     List<EconomyCar> getAll();
 
-    void update(@NonNull EconomyCar car) throws RepositoryAdapterException;
+    void update(EconomyCar car) throws RepositoryAdapterException;
 
-    void delete(@NonNull UUID id);
+    void delete(UUID id);
 }
