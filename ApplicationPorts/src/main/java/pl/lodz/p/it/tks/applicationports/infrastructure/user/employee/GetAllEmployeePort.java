@@ -1,4 +1,4 @@
-package pl.lodz.p.it.tks.applicationports.infrastructure.user;
+package pl.lodz.p.it.tks.applicationports.infrastructure.user.employee;
 
 import pl.lodz.p.it.tks.domainmodel.user.Employee;
 import pl.lodz.p.it.tks.domainmodel.user.User;

@@ -1,4 +1,4 @@
-package pl.lodz.p.it.tks.applicationports.infrastructure.user;
+package pl.lodz.p.it.tks.applicationports.infrastructure.user.customer;
 
 import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;

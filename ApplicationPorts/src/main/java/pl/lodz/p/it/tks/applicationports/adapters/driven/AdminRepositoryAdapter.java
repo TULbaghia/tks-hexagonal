@@ -2,7 +2,7 @@ package pl.lodz.p.it.tks.applicationports.adapters.driven;
 
 import pl.lodz.p.it.tks.applicationports.converters.UserConverter;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
-import pl.lodz.p.it.tks.applicationports.infrastructure.user.*;
+import pl.lodz.p.it.tks.applicationports.infrastructure.user.admin.*;
 import pl.lodz.p.it.tks.data.user.AdminEnt;
 import pl.lodz.p.it.tks.domainmodel.user.Admin;
 import pl.lodz.p.it.tks.repository.UserEntRepository;

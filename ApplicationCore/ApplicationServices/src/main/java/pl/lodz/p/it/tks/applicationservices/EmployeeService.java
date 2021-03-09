@@ -1,7 +1,7 @@
 package pl.lodz.p.it.tks.applicationservices;
 
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
-import pl.lodz.p.it.tks.applicationports.infrastructure.user.*;
+import pl.lodz.p.it.tks.applicationports.infrastructure.user.employee.*;
 import pl.lodz.p.it.tks.applicationports.ui.EmployeeUseCase;
 import pl.lodz.p.it.tks.applicationservices.exception.CoreServiceException;
 import pl.lodz.p.it.tks.domainmodel.user.Employee;
