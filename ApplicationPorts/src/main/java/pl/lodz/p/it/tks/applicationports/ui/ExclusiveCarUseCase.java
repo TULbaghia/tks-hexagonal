@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ExclusiveCarUseCase {
     ExclusiveCar add(ExclusiveCar car) throws RepositoryAdapterException;
 
-    ExclusiveCar get(UUID id) throws RepositoryEntException;
+    ExclusiveCar get(UUID id) throws RepositoryAdapterException;
 
     List<ExclusiveCar> getAll();
 

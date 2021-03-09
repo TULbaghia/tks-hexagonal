@@ -23,7 +23,7 @@ public abstract class EntRepository<T extends ModelIdTraitEnt> {
     }
 
     public T get(UUID id) throws RepositoryEntException {
-        return items.stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new RepositoryEntException("Cannot found item."));
+        return items.stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new RepositoryEntException("Item does not exist."));
     }
 
     public List<T> getAll() {

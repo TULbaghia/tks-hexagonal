@@ -6,12 +6,14 @@ import pas.service.exception.RestException;
 import pas.service.validation.resources.AddRentValid;
 import pas.service.validation.resources.UpdateRentValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
-import pl.lodz.p.it.tks.applicationports.ui.RentUseCase;
+import pl.lodz.p.it.tks.applicationports.ui.*;
 import pl.lodz.p.it.tks.domainmodel.exception.CustomerException;
 import pl.lodz.p.it.tks.domainmodel.exception.RentException;
 import pl.lodz.p.it.tks.domainmodel.resources.Car;
 import pl.lodz.p.it.tks.domainmodel.resources.Rent;
 import pl.lodz.p.it.tks.domainmodel.user.Customer;
+import pl.lodz.p.it.tks.domainmodel.user.Employee;
+import pl.lodz.p.it.tks.domainmodel.user.User;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.inject.Inject;
@@ -22,51 +24,98 @@ import javax.ws.rs.core.SecurityContext;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Produces({ MediaType.APPLICATION_JSON })
-@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 @Path("rent")
 public class RentService {
 
     @Inject
     private RentUseCase rentUseCase;
 
+    @Inject
+    private EmployeeUseCase employeeUseCase;
+
+    @Inject
+    private CustomerUseCase customerUseCase;
+
+    @Inject
+    private EconomyCarUseCase economyCarUseCase;
+
+    @Inject
+    private ExclusiveCarUseCase exclusiveCarUseCase;
+
+    private User getUser(String login) throws RepositoryAdapterException {
+        try {
+            User user = employeeUseCase.get(login);
+            if(user != null) {
+                return user;
+            }
+        } catch (RepositoryAdapterException ignore) {
+        }
+
+        return customerUseCase.get(login);
+    }
+
+
     @GET
-    public String getAllRents(@Context SecurityContext securityContext) {
+    public String getAllRents(@Context SecurityContext securityContext) throws RepositoryAdapterException {
         String currentUser = securityContext.getUserPrincipal().getName();
-        User user = userManager.get(currentUser);
+
+        User user = getUser(currentUser);
+
         if (user instanceof Employee) {
             return JSONObject.valueToString(rentUseCase.getAll());
         } else if (user instanceof Customer){
-            return JSONObject.valueToString(rentUseCase.getAll());
+            return JSONObject.valueToString(rentUseCase.getAll().stream()
+                    .filter(x -> x.getCustomer().equals(user)).collect(Collectors.toList()));
         }
         return null;
     }
 
     @Path("/{uuid}")
     @GET
-    public String getRent(@PathParam("uuid") String id,  @Context SecurityContext securityContext) {
+    public String getRent(@PathParam("uuid") String id, @Context SecurityContext securityContext) throws RepositoryAdapterException {
         String currentUser = securityContext.getUserPrincipal().getName();
-        User user = userManager.get(currentUser);
+        User user = getUser(currentUser);
         Rent r = rentUseCase.get(UUID.fromString(id));
         if (user instanceof Employee) {
             return JSONObject.wrap(r).toString();
-        } else if (user instanceof Customer && r.getCustomer().getLogin().equals(currentUser)){
+        } else if (user instanceof Customer && r.getCustomer().getLogin().equals(currentUser)) {
             return JSONObject.wrap(r).toString();
         }
         return null;
+    }
+
+    private Car getCarById(UUID id) throws RepositoryAdapterException {
+        try {
+            Car car = economyCarUseCase.get(id);
+            if(car != null) {
+                return car;
+            }
+        } catch (RepositoryAdapterException ignore) {
+        }
+
+        return exclusiveCarUseCase.get(id);
     }
 
     @POST
     public String addRent(@AddRentValid ReservationDto reservationDto, @Context SecurityContext securityContext) {
         String currentUser = securityContext.getUserPrincipal().getName();
 
-        Car car = carManager.get(UUID.fromString(reservationDto.getCarId()));
-        Customer customer = (Customer) userManager.get(UUID.fromString(reservationDto.getCustomerId()));
+        Car car;
+        Customer customer;
+        User user;
         LocalDateTime dateTime = LocalDateTime.parse(reservationDto.getRentStartDate());
-        carCustomerNull(customer, car);
-
-        User user = userManager.get(currentUser);
+        try {
+            car = getCarById(UUID.fromString(reservationDto.getCarId()));
+            customer = customerUseCase.get(UUID.fromString(reservationDto.getCustomerId()));
+            carCustomerNull(customer, car);
+            user = getUser(currentUser);
+        } catch (RepositoryAdapterException e) {
+            throw new RestException(e.getMessage());
+        }
         if (user instanceof Customer && !customer.getLogin().equals(currentUser)) {
             throw new RestException("Permissions error.");
         }
@@ -77,17 +126,22 @@ public class RentService {
                 .build();
 
         try {
-            rentManager.add(newRent);
-        } catch (ManagerException | RepositoryException e) {
+            return JSONObject.wrap(rentUseCase.add(newRent)).toString();
+        } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(rentManager.get(newRent.getId())).toString();
     }
 
     @PUT
     public String updateRent(@UpdateRentValid ReservationDto reservationDto) {
-        Car car = carManager.get(UUID.fromString(reservationDto.getCarId()));
-        Customer customer = (Customer) userManager.get(UUID.fromString(reservationDto.getCustomerId()));
+        Car car;
+        Customer customer;
+        try {
+            car = getCarById(UUID.fromString(reservationDto.getCarId()));
+            customer = customerUseCase.get(UUID.fromString(reservationDto.getCustomerId()));
+        } catch (RepositoryAdapterException e) {
+            throw new RestException(e.getMessage());
+        }
         carCustomerNull(customer, car);
 
         Rent newRent = Rent.builder()
@@ -98,11 +152,10 @@ public class RentService {
                 .build();
 
         try {
-            rentManager.update(newRent);
-        } catch (ManagerException | RepositoryException | IllegalAccessException | InvocationTargetException e) {
+            return JSONObject.wrap(rentUseCase.update(newRent)).toString();
+        } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(rentManager.get(newRent.getId())).toString();
     }
 
     @Path("/{uuid}")
@@ -122,21 +175,18 @@ public class RentService {
     @Path("/end")
     @PATCH
     public String endRent(ReservationDto reservationDto) {
-        Rent rent;
         try {
-            rent = rentUseCase.get(UUID.fromString(reservationDto.getId()));
-            rent.endRent();
-            return JSONObject.wrap(rent).toString();
-        } catch (RentException | CustomerException | RepositoryAdapterException e) {
+            return JSONObject.wrap(rentUseCase.endRent(UUID.fromString(reservationDto.getId()))).toString();
+        } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
     }
 
     private void carCustomerNull(Customer customer, Car car) {
-        if(customer == null) {
+        if (customer == null) {
             throw new RestException("Customer is null.");
         }
-        if(car == null) {
+        if (car == null) {
             throw new RestException("Car is null.");
         }
     }

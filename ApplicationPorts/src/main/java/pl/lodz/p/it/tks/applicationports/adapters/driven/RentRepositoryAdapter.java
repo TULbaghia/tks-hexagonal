@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRentPort, UpdateRentPort, DeleteRentPort {
+public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRentPort, UpdateRentPort, DeleteRentPort, EndRentPort {
 
     @Inject
     private RentEntRepository rentEntRepository;
@@ -58,6 +58,15 @@ public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRe
         RentEnt rentEnt = RentConverter.convertDomainToEnt(rent);
         try {
             return RentConverter.convertEntToDomain(rentEntRepository.update(rentEnt));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
+    }
+
+    @Override
+    public Rent endRent(UUID id) throws RepositoryAdapterException {
+        try {
+            return RentConverter.convertEntToDomain(rentEntRepository.endRent(id));
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }

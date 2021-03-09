@@ -37,9 +37,13 @@ public class EconomyCarService {
 
     @Path("/{uuid}")
     @GET
-    public String getEconomyCar(@PathParam("uuid") String id) throws RepositoryEntException {
-        EconomyCar economyCar = economyCarUseCase.get(UUID.fromString(id));
-        return JSONObject.wrap(economyCarUseCase.get(economyCar.getId())).toString();
+    public String getEconomyCar(@PathParam("uuid") String id) {
+        try {
+            EconomyCar economyCar = economyCarUseCase.get(UUID.fromString(id));
+            return JSONObject.wrap(economyCarUseCase.get(economyCar.getId())).toString();
+        } catch (RepositoryAdapterException e) {
+            throw new RestException(e.getMessage());
+        }
     }
 
     @PUT

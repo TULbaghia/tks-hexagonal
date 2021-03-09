@@ -30,8 +30,12 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     }
 
     @Override
-    public ExclusiveCar get(UUID id) throws RepositoryEntException {
-        return getExclusiveCarByIdPort.get(id);
+    public ExclusiveCar get(UUID id) throws RepositoryAdapterException {
+        try {
+            return getExclusiveCarByIdPort.get(id);
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override

@@ -30,8 +30,12 @@ public class EconomyCarService implements EconomyCarUseCase {
     }
 
     @Override
-    public EconomyCar get(UUID id) throws RepositoryEntException {
-        return getEconomyCarByIdPort.get(id);
+    public EconomyCar get(UUID id) throws RepositoryAdapterException {
+        try {
+            return getEconomyCarByIdPort.get(id);
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override

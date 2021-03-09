@@ -37,9 +37,13 @@ public class ExclusiveCarService {
 
     @Path("/{uuid}")
     @GET
-    public String getExclusiveCar(@PathParam("uuid") String id) throws RepositoryEntException {
-        ExclusiveCar exclusiveCar = exclusiveCarUseCase.get(UUID.fromString(id));
-        return JSONObject.wrap(exclusiveCarUseCase.get(exclusiveCar.getId())).toString();
+    public String getExclusiveCar(@PathParam("uuid") String id) {
+        try {
+            ExclusiveCar exclusiveCar = exclusiveCarUseCase.get(UUID.fromString(id));
+            return JSONObject.wrap(exclusiveCarUseCase.get(exclusiveCar.getId())).toString();
+        } catch (RepositoryAdapterException e) {
+            throw new RestException(e.getMessage());
+        }
     }
 
     @PUT

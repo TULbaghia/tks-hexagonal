@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface EconomyCarUseCase {
     EconomyCar add(EconomyCar car) throws RepositoryAdapterException;
 
-    EconomyCar get(UUID id) throws RepositoryEntException;
+    EconomyCar get(UUID id) throws RepositoryAdapterException;
 
     List<EconomyCar> getAll();
 

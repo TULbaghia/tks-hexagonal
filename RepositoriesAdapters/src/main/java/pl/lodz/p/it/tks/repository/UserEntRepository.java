@@ -27,7 +27,7 @@ public class UserEntRepository extends EntRepository<UserEnt> {
     }
 
     public UserEnt get(String login) throws RepositoryEntException {
-        return getAll().stream().filter(x -> x.getLogin().equals(login)).findFirst().orElseThrow(() -> new RepositoryEntException("Cannot found item."));
+        return getAll().stream().filter(x -> x.getLogin().equals(login)).findFirst().orElseThrow(() -> new RepositoryEntException("Item does not exist."));
     }
 
     @Override

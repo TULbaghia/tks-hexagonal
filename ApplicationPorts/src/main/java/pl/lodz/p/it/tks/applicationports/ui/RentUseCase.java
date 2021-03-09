@@ -15,5 +15,7 @@ public interface RentUseCase {
 
     Rent get(UUID uuid) throws RepositoryAdapterException;
 
-    void delete(UUID id);
+    void delete(UUID id) throws RepositoryAdapterException;
+
+    Rent endRent(UUID id) throws RepositoryAdapterException;
 }

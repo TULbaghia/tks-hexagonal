@@ -5,10 +5,12 @@ import pl.lodz.p.it.tks.applicationports.infrastructure.rent.*;
 import pl.lodz.p.it.tks.applicationports.ui.RentUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.Rent;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
+@ApplicationScoped
 public class RentService implements RentUseCase {
 
     @Inject
@@ -21,6 +23,8 @@ public class RentService implements RentUseCase {
     private UpdateRentPort updateRentPort;
     @Inject
     private DeleteRentPort deleteRentPort;
+    @Inject
+    private EndRentPort endRentPort;
 
     @Override
     public Rent add(Rent rent) throws RepositoryAdapterException {
@@ -43,7 +47,12 @@ public class RentService implements RentUseCase {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RepositoryAdapterException {
         deleteRentPort.delete(id);
+    }
+
+    @Override
+    public Rent endRent(UUID id) throws RepositoryAdapterException {
+        return endRentPort.endRent(id);
     }
 }
