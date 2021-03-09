@@ -1,8 +1,7 @@
 package pl.lodz.p.it.tks.applicationports.adapters.driven;
 
-import lombok.NonNull;
-import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.converters.CarConverter;
+import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.exclusive.*;
 import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
@@ -11,7 +10,6 @@ import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,17 +22,17 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     private CarEntRepository carEntRepository;
 
     @Override
-    public void add(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
+    public ExclusiveCar add(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
         ExclusiveCarEnt exclusiveCarEnt = CarConverter.convertDomainToEnt(exclusiveCar);
         try {
-            carEntRepository.add(exclusiveCarEnt);
+            return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.add(exclusiveCarEnt));
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RepositoryEntException {
         carEntRepository.delete(id);
     }
 
@@ -47,16 +45,16 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     }
 
     @Override
-    public ExclusiveCar get(UUID id) {
+    public ExclusiveCar get(UUID id) throws RepositoryEntException {
         return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.get(id));
     }
 
     @Override
-    public void update(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
+    public ExclusiveCar update(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {
         ExclusiveCarEnt exclusiveCarEnt = CarConverter.convertDomainToEnt(exclusiveCar);
         try {
-            carEntRepository.update(exclusiveCarEnt);
-        } catch (RepositoryEntException | InvocationTargetException | IllegalAccessException e) {
+            return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.update(exclusiveCarEnt));
+        } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }
     }

@@ -6,6 +6,7 @@ import pas.service.validation.resources.UpdateCarValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.ui.ExclusiveCarUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -23,11 +24,10 @@ public class ExclusiveCarService {
     @POST
     public String addExclusiveCar(@Valid ExclusiveCar exclusiveCar) {
         try {
-            exclusiveCarUseCase.add(exclusiveCar);
+            return JSONObject.wrap(exclusiveCarUseCase.add(exclusiveCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(exclusiveCarUseCase.get(exclusiveCar.getId())).toString();
     }
 
     @GET
@@ -37,7 +37,7 @@ public class ExclusiveCarService {
 
     @Path("/{uuid}")
     @GET
-    public String getExclusiveCar(@PathParam("uuid") String id) {
+    public String getExclusiveCar(@PathParam("uuid") String id) throws RepositoryEntException {
         ExclusiveCar exclusiveCar = exclusiveCarUseCase.get(UUID.fromString(id));
         return JSONObject.wrap(exclusiveCarUseCase.get(exclusiveCar.getId())).toString();
     }
@@ -54,11 +54,10 @@ public class ExclusiveCarService {
                 .boardPcName(exclusiveCar.getBoardPcName())
                 .build();
         try {
-            exclusiveCarUseCase.update(editingCar);
+            return JSONObject.wrap(exclusiveCarUseCase.add(editingCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(exclusiveCarUseCase.get(editingCar.getId())).toString();
     }
 
     @Path("/{uuid}")

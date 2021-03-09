@@ -8,27 +8,26 @@ import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class UserEntRepository extends EntRepository<UserEnt> {
     @Override
-    public synchronized void add(UserEnt item) throws RepositoryEntException {
-        if(getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()))) {
+    public synchronized UserEnt add(UserEnt item) throws RepositoryEntException {
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()))) {
             throw new RepositoryEntException("User with this login already exists.");
         }
-        super.add(item);
+        return super.add(item);
     }
 
     @Override
-    public UserEnt get(UUID id) {
+    public UserEnt get(UUID id) throws RepositoryEntException {
         return super.get(id);
     }
 
-    public UserEnt get(String login) {
-        return getAll().stream().filter(x -> x.getLogin().equals(login)).findFirst().orElse(null);
+    public UserEnt get(String login) throws RepositoryEntException {
+        return getAll().stream().filter(x -> x.getLogin().equals(login)).findFirst().orElseThrow(() -> new RepositoryEntException("Cannot found item."));
     }
 
     @Override
@@ -37,11 +36,11 @@ public class UserEntRepository extends EntRepository<UserEnt> {
     }
 
     @Override
-    public synchronized void update(UserEnt item) throws RepositoryEntException, InvocationTargetException, IllegalAccessException {
-        if(getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()) && !x.getId().equals(item.getId()))) {
+    public synchronized UserEnt update(UserEnt item) throws RepositoryEntException {
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()) && !x.getId().equals(item.getId()))) {
             throw new RepositoryEntException("User with this login already exists.");
         }
-        super.update(item);
+        return super.update(item);
     }
 
     @PostConstruct

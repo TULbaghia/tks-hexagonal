@@ -7,7 +7,7 @@ import pas.service.validation.user.ActivateUserValid;
 import pas.service.validation.user.AddUserValid;
 import pas.service.validation.user.UpdateUserValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
-import pl.lodz.p.it.tks.applicationports.ui.UserUseCase;
+import pl.lodz.p.it.tks.applicationports.ui.AdminUseCase;
 import pl.lodz.p.it.tks.domainmodel.user.Admin;
 import pl.lodz.p.it.tks.domainmodel.user.User;
 
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @Path("user/admin")
 public class AdminService {
     @Inject
-    private UserUseCase userUseCase;
+    private AdminUseCase adminUseCase;
 
     @POST
-    public String addAdmin(@AddUserValid UserDto userDto) {
+    public String addAdmin(@AddUserValid UserDto userDto) throws RepositoryAdapterException {
         Admin newUser = Admin.builder()
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
@@ -33,32 +33,31 @@ public class AdminService {
                 .password(userDto.getPassword())
                 .build();
         try {
-            userUseCase.add(newUser);
+            return JSONObject.wrap(adminUseCase.add(newUser)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(userUseCase.get(newUser.getId())).toString();
     }
 
     @GET
     public String getAllAdmins() {
-        return JSONObject.valueToString(userUseCase.getAll().stream().filter(x -> x instanceof Admin).collect(Collectors.toList()));
+        return JSONObject.valueToString(adminUseCase.getAll().stream().filter(x -> x instanceof Admin).collect(Collectors.toList()));
     }
 
     @Path("/{uuid}")
     @GET
-    public String getAdmin(@PathParam("uuid") String id) {
+    public String getAdmin(@PathParam("uuid") String id) throws RepositoryAdapterException {
         User user;
         try {
-            user = userUseCase.get(UUID.fromString(id));
-        } catch (IllegalArgumentException e) {
-            user = userUseCase.get(id);
+            user = adminUseCase.get(UUID.fromString(id));
+        } catch (IllegalArgumentException | RepositoryAdapterException e) {
+            user = adminUseCase.get(id);
         }
-        return JSONObject.wrap(userUseCase.get(user.getId())).toString();
+        return JSONObject.wrap(adminUseCase.get(user.getId())).toString();
     }
 
     @PUT
-    public String updateAdmin(@UpdateUserValid UserDto userDto) {
+    public String updateAdmin(@UpdateUserValid UserDto userDto) throws RepositoryAdapterException {
         Admin editingUser = Admin.builder()
                 .id(UUID.fromString(userDto.getId()))
                 .login(userDto.getLogin())
@@ -67,16 +66,15 @@ public class AdminService {
                 .lastname(userDto.getLastname())
                 .build();
         try {
-            userUseCase.update(editingUser);
+            return JSONObject.wrap(adminUseCase.update(editingUser)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(userUseCase.get(UUID.fromString(userDto.getId()))).toString();
     }
 
     @PATCH
-    public String activateAdmin(@ActivateUserValid UserDto userDto) {
-        Admin user = (Admin) userUseCase.get(UUID.fromString(userDto.getId()));
+    public String activateAdmin(@ActivateUserValid UserDto userDto) throws RepositoryAdapterException {
+        Admin user = (Admin) adminUseCase.get(UUID.fromString(userDto.getId()));
 
         Admin activatedUser = Admin.builder()
                 .id(UUID.fromString(userDto.getId()))
@@ -87,10 +85,9 @@ public class AdminService {
                 .isActive(userDto.getIsActive())
                 .build();
         try {
-            userUseCase.update(activatedUser);
+            return JSONObject.wrap(adminUseCase.update(activatedUser)).toString();
         } catch (RepositoryAdapterException e ) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(userUseCase.get(UUID.fromString(userDto.getId()))).toString();
     }
 }

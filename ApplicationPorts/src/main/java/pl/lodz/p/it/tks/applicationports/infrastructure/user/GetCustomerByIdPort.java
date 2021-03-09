@@ -1,9 +1,10 @@
 package pl.lodz.p.it.tks.applicationports.infrastructure.user;
 
-import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.domainmodel.user.Customer;
 
-public interface UpdateCustomerPort {
-    Customer update(Customer customer) throws RepositoryAdapterException;
+import java.util.UUID;
+
+public interface GetCustomerByIdPort {
+    Customer get(UUID uuid) throws RepositoryAdapterException;
 }

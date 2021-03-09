@@ -6,6 +6,7 @@ import pas.service.validation.resources.UpdateCarValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.ui.EconomyCarUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -23,11 +24,10 @@ public class EconomyCarService {
     @POST
     public String addEconomyCar(@Valid EconomyCar economyCar) {
         try {
-            economyCarUseCase.add(economyCar);
+            return JSONObject.wrap(economyCarUseCase.add(economyCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(economyCarUseCase.get(economyCar.getId())).toString();
     }
 
     @GET
@@ -37,7 +37,7 @@ public class EconomyCarService {
 
     @Path("/{uuid}")
     @GET
-    public String getEconomyCar(@PathParam("uuid") String id) {
+    public String getEconomyCar(@PathParam("uuid") String id) throws RepositoryEntException {
         EconomyCar economyCar = economyCarUseCase.get(UUID.fromString(id));
         return JSONObject.wrap(economyCarUseCase.get(economyCar.getId())).toString();
     }
@@ -53,11 +53,10 @@ public class EconomyCarService {
                 .driverEquipment(economyCar.getDriverEquipment())
                 .build();
         try {
-            economyCarUseCase.update(editingCar);
+            return JSONObject.wrap(economyCarUseCase.add(editingCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
-        return JSONObject.wrap(economyCarUseCase.get(editingCar.getId())).toString();
     }
 
     @Path("/{uuid}")

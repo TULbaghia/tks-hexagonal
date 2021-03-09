@@ -1,7 +1,7 @@
 package pas.service.auth;
 
 import org.json.JSONObject;
-import pl.lodz.p.it.tks.applicationports.ui.UserUseCase;
+import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.domainmodel.user.User;
 
 import javax.inject.Inject;
@@ -18,11 +18,11 @@ import javax.ws.rs.core.SecurityContext;
 @Path("/auth/self")
 public class SelfService {
     @Inject
-    private UserUseCase userUseCase;
+    private RestIdentityStore restIdentityStore;
 
     @GET
     public String getSelf(@Context SecurityContext securityContext) {
-        User user = userUseCase.get(securityContext.getUserPrincipal().getName());
+        User user = restIdentityStore.getUserByLogin(securityContext.getUserPrincipal().getName());
         String filterApplied = JSONObject.wrap(user).toString();
         JSONObject jsonObject = new JSONObject(filterApplied);
         jsonObject.put("group", user.getClass().getSimpleName());

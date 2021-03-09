@@ -1,10 +1,10 @@
 package pl.lodz.p.it.tks.applicationservices;
 
-import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.economy.*;
 import pl.lodz.p.it.tks.applicationports.ui.EconomyCarUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -25,12 +25,12 @@ public class EconomyCarService implements EconomyCarUseCase {
     private DeleteEconomyCarPort deleteEconomyCarPort;
 
     @Override
-    public void add(EconomyCar car) throws RepositoryAdapterException {
-            addEconomyCarPort.add(car);
+    public EconomyCar add(EconomyCar car) throws RepositoryAdapterException {
+        return addEconomyCarPort.add(car);
     }
 
     @Override
-    public EconomyCar get(UUID id) {
+    public EconomyCar get(UUID id) throws RepositoryEntException {
         return getEconomyCarByIdPort.get(id);
     }
 
@@ -40,12 +40,12 @@ public class EconomyCarService implements EconomyCarUseCase {
     }
 
     @Override
-    public void update(EconomyCar car) throws RepositoryAdapterException {
-            updateEconomyCarPort.update(car);
+    public EconomyCar update(EconomyCar car) throws RepositoryAdapterException {
+        return updateEconomyCarPort.update(car);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RepositoryEntException {
         deleteEconomyCarPort.delete(id);
     }
 }

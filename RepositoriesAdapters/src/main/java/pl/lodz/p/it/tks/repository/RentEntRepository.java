@@ -8,19 +8,18 @@ import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class RentEntRepository extends EntRepository<RentEnt> {
     @Override
-    public synchronized void add(RentEnt item) throws RepositoryEntException {
-        super.add(item);
+    public synchronized RentEnt add(RentEnt item) throws RepositoryEntException {
+        return super.add(item);
     }
 
     @Override
-    public RentEnt get(UUID id) {
+    public RentEnt get(UUID id) throws RepositoryEntException {
         return super.get(id);
     }
 
@@ -30,12 +29,12 @@ public class RentEntRepository extends EntRepository<RentEnt> {
     }
 
     @Override
-    public synchronized void update(RentEnt item) throws RepositoryEntException, InvocationTargetException, IllegalAccessException {
-        super.update(item);
+    public synchronized RentEnt update(RentEnt item) throws RepositoryEntException {
+        return super.update(item);
     }
 
     @Override
-    public synchronized void delete(UUID id) {
+    public synchronized void delete(UUID id) throws RepositoryEntException {
         super.delete(id);
     }
 

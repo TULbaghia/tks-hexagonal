@@ -3,18 +3,19 @@ package pl.lodz.p.it.tks.applicationports.ui;
 import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ExclusiveCarUseCase {
-    void add(ExclusiveCar car) throws RepositoryAdapterException;
+    ExclusiveCar add(ExclusiveCar car) throws RepositoryAdapterException;
 
-    ExclusiveCar get(UUID id);
+    ExclusiveCar get(UUID id) throws RepositoryEntException;
 
     List<ExclusiveCar> getAll();
 
-    void update(ExclusiveCar car) throws RepositoryAdapterException;
+    ExclusiveCar update(ExclusiveCar car) throws RepositoryAdapterException;
 
-    void delete(UUID id);
+    void delete(UUID id) throws RepositoryEntException;
 }

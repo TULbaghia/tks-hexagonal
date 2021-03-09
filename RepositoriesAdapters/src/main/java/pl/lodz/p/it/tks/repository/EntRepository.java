@@ -12,41 +12,39 @@ import java.util.UUID;
 public abstract class EntRepository<T extends ModelIdTraitEnt> {
     private final List<T> items = new ArrayList<>();
 
-    public synchronized void add(T item) throws RepositoryEntException {
-        if (item.getId() == null) {
+    public synchronized T add(T item) throws RepositoryEntException {
+        if (item.getId() != null) {
+//            throw new RepositoryEntException("ID must be null.");
+        } else {
             item.setId(UUID.randomUUID());
         }
-        if (get(item.getId()) == null) {
-            items.add(item);
-        } else {
-            throw new RepositoryEntException("Item is already added.");
-        }
+        items.add(item);
+        return get(item.getId());
     }
 
-    public T get(UUID id) {
-        return items.stream().filter(x -> x.getId().equals(id)).findFirst().orElse(null);
+    public T get(UUID id) throws RepositoryEntException {
+        return items.stream().filter(x -> x.getId().equals(id)).findFirst().orElseThrow(() -> new RepositoryEntException("Cannot found item."));
     }
 
     public List<T> getAll() {
         return new ArrayList<>(items);
     }
 
-    public synchronized void update(T item) throws RepositoryEntException, InvocationTargetException, IllegalAccessException {
+    public synchronized T update(T item) throws RepositoryEntException {
         if(item.getId() == null) {
             throw new RepositoryEntException("Item id is null.");
         }
         T old = get(item.getId());
-        if (old != null) {
+        try {
             BeanUtils.copyProperties(old, item);
-        } else {
-            throw new RepositoryEntException("Item does not exist.");
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RepositoryEntException(e);
         }
+        return get(item.getId());
     }
 
-    public synchronized void delete(UUID id) {
+    public synchronized void delete(UUID id) throws RepositoryEntException {
         T old = get(id);
-        if (old != null) {
-            items.remove(old);
-        }
+        items.remove(old);
     }
 }

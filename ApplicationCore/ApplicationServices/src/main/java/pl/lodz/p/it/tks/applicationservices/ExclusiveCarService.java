@@ -1,10 +1,10 @@
 package pl.lodz.p.it.tks.applicationservices;
 
-import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.exclusive.*;
 import pl.lodz.p.it.tks.applicationports.ui.ExclusiveCarUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
+import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -25,12 +25,12 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     private DeleteExclusiveCarPort deleteExclusiveCarPort;
 
     @Override
-    public void add(ExclusiveCar car) throws RepositoryAdapterException {
-        addExclusiveCarPort.add(car);
+    public ExclusiveCar add(ExclusiveCar car) throws RepositoryAdapterException {
+        return addExclusiveCarPort.add(car);
     }
 
     @Override
-    public ExclusiveCar get(UUID id) {
+    public ExclusiveCar get(UUID id) throws RepositoryEntException {
         return getExclusiveCarByIdPort.get(id);
     }
 
@@ -40,12 +40,12 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     }
 
     @Override
-    public void update(ExclusiveCar car) throws RepositoryAdapterException {
-        updateExclusiveCarPort.update(car);
+    public ExclusiveCar update(ExclusiveCar car) throws RepositoryAdapterException {
+        return updateExclusiveCarPort.update(car);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RepositoryEntException {
         deleteExclusiveCarPort.delete(id);
     }
 }

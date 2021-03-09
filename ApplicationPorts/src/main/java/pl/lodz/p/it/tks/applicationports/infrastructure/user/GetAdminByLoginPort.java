@@ -1,9 +1,9 @@
 package pl.lodz.p.it.tks.applicationports.infrastructure.user;
 
-import lombok.NonNull;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.domainmodel.user.Admin;
+import pl.lodz.p.it.tks.domainmodel.user.User;
 
-public interface AddAdminPort {
-    Admin add(Admin admin) throws RepositoryAdapterException;
+public interface GetAdminByLoginPort {
+    Admin get(String login) throws RepositoryAdapterException;
 }
