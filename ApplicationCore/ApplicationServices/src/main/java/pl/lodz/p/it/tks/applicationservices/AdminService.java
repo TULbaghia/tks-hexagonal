@@ -27,12 +27,18 @@ public class AdminService implements AdminUseCase {
     @Override
     public Admin add(Admin admin) throws RepositoryAdapterException {
         checkPassword(admin.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(admin.getLogin()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return addAdminPort.add(admin);
     }
 
     @Override
     public Admin update(Admin admin) throws RepositoryAdapterException {
         checkPassword(admin.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(admin.getLogin()) && !x.getId().equals(admin.getId()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return updateAdminPort.update(admin);
     }
 

@@ -2,8 +2,11 @@ package pl.lodz.p.it.tks.applicationservices;
 
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.economy.*;
+import pl.lodz.p.it.tks.applicationports.infrastructure.rent.GetAllRentPort;
+import pl.lodz.p.it.tks.applicationports.infrastructure.rent.UpdateRentPort;
 import pl.lodz.p.it.tks.applicationports.ui.EconomyCarUseCase;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.domainmodel.resources.Rent;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,6 +26,12 @@ public class EconomyCarService implements EconomyCarUseCase {
     private UpdateEconomyCarPort updateEconomyCarPort;
     @Inject
     private DeleteEconomyCarPort deleteEconomyCarPort;
+    @Inject
+    private GetEconomyCarByVinPort getEconomyCarByVinPort;
+    @Inject
+    private GetAllRentPort getAllRentPort;
+    @Inject
+    private UpdateRentPort updateRentPort;
 
     @Override
     public EconomyCar add(EconomyCar car) throws RepositoryAdapterException {
@@ -39,6 +48,11 @@ public class EconomyCarService implements EconomyCarUseCase {
     }
 
     @Override
+    public EconomyCar get(String vin) throws RepositoryAdapterException {
+        return getEconomyCarByVinPort.getEconomyCarByVin(vin);
+    }
+
+    @Override
     public List<EconomyCar> getAll() {
         return getAllEconomyCarPort.getAll();
     }
@@ -49,7 +63,19 @@ public class EconomyCarService implements EconomyCarUseCase {
     }
 
     @Override
-    public void delete(UUID id) throws RepositoryEntException {
+    public void delete(UUID id) throws RepositoryAdapterException {
+        long length = getAllRentPort.getAll().stream().filter(x -> x.getRentEndDate() == null && x.getCar().getId().equals(id)).count();
+        if(length > 0) {
+            throw new RepositoryAdapterException("Cannot delete already reserved vehicle");
+        }
         deleteEconomyCarPort.delete(id);
+        getAllRentPort.getAll().stream().filter(x -> x.getCar() != null && x.getCar().getId().equals(id)).forEach(x -> {
+            x.setCar(null);
+            try {
+                updateRentPort.update(x);
+            } catch (RepositoryAdapterException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

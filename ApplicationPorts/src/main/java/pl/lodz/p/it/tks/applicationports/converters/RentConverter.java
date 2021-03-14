@@ -1,29 +1,25 @@
 package pl.lodz.p.it.tks.applicationports.converters;
 
-import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
-import pl.lodz.p.it.tks.applicationports.ui.EconomyCarUseCase;
 import pl.lodz.p.it.tks.data.resources.CarEnt;
 import pl.lodz.p.it.tks.data.resources.EconomyCarEnt;
 import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.data.resources.RentEnt;
+import pl.lodz.p.it.tks.data.user.CustomerEnt;
+import pl.lodz.p.it.tks.data.user.UserEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.Car;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.domainmodel.resources.Rent;
-import pl.lodz.p.it.tks.repository.CarEntRepository;
-import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
-
-import javax.inject.Inject;
-import java.util.stream.Stream;
 
 public class RentConverter {
 
     private static Car convertCar(CarEnt carEnt) {
         if (carEnt instanceof ExclusiveCarEnt) {
             return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEnt);
-        } else {
+        } else if (carEnt instanceof EconomyCarEnt){
             return CarConverter.convertEntToDomain((EconomyCarEnt) carEnt);
         }
+        return null;
     }
 
     private static CarEnt convertCarEnt(Car car) {
@@ -34,11 +30,11 @@ public class RentConverter {
         }
     }
 
-    public static RentEnt convertDomainToEnt(Rent rent) {
+    public static RentEnt convertDomainToEnt(Rent rent, CustomerEnt userEnt, CarEnt carEnt) {
         return RentEnt.builder()
                 .id(rent.getId())
-                .customer(UserConverter.convertDomainToEnt(rent.getCustomer()))
-                .car(convertCarEnt(rent.getCar()))
+                .customer(userEnt)
+                .car(carEnt)
                 .rentStartDate(rent.getRentStartDate())
                 .rentEndDate(rent.getRentEndDate())
                 .price(rent.getPrice())

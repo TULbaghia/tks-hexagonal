@@ -43,6 +43,7 @@ public class CarEntRepository extends EntRepository<CarEnt> {
             try {
                 add(EconomyCarEnt.builder()
                         .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7222" + i))
+                        .vin("8233h4234h234g2" + i)
                         .engineCapacity(1.5)
                         .doorNumber(5)
                         .brand("BMW" + i)

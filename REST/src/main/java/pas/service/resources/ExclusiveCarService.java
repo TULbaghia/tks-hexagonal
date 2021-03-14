@@ -5,6 +5,7 @@ import pas.service.exception.RestException;
 import pas.service.validation.resources.UpdateCarValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.ui.ExclusiveCarUseCase;
+import pl.lodz.p.it.tks.domainmodel.resources.Car;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
@@ -38,12 +39,30 @@ public class ExclusiveCarService {
     @Path("/{uuid}")
     @GET
     public String getExclusiveCar(@PathParam("uuid") String id) {
+        UUID uuid;
         try {
-            ExclusiveCar exclusiveCar = exclusiveCarUseCase.get(UUID.fromString(id));
-            return JSONObject.wrap(exclusiveCarUseCase.get(exclusiveCar.getId())).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            uuid = null;
         }
+
+        Car car;
+
+        if(uuid == null) {
+            try {
+                car = exclusiveCarUseCase.get(id);
+            } catch (RepositoryAdapterException e) {
+                throw new RestException(e.getMessage());
+            }
+        } else {
+            try {
+                car = exclusiveCarUseCase.get(uuid);
+            } catch (RepositoryAdapterException e) {
+                throw new RestException(e.getMessage());
+            }
+        }
+
+        return JSONObject.wrap(car).toString();
     }
 
     @PUT
@@ -51,6 +70,7 @@ public class ExclusiveCarService {
         ExclusiveCar editingCar = ExclusiveCar.builder()
                 .id(exclusiveCar.getId())
                 .engineCapacity(exclusiveCar.getEngineCapacity())
+                .vin(exclusiveCar.getVin())
                 .brand(exclusiveCar.getBrand())
                 .doorNumber(exclusiveCar.getDoorNumber())
                 .basePricePerDay(exclusiveCar.getBasePricePerDay())
@@ -58,7 +78,7 @@ public class ExclusiveCarService {
                 .boardPcName(exclusiveCar.getBoardPcName())
                 .build();
         try {
-            return JSONObject.wrap(exclusiveCarUseCase.add(editingCar)).toString();
+            return JSONObject.wrap(exclusiveCarUseCase.update(editingCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }

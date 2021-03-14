@@ -27,12 +27,18 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee add(Employee employee) throws RepositoryAdapterException {
         checkPassword(employee.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(employee.getLogin()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return addEmployeePort.add(employee);
     }
 
     @Override
     public Employee update(Employee employee) throws RepositoryAdapterException {
         checkPassword(employee.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(employee.getLogin()) && !x.getId().equals(employee.getId()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return updateEmployeePort.update(employee);
     }
 

@@ -3,9 +3,13 @@ package pl.lodz.p.it.tks.applicationports.adapters.driven;
 import pl.lodz.p.it.tks.applicationports.converters.RentConverter;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.rent.*;
+import pl.lodz.p.it.tks.data.resources.CarEnt;
 import pl.lodz.p.it.tks.data.resources.RentEnt;
+import pl.lodz.p.it.tks.data.user.CustomerEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.Rent;
+import pl.lodz.p.it.tks.repository.CarEntRepository;
 import pl.lodz.p.it.tks.repository.RentEntRepository;
+import pl.lodz.p.it.tks.repository.UserEntRepository;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.inject.Inject;
@@ -13,14 +17,18 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRentPort, UpdateRentPort, DeleteRentPort, EndRentPort {
+public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRentPort, UpdateRentPort, DeleteRentPort {
 
     @Inject
     private RentEntRepository rentEntRepository;
+    @Inject
+    private UserEntRepository userEntRepository;
+    @Inject
+    private CarEntRepository carEntRepository;
 
     @Override
     public Rent add(Rent rent) throws RepositoryAdapterException {
-        RentEnt rentEnt = RentConverter.convertDomainToEnt(rent);
+        RentEnt rentEnt = loadEnts(rent);
         try {
             return RentConverter.convertEntToDomain(rentEntRepository.add(rentEnt));
         } catch (RepositoryEntException e) {
@@ -55,7 +63,7 @@ public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRe
 
     @Override
     public Rent update(Rent rent) throws RepositoryAdapterException {
-        RentEnt rentEnt = RentConverter.convertDomainToEnt(rent);
+        RentEnt rentEnt = loadEnts(rent);
         try {
             return RentConverter.convertEntToDomain(rentEntRepository.update(rentEnt));
         } catch (RepositoryEntException e) {
@@ -63,12 +71,17 @@ public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRe
         }
     }
 
-    @Override
-    public Rent endRent(UUID id) throws RepositoryAdapterException {
+    private RentEnt loadEnts(Rent rent) throws RepositoryAdapterException {
+        CarEnt carEnt = null;
+        CustomerEnt userEnt;
         try {
-            return RentConverter.convertEntToDomain(rentEntRepository.endRent(id));
+            if (rent.getCar() != null) {
+                carEnt = carEntRepository.get(rent.getCar().getId());
+            }
+            userEnt = (CustomerEnt) userEntRepository.get(rent.getCustomer().getId());
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }
+        return RentConverter.convertDomainToEnt(rent, userEnt, carEnt);
     }
 }

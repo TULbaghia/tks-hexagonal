@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconomyCarByIdPort,
-        GetAllEconomyCarPort, UpdateEconomyCarPort, DeleteEconomyCarPort {
+        GetAllEconomyCarPort, UpdateEconomyCarPort, DeleteEconomyCarPort, GetEconomyCarByVinPort {
 
     @Inject
     private CarEntRepository carEntRepository;
@@ -32,8 +32,12 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
     }
 
     @Override
-    public void delete(UUID id) throws RepositoryEntException {
-        carEntRepository.delete(id);
+    public void delete(UUID id) throws RepositoryAdapterException {
+        try {
+            carEntRepository.delete(id);
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override
@@ -57,5 +61,12 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }
+    }
+
+    @Override
+    public EconomyCar getEconomyCarByVin(String vin) throws RepositoryAdapterException {
+        return getAll().stream()
+                .filter(economyCar -> economyCar.getVin().equals(vin))
+                .findFirst().orElseThrow(() -> new RepositoryAdapterException("vin does not exist"));
     }
 }

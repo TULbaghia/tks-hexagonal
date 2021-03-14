@@ -5,7 +5,9 @@ import pas.service.exception.RestException;
 import pas.service.validation.resources.UpdateCarValid;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.ui.EconomyCarUseCase;
+import pl.lodz.p.it.tks.domainmodel.resources.Car;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.domainmodel.user.User;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import javax.inject.Inject;
@@ -38,12 +40,30 @@ public class EconomyCarService {
     @Path("/{uuid}")
     @GET
     public String getEconomyCar(@PathParam("uuid") String id) {
+        UUID uuid;
         try {
-            EconomyCar economyCar = economyCarUseCase.get(UUID.fromString(id));
-            return JSONObject.wrap(economyCarUseCase.get(economyCar.getId())).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            uuid = null;
         }
+
+        Car car;
+
+        if(uuid == null) {
+            try {
+                car = economyCarUseCase.get(id);
+            } catch (RepositoryAdapterException e) {
+                throw new RestException(e.getMessage());
+            }
+        } else {
+            try {
+                car = economyCarUseCase.get(uuid);
+            } catch (RepositoryAdapterException e) {
+                throw new RestException(e.getMessage());
+            }
+        }
+
+        return JSONObject.wrap(car).toString();
     }
 
     @PUT
@@ -51,13 +71,14 @@ public class EconomyCarService {
         EconomyCar editingCar = EconomyCar.builder()
                 .id(economyCar.getId())
                 .engineCapacity(economyCar.getEngineCapacity())
+                .vin(economyCar.getVin())
                 .brand(economyCar.getBrand())
                 .doorNumber(economyCar.getDoorNumber())
                 .basePricePerDay(economyCar.getBasePricePerDay())
                 .driverEquipment(economyCar.getDriverEquipment())
                 .build();
         try {
-            return JSONObject.wrap(economyCarUseCase.add(editingCar)).toString();
+            return JSONObject.wrap(economyCarUseCase.update(editingCar)).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }

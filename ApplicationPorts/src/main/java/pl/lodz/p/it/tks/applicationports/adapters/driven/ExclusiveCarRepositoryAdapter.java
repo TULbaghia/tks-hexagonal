@@ -4,6 +4,7 @@ import pl.lodz.p.it.tks.applicationports.converters.CarConverter;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.exclusive.*;
 import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
+import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.repository.CarEntRepository;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetExclusiveCarByIdPort,
-        GetAllExclusiveCarPort, UpdateExclusiveCarPort, DeleteExclusiveCarPort {
+        GetAllExclusiveCarPort, UpdateExclusiveCarPort, DeleteExclusiveCarPort, GetExclusiveCarByVinPort {
 
     @Inject
     private CarEntRepository carEntRepository;
@@ -32,8 +33,12 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     }
 
     @Override
-    public void delete(UUID id) throws RepositoryEntException {
-        carEntRepository.delete(id);
+    public void delete(UUID id) throws RepositoryAdapterException {
+        try {
+            carEntRepository.delete(id);
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override
@@ -57,5 +62,12 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }
+    }
+
+    @Override
+    public ExclusiveCar getExclusiveCarByVin(String vin) throws RepositoryAdapterException {
+        return getAll().stream()
+                .filter(economyCar -> economyCar.getVin().equals(vin))
+                .findFirst().orElseThrow(() -> new RepositoryAdapterException("vin does not exist"));
     }
 }

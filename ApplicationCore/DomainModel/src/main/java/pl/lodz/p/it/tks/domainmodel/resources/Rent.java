@@ -20,7 +20,6 @@ public class Rent extends ModelIdTrait {
     private LocalDateTime rentStartDate = LocalDateTime.now();
     @NonNull
     private Customer customer;
-    @NonNull
     private Car car;
 
     @Setter(AccessLevel.NONE)

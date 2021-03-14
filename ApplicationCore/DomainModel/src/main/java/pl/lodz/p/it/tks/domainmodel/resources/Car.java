@@ -23,6 +23,12 @@ public abstract class Car extends ModelIdTrait {
 
     @JsonProperty
     @NonNull
+    @NotNull(message = "vin cannot be null.")
+    @Size(min = 17, max = 17, message = "brand length should be 17 chars.")
+    private String vin;
+
+    @JsonProperty
+    @NonNull
     @NotNull(message = "doorNumber cannot be null.")
     @Min(value = 3, message = "doorNumber should be at 3 minimum.")
     private int doorNumber;

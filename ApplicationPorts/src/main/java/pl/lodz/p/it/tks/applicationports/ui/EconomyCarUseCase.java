@@ -12,9 +12,11 @@ public interface EconomyCarUseCase {
 
     EconomyCar get(UUID id) throws RepositoryAdapterException;
 
+    EconomyCar get(String vin) throws RepositoryAdapterException;
+
     List<EconomyCar> getAll();
 
     EconomyCar update(EconomyCar car) throws RepositoryAdapterException;
 
-    void delete(UUID id) throws RepositoryEntException;
+    void delete(UUID id) throws RepositoryAdapterException;
 }

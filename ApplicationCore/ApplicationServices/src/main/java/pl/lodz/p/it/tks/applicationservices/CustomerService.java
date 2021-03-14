@@ -27,12 +27,18 @@ public class CustomerService implements CustomerUseCase {
     @Override
     public Customer add(Customer customer) throws RepositoryAdapterException {
         checkPassword(customer.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(customer.getLogin()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return addCustomerPort.add(customer);
     }
 
     @Override
     public Customer update(Customer customer) throws RepositoryAdapterException {
         checkPassword(customer.getPassword());
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(customer.getLogin()) && !x.getId().equals(customer.getId()))) {
+            throw new RepositoryAdapterException("User with this login already exists.");
+        }
         return updateCustomerPort.update(customer);
     }
 
