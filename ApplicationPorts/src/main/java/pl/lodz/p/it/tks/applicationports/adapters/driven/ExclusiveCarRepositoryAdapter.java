@@ -66,8 +66,10 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
 
     @Override
     public ExclusiveCar getExclusiveCarByVin(String vin) throws RepositoryAdapterException {
-        return getAll().stream()
-                .filter(economyCar -> economyCar.getVin().equals(vin))
-                .findFirst().orElseThrow(() -> new RepositoryAdapterException("vin does not exist"));
+        try {
+            return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.get(vin));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 }

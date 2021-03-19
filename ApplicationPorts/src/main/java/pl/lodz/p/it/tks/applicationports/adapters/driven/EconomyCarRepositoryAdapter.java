@@ -4,6 +4,7 @@ import pl.lodz.p.it.tks.applicationports.converters.CarConverter;
 import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.applicationports.infrastructure.car.economy.*;
 import pl.lodz.p.it.tks.data.resources.EconomyCarEnt;
+import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
 import pl.lodz.p.it.tks.repository.CarEntRepository;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
@@ -65,8 +66,10 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
 
     @Override
     public EconomyCar getEconomyCarByVin(String vin) throws RepositoryAdapterException {
-        return getAll().stream()
-                .filter(economyCar -> economyCar.getVin().equals(vin))
-                .findFirst().orElseThrow(() -> new RepositoryAdapterException("vin does not exist"));
+        try {
+            return CarConverter.convertEntToDomain((EconomyCarEnt) carEntRepository.get(vin));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 }

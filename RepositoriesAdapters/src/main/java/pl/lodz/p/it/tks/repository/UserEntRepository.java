@@ -42,7 +42,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
         try {
             for (int i = 1; i < 5; i++) {
                 add(CustomerEnt.builder()
-                        .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7111" + i))
                         .firstname("Customer" + i)
                         .lastname("Kowalski" + i)
                         .login("Klient" + i)
@@ -52,7 +51,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
             }
 
             add(CustomerEnt.builder()
-                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78475"))
                     .firstname("TestCustomer")
                     .lastname("TestCustomer")
                     .login("TestCustomer")
@@ -61,7 +59,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
             );
 
             add(EmployeeEnt.builder()
-                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78476"))
                     .firstname("TestEmployee")
                     .lastname("TestEmployee")
                     .login("TestEmployee")
@@ -70,7 +67,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
             );
 
             add(AdminEnt.builder()
-                    .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f78477"))
                     .firstname("TestAdmin")
                     .lastname("TestAdmin")
                     .login("TestAdmin")

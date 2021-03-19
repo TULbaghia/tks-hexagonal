@@ -11,6 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class RentEntRepository extends EntRepository<RentEnt> {
@@ -47,14 +48,16 @@ public class RentEntRepository extends EntRepository<RentEnt> {
 
     @PostConstruct
     public void loadSampleData()  {
+
+        List<CustomerEnt> customers = userEntRepository.getAll().stream().filter(x -> x instanceof CustomerEnt).map(x -> (CustomerEnt) x).collect(Collectors.toList());
+        List<CarEnt> cars = carEntRepository.getAll();
+
         for (int i = 1; i < 5; i++) {
             try {
-                CustomerEnt customer = (CustomerEnt) userEntRepository.get(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7111" + i));
-
-                CarEnt car = carEntRepository.get(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7222" + i));
+                CustomerEnt customer = customers.get(i);
+                CarEnt car = cars.get(i);
 
                 add(RentEnt.builder()
-                        .id(UUID.fromString("bcc5f975-d52c-4493-a9f6-50be79f7333" + i))
                         .car(car)
                         .customer(customer)
                         .build()
