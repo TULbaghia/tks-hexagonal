@@ -10,6 +10,7 @@ import pl.lodz.p.it.tks.data.user.customer.CustomerTypeEnt;
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class CustomerEnt extends UserEnt {
     private int rentsNumber;
 

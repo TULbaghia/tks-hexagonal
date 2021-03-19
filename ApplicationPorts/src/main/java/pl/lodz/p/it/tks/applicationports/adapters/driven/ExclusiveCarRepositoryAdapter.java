@@ -50,8 +50,12 @@ public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetEx
     }
 
     @Override
-    public ExclusiveCar get(UUID id) throws RepositoryEntException {
-        return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.get(id));
+    public ExclusiveCar get(UUID id) throws RepositoryAdapterException {
+        try {
+            return CarConverter.convertEntToDomain((ExclusiveCarEnt) carEntRepository.get(id));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override

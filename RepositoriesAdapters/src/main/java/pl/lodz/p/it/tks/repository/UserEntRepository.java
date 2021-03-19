@@ -15,6 +15,9 @@ import java.util.UUID;
 public class UserEntRepository extends EntRepository<UserEnt> {
     @Override
     public synchronized UserEnt add(UserEnt item) throws RepositoryEntException {
+        if (getAll().stream().anyMatch(x -> x.getLogin().equals(item.getLogin()))) {
+            throw new RepositoryEntException("User with this login already exists.");
+        }
         return super.add(item);
     }
 

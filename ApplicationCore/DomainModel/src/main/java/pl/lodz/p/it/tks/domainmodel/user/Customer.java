@@ -11,6 +11,7 @@ import pl.lodz.p.it.tks.domainmodel.user.customer.CustomerType;
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class Customer extends User {
     private int rentsNumber;
 

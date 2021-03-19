@@ -9,6 +9,7 @@ import pl.lodz.p.it.tks.domainmodel.trait.ModelIdTrait;
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class User extends ModelIdTrait {
     @NonNull
     private String login;

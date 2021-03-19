@@ -24,7 +24,7 @@ public abstract class CarDto extends ModelIdTrait {
     @JsonProperty
     @NonNull
     @NotNull(message = "vin cannot be null.")
-    @Size(min = 17, max = 17, message = "brand length should be 17 chars.")
+    @Size(min = 17, max = 17, message = "vin length should be 17 chars.")
     private String vin;
 
     @JsonProperty

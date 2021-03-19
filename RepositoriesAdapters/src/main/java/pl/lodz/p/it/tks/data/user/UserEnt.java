@@ -8,6 +8,7 @@ import pl.lodz.p.it.tks.data.trait.ModelIdTraitEnt;
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class UserEnt extends ModelIdTraitEnt {
     @NonNull
     private String login;

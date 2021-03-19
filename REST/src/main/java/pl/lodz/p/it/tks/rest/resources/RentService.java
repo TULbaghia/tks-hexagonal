@@ -48,7 +48,7 @@ public class RentService {
             if(user != null) {
                 return user;
             }
-        } catch (RepositoryAdapterException ignore) {
+        } catch (RepositoryAdapterException | ClassCastException ignore) {
         }
 
         return customerUseCase.get(login);

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class Rent extends ModelIdTrait {
     @NonNull
     @Builder.Default

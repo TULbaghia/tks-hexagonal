@@ -50,8 +50,12 @@ public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconom
     }
 
     @Override
-    public EconomyCar get(UUID id) throws RepositoryEntException {
-        return CarConverter.convertEntToDomain((EconomyCarEnt) carEntRepository.get(id));
+    public EconomyCar get(UUID id) throws RepositoryAdapterException {
+        try {
+            return CarConverter.convertEntToDomain((EconomyCarEnt) carEntRepository.get(id));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
     }
 
     @Override

@@ -5,10 +5,7 @@ import pl.lodz.p.it.tks.data.resources.EconomyCarEnt;
 import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.data.resources.RentEnt;
 import pl.lodz.p.it.tks.data.user.CustomerEnt;
-import pl.lodz.p.it.tks.data.user.UserEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.Car;
-import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
-import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.domainmodel.resources.Rent;
 
 public class RentConverter {
@@ -20,14 +17,6 @@ public class RentConverter {
             return CarConverter.convertEntToDomain((EconomyCarEnt) carEnt);
         }
         return null;
-    }
-
-    private static CarEnt convertCarEnt(Car car) {
-        if (car instanceof ExclusiveCar) {
-            return CarConverter.convertDomainToEnt((ExclusiveCar) car);
-        } else {
-            return CarConverter.convertDomainToEnt((EconomyCar) car);
-        }
     }
 
     public static RentEnt convertDomainToEnt(Rent rent, CustomerEnt userEnt, CarEnt carEnt) {
