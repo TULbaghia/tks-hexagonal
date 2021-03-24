@@ -109,7 +109,7 @@ public class RentService implements RentUseCase {
                 rent.getCustomer().getId().equals(item.getCustomer().getId()) &&
                         rent.getRentEndDate() == null).size();
 
-        if (currentlyRentedNumber + 1 > customerCarLimit) {
+        if (currentlyRentedNumber > customerCarLimit) {
             throw new RepositoryAdapterException("Customer max cars limit reached.");
         }
     }

@@ -43,8 +43,24 @@
         <web-resource-collection>
             <web-resource-name>Customer resources</web-resource-name>
             <url-pattern>/api/rent</url-pattern>
+            <url-pattern>/api/rent/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Customer</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Customer resources cars</web-resource-name>
+            <url-pattern>/api/car/exclusive</url-pattern>
+            <url-pattern>/api/car/economy</url-pattern>
+            <http-method>GET</http-method>
         </web-resource-collection>
         <auth-constraint>
             <role-name>Customer</role-name>
@@ -59,12 +75,12 @@
             <web-resource-name>Employee resources</web-resource-name>
             <url-pattern>/api/rent</url-pattern>
             <url-pattern>/api/rent/*</url-pattern>
-            <url-pattern>/api/customer</url-pattern>
-            <url-pattern>/api/customer/*</url-pattern>
-            <url-pattern>/api/exclusive</url-pattern>
-            <url-pattern>/api/exclusive/*</url-pattern>
-            <url-pattern>/api/economy</url-pattern>
-            <url-pattern>/api/economy/*</url-pattern>
+            <url-pattern>/api/user/customer</url-pattern>
+            <url-pattern>/api/user/customer/*</url-pattern>
+            <url-pattern>/api/car/exclusive</url-pattern>
+            <url-pattern>/api/car/exclusive/*</url-pattern>
+            <url-pattern>/api/car/economy</url-pattern>
+            <url-pattern>/api/car/economy/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>PATCH</http-method>
@@ -82,10 +98,10 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Admin resources</web-resource-name>
-            <url-pattern>/api/employee</url-pattern>
-            <url-pattern>/api/employee/*</url-pattern>
-            <url-pattern>/api/admin</url-pattern>
-            <url-pattern>/api/admin/*</url-pattern>
+            <url-pattern>/api/user/employee</url-pattern>
+            <url-pattern>/api/user/employee/*</url-pattern>
+            <url-pattern>/api/user/admin</url-pattern>
+            <url-pattern>/api/user/admin/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>PATCH</http-method>

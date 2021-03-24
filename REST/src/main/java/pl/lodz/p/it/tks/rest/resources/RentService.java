@@ -65,7 +65,7 @@ public class RentService {
             return JSONObject.valueToString(rentUseCase.getAll());
         } else if (user instanceof Customer){
             return JSONObject.valueToString(rentUseCase.getAll().stream()
-                    .filter(x -> x.getCustomer().equals(user)).collect(Collectors.toList()));
+                    .filter(x -> x.getCustomer().getId().equals(user.getId())).collect(Collectors.toList()));
         }
         return null;
     }
