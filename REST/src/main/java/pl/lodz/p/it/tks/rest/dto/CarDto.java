@@ -8,13 +8,18 @@ import pl.lodz.p.it.tks.domainmodel.trait.ModelIdTrait;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Data
 @SuperBuilder
 @ToString(callSuper = true)
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public abstract class CarDto extends ModelIdTrait {
+@EqualsAndHashCode
+public abstract class CarDto {
+    @JsonProperty
+    @NonNull
+    private String id;
+
     @JsonProperty
     @NonNull
     @NotNull(message = "engineCapacity cannot be null.")

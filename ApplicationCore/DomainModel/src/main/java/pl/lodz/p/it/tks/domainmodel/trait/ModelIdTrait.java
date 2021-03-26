@@ -13,6 +13,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class ModelIdTrait {
-    @JsonProperty
     private UUID id;
 }

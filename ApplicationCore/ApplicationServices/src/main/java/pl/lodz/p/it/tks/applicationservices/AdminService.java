@@ -13,16 +13,20 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class AdminService implements AdminUseCase {
+    private final AddAdminPort addAdminPort;
+    private final UpdateAdminPort updateAdminPort;
+    private final GetAllAdminPort getAllAdminPort;
+    private final GetAdminByIdPort getAdminByIdPort;
+    private final GetAdminByLoginPort getAdminByLoginPort;
+
     @Inject
-    private AddAdminPort addAdminPort;
-    @Inject
-    private UpdateAdminPort updateAdminPort;
-    @Inject
-    private GetAllAdminPort getAllAdminPort;
-    @Inject
-    private GetAdminByIdPort getAdminByIdPort;
-    @Inject
-    private GetAdminByLoginPort getAdminByLoginPort;
+    public AdminService(AddAdminPort addAdminPort, UpdateAdminPort updateAdminPort, GetAllAdminPort getAllAdminPort, GetAdminByIdPort getAdminByIdPort, GetAdminByLoginPort getAdminByLoginPort) {
+        this.addAdminPort = addAdminPort;
+        this.updateAdminPort = updateAdminPort;
+        this.getAllAdminPort = getAllAdminPort;
+        this.getAdminByIdPort = getAdminByIdPort;
+        this.getAdminByLoginPort = getAdminByLoginPort;
+    }
 
     @Override
     public Admin add(Admin admin) throws RepositoryAdapterException {
@@ -57,9 +61,9 @@ public class AdminService implements AdminUseCase {
         return getAdminByLoginPort.get(login);
     }
 
-    private void checkPassword(String password) throws CoreServiceException {
+    private void checkPassword(String password) throws RepositoryAdapterException {
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new CoreServiceException("Password is not secure.");
+            throw new RepositoryAdapterException("Password is not secure.");
         }
     }
 }

@@ -8,6 +8,7 @@ import pl.lodz.p.it.tks.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.repository.CarEntRepository;
+import pl.lodz.p.it.tks.repository.UserEntRepository;
 import pl.lodz.p.it.tks.repository.exception.RepositoryEntException;
 
 import java.lang.reflect.Field;
@@ -19,7 +20,7 @@ public class ExclusiveCarRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
-        exclusiveCarRepositoryAdapter = new ExclusiveCarRepositoryAdapter();
+        exclusiveCarRepositoryAdapter = new ExclusiveCarRepositoryAdapter(new CarEntRepository());
         carEntRepository = new CarEntRepository();
         Field field = exclusiveCarRepositoryAdapter.getClass().getDeclaredField("carEntRepository");
         field.setAccessible(true);

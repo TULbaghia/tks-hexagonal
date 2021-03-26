@@ -19,7 +19,7 @@ public class AdminRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
-        adminRepositoryAdapter = new AdminRepositoryAdapter();
+        adminRepositoryAdapter = new AdminRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
         Field field = adminRepositoryAdapter.getClass().getDeclaredField("userEntRepository");
         field.setAccessible(true);

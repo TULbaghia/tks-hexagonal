@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,20 +28,24 @@ import java.util.stream.Collectors;
 @Path("rent")
 public class RentService {
 
-    @Inject
-    private RentUseCase rentUseCase;
+    private final RentUseCase rentUseCase;
+
+    private final EmployeeUseCase employeeUseCase;
+
+    private final CustomerUseCase customerUseCase;
+
+    private final EconomyCarUseCase economyCarUseCase;
+
+    private final ExclusiveCarUseCase exclusiveCarUseCase;
 
     @Inject
-    private EmployeeUseCase employeeUseCase;
-
-    @Inject
-    private CustomerUseCase customerUseCase;
-
-    @Inject
-    private EconomyCarUseCase economyCarUseCase;
-
-    @Inject
-    private ExclusiveCarUseCase exclusiveCarUseCase;
+    public RentService(RentUseCase rentUseCase, EmployeeUseCase employeeUseCase, CustomerUseCase customerUseCase, EconomyCarUseCase economyCarUseCase, ExclusiveCarUseCase exclusiveCarUseCase) {
+        this.rentUseCase = rentUseCase;
+        this.employeeUseCase = employeeUseCase;
+        this.customerUseCase = customerUseCase;
+        this.economyCarUseCase = economyCarUseCase;
+        this.exclusiveCarUseCase = exclusiveCarUseCase;
+    }
 
     private User getUser(String login) throws RepositoryAdapterException {
         try {
@@ -62,10 +67,10 @@ public class RentService {
         User user = getUser(currentUser);
 
         if (user instanceof Employee) {
-            return JSONObject.valueToString(rentUseCase.getAll());
+            return JSONObject.valueToString(rentUseCase.getAll().stream().map(ReservationDto::toDto).collect(Collectors.toList()));
         } else if (user instanceof Customer){
             return JSONObject.valueToString(rentUseCase.getAll().stream()
-                    .filter(x -> x.getCustomer().getId().equals(user.getId())).collect(Collectors.toList()));
+                    .filter(x -> x.getCustomer().getId().equals(user.getId())).map(ReservationDto::toDto).collect(Collectors.toList()));
         }
         return null;
     }
@@ -77,9 +82,9 @@ public class RentService {
         User user = getUser(currentUser);
         Rent r = rentUseCase.get(UUID.fromString(id));
         if (user instanceof Employee) {
-            return JSONObject.wrap(r).toString();
+            return JSONObject.wrap(ReservationDto.toDto(r)).toString();
         } else if (user instanceof Customer && r.getCustomer().getLogin().equals(currentUser)) {
-            return JSONObject.wrap(r).toString();
+            return JSONObject.wrap(ReservationDto.toDto(r)).toString();
         }
         return null;
     }
@@ -122,7 +127,7 @@ public class RentService {
                 .build();
 
         try {
-            return JSONObject.wrap(rentUseCase.add(newRent)).toString();
+            return JSONObject.wrap(ReservationDto.toDto(rentUseCase.add(newRent))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -148,7 +153,7 @@ public class RentService {
                 .build();
 
         try {
-            return JSONObject.wrap(rentUseCase.update(newRent)).toString();
+            return JSONObject.wrap(ReservationDto.toDto(rentUseCase.update(newRent))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -172,7 +177,7 @@ public class RentService {
     @PATCH
     public String endRent(ReservationDto reservationDto) {
         try {
-            return JSONObject.wrap(rentUseCase.endRent(UUID.fromString(reservationDto.getId()))).toString();
+            return JSONObject.wrap(ReservationDto.toDto(rentUseCase.endRent(UUID.fromString(reservationDto.getId())))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }

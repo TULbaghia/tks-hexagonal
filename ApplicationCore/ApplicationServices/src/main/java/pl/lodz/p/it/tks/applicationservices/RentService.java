@@ -21,18 +21,22 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class RentService implements RentUseCase {
 
+    private final AddRentPort addRentPort;
+    private final GetRentPort getRentPort;
+    private final GetAllRentPort getAllRentPort;
+    private final UpdateRentPort updateRentPort;
+    private final DeleteRentPort deleteRentPort;
+    private final UpdateCustomerPort updateCustomerPort;
+
     @Inject
-    private AddRentPort addRentPort;
-    @Inject
-    private GetRentPort getRentPort;
-    @Inject
-    private GetAllRentPort getAllRentPort;
-    @Inject
-    private UpdateRentPort updateRentPort;
-    @Inject
-    private DeleteRentPort deleteRentPort;
-    @Inject
-    private UpdateCustomerPort updateCustomerPort;
+    public RentService(AddRentPort addRentPort, GetRentPort getRentPort, GetAllRentPort getAllRentPort, UpdateRentPort updateRentPort, DeleteRentPort deleteRentPort, UpdateCustomerPort updateCustomerPort) {
+        this.addRentPort = addRentPort;
+        this.getRentPort = getRentPort;
+        this.getAllRentPort = getAllRentPort;
+        this.updateRentPort = updateRentPort;
+        this.deleteRentPort = deleteRentPort;
+        this.updateCustomerPort = updateCustomerPort;
+    }
 
     @Override
     public Rent add(Rent rent) throws RepositoryAdapterException {
@@ -43,7 +47,7 @@ public class RentService implements RentUseCase {
         if (!rent.getCustomer().isActive()) {
             throw new RepositoryAdapterException("Non active customer cannot rent a car.");
         }
-       return addRentPort.add(rent);
+        return addRentPort.add(rent);
     }
 
     @Override

@@ -3,6 +3,8 @@ package pl.lodz.p.it.tks.rest.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.domainmodel.resources.ExclusiveCar;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,6 +25,19 @@ public class ExclusiveCarDto extends CarDto {
     @NotNull(message = "boardPcName cannot be null.")
     @Size(min = 1, max = 25, message = "brand length should be 1-255 chars.")
     private String boardPcName;
+
+    public static ExclusiveCarDto toDto(ExclusiveCar economyCar) {
+        return ExclusiveCarDto.builder()
+                .id(economyCar.getId().toString())
+                .engineCapacity(economyCar.getEngineCapacity())
+                .vin(economyCar.getVin())
+                .doorNumber(economyCar.getDoorNumber())
+                .brand(economyCar.getBrand())
+                .basePricePerDay(economyCar.getBasePricePerDay())
+                .driverEquipment(economyCar.getDriverEquipment())
+                .boardPcName(economyCar.getBoardPcName())
+                .build();
+    }
 
     @Override
     public double actualPricePerDay() {

@@ -16,22 +16,26 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class EconomyCarService implements EconomyCarUseCase {
+    private final AddEconomyCarPort addEconomyCarPort;
+    private final GetEconomyCarByIdPort getEconomyCarByIdPort;
+    private final GetAllEconomyCarPort getAllEconomyCarPort;
+    private final UpdateEconomyCarPort updateEconomyCarPort;
+    private final DeleteEconomyCarPort deleteEconomyCarPort;
+    private final GetEconomyCarByVinPort getEconomyCarByVinPort;
+    private final GetAllRentPort getAllRentPort;
+    private final UpdateRentPort updateRentPort;
+
     @Inject
-    private AddEconomyCarPort addEconomyCarPort;
-    @Inject
-    private GetEconomyCarByIdPort getEconomyCarByIdPort;
-    @Inject
-    private GetAllEconomyCarPort getAllEconomyCarPort;
-    @Inject
-    private UpdateEconomyCarPort updateEconomyCarPort;
-    @Inject
-    private DeleteEconomyCarPort deleteEconomyCarPort;
-    @Inject
-    private GetEconomyCarByVinPort getEconomyCarByVinPort;
-    @Inject
-    private GetAllRentPort getAllRentPort;
-    @Inject
-    private UpdateRentPort updateRentPort;
+    public EconomyCarService(AddEconomyCarPort addEconomyCarPort, GetEconomyCarByIdPort getEconomyCarByIdPort, GetAllEconomyCarPort getAllEconomyCarPort, UpdateEconomyCarPort updateEconomyCarPort, DeleteEconomyCarPort deleteEconomyCarPort, GetEconomyCarByVinPort getEconomyCarByVinPort, GetAllRentPort getAllRentPort, UpdateRentPort updateRentPort) {
+        this.addEconomyCarPort = addEconomyCarPort;
+        this.getEconomyCarByIdPort = getEconomyCarByIdPort;
+        this.getAllEconomyCarPort = getAllEconomyCarPort;
+        this.updateEconomyCarPort = updateEconomyCarPort;
+        this.deleteEconomyCarPort = deleteEconomyCarPort;
+        this.getEconomyCarByVinPort = getEconomyCarByVinPort;
+        this.getAllRentPort = getAllRentPort;
+        this.updateRentPort = updateRentPort;
+    }
 
     @Override
     public EconomyCar add(EconomyCar car) throws RepositoryAdapterException {
@@ -65,7 +69,7 @@ public class EconomyCarService implements EconomyCarUseCase {
     @Override
     public void delete(UUID id) throws RepositoryAdapterException {
         long length = getAllRentPort.getAll().stream().filter(x -> x.getRentEndDate() == null && x.getCar().getId().equals(id)).count();
-        if(length > 0) {
+        if (length > 0) {
             throw new RepositoryAdapterException("Cannot delete already reserved vehicle");
         }
         deleteEconomyCarPort.delete(id);

@@ -19,8 +19,12 @@ import java.util.stream.Collectors;
 public class ExclusiveCarRepositoryAdapter implements AddExclusiveCarPort, GetExclusiveCarByIdPort,
         GetAllExclusiveCarPort, UpdateExclusiveCarPort, DeleteExclusiveCarPort, GetExclusiveCarByVinPort {
 
+    private final CarEntRepository carEntRepository;
+
     @Inject
-    private CarEntRepository carEntRepository;
+    public ExclusiveCarRepositoryAdapter(CarEntRepository carEntRepository) {
+        this.carEntRepository = carEntRepository;
+    }
 
     @Override
     public ExclusiveCar add(ExclusiveCar exclusiveCar) throws RepositoryAdapterException {

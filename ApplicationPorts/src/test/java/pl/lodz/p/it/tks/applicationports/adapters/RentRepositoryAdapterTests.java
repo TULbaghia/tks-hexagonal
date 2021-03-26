@@ -33,7 +33,7 @@ public class RentRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException, RepositoryEntException {
-        rentRepositoryAdapter = new RentRepositoryAdapter();
+        rentRepositoryAdapter = new RentRepositoryAdapter(new RentEntRepository(), new UserEntRepository(), new CarEntRepository());
 
         rentEntRepository = new RentEntRepository();
         carEntRepository = new CarEntRepository();

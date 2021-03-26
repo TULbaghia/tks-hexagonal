@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 public class EmployeeRepositoryAdapter implements AddEmployeePort, UpdateEmployeePort, GetAllEmployeePort,
         GetEmployeeByLoginPort, GetEmployeeByIdPort {
 
+    private final UserEntRepository userEntRepository;
+
     @Inject
-    private UserEntRepository userEntRepository;
+    public EmployeeRepositoryAdapter(UserEntRepository userEntRepository) {
+        this.userEntRepository = userEntRepository;
+    }
 
     @Override
     public Employee add(Employee employee) throws RepositoryAdapterException {

@@ -1,6 +1,6 @@
 package pl.lodz.p.it.tks.applicationservices.exception;
 
-public class CoreServiceException extends RuntimeException {
+public class CoreServiceException extends Exception {
     public CoreServiceException() {
         super();
     }

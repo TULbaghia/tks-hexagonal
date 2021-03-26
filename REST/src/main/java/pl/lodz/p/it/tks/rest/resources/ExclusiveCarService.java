@@ -14,18 +14,22 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 @Path("car/exclusive")
 public class ExclusiveCarService {
+    private final ExclusiveCarUseCase exclusiveCarUseCase;
+
     @Inject
-    private ExclusiveCarUseCase exclusiveCarUseCase;
+    public ExclusiveCarService(ExclusiveCarUseCase exclusiveCarUseCase) {
+        this.exclusiveCarUseCase = exclusiveCarUseCase;
+    }
 
     @POST
     public String addExclusiveCar(@Valid ExclusiveCarDto exclusiveCarDto) {
         ExclusiveCar exclusiveCar = ExclusiveCar.builder()
-                .id(exclusiveCarDto.getId())
                 .engineCapacity(exclusiveCarDto.getEngineCapacity())
                 .vin(exclusiveCarDto.getVin())
                 .brand(exclusiveCarDto.getBrand())
@@ -35,7 +39,7 @@ public class ExclusiveCarService {
                 .boardPcName(exclusiveCarDto.getBoardPcName())
                 .build();
         try {
-            return JSONObject.wrap(exclusiveCarUseCase.add(exclusiveCar)).toString();
+            return JSONObject.wrap(ExclusiveCarDto.toDto(exclusiveCarUseCase.add(exclusiveCar))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -43,7 +47,7 @@ public class ExclusiveCarService {
 
     @GET
     public String getAllExclusiveCars() {
-        return JSONObject.valueToString(exclusiveCarUseCase.getAll());
+        return JSONObject.valueToString(exclusiveCarUseCase.getAll().stream().map(ExclusiveCarDto::toDto).collect(Collectors.toList()));
     }
 
     @Path("/{uuid}")
@@ -56,7 +60,7 @@ public class ExclusiveCarService {
             uuid = null;
         }
 
-        Car car;
+        ExclusiveCar car;
 
         if(uuid == null) {
             try {
@@ -72,13 +76,13 @@ public class ExclusiveCarService {
             }
         }
 
-        return JSONObject.wrap(car).toString();
+        return JSONObject.wrap(ExclusiveCarDto.toDto(car)).toString();
     }
 
     @PUT
     public String updateExclusiveCar(@UpdateCarValid @Valid ExclusiveCarDto exclusiveCar) {
         ExclusiveCar editingCar = ExclusiveCar.builder()
-                .id(exclusiveCar.getId())
+                .id(UUID.fromString(exclusiveCar.getId()))
                 .engineCapacity(exclusiveCar.getEngineCapacity())
                 .vin(exclusiveCar.getVin())
                 .brand(exclusiveCar.getBrand())
@@ -88,7 +92,7 @@ public class ExclusiveCarService {
                 .boardPcName(exclusiveCar.getBoardPcName())
                 .build();
         try {
-            return JSONObject.wrap(exclusiveCarUseCase.update(editingCar)).toString();
+            return JSONObject.wrap(ExclusiveCarDto.toDto(exclusiveCarUseCase.update(editingCar))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }

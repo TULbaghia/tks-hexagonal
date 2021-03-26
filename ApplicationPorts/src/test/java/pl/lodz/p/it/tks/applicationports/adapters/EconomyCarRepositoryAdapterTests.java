@@ -20,7 +20,7 @@ public class EconomyCarRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
-        economyCarRepositoryAdapter = new EconomyCarRepositoryAdapter();
+        economyCarRepositoryAdapter = new EconomyCarRepositoryAdapter(new CarEntRepository());
         carEntRepository = new CarEntRepository();
         Field field = economyCarRepositoryAdapter.getClass().getDeclaredField("carEntRepository");
         field.setAccessible(true);

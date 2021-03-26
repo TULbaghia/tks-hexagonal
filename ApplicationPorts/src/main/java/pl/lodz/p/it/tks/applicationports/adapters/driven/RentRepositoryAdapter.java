@@ -19,12 +19,16 @@ import java.util.stream.Collectors;
 
 public class RentRepositoryAdapter implements AddRentPort, GetRentPort, GetAllRentPort, UpdateRentPort, DeleteRentPort {
 
+    private final RentEntRepository rentEntRepository;
+    private final UserEntRepository userEntRepository;
+    private final CarEntRepository carEntRepository;
+
     @Inject
-    private RentEntRepository rentEntRepository;
-    @Inject
-    private UserEntRepository userEntRepository;
-    @Inject
-    private CarEntRepository carEntRepository;
+    public RentRepositoryAdapter(RentEntRepository rentEntRepository, UserEntRepository userEntRepository, CarEntRepository carEntRepository) {
+        this.rentEntRepository = rentEntRepository;
+        this.userEntRepository = userEntRepository;
+        this.carEntRepository = carEntRepository;
+    }
 
     @Override
     public Rent add(Rent rent) throws RepositoryAdapterException {

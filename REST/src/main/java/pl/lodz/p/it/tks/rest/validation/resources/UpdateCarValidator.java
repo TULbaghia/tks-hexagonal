@@ -20,8 +20,8 @@ public class UpdateCarValidator implements ConstraintValidator<UpdateCarValid, C
         return checkConstraint(constraintValidatorContext, car.getId(), "Car ID cannot be null or empty.");
     }
 
-    private boolean checkConstraint(ConstraintValidatorContext constraintValidatorContext, UUID field, String message) {
-        if (field == null) {
+    private boolean checkConstraint(ConstraintValidatorContext constraintValidatorContext, String field, String message) {
+        if (field == null || field.equals("")) {
             constraintValidatorContext.buildConstraintViolationWithTemplate(message).addConstraintViolation();
             return false;
         }

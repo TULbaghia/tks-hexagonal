@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class EconomyCar extends Car {
-    @JsonProperty
     @NonNull
     @NotNull(message = "driverEquipment cannot be null.")
     @Size(min = 1, max = 255)

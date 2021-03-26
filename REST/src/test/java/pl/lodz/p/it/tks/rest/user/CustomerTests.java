@@ -142,7 +142,7 @@ public class CustomerTests {
         JSONObject testUser = addTestCustomer();
         JSONObject jsonObj = new JSONObject()
                 .put("id", testUser.get("id"))
-                .put("isActive", false);
+                .put("active", false);
 
         RequestSpecification rs = RestAssured.given();
 

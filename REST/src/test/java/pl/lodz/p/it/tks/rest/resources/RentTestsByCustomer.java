@@ -65,8 +65,8 @@ public class RentTestsByCustomer {
                 .post("rent")
                 .then()
                 .assertThat()
-                .body("customer.id", containsString(testCustomer.getString("id")))
-                .body("car.id", containsString(testCar.getString("id")))
+                .body("customerId", containsString(testCustomer.getString("id")))
+                .body("carId", containsString(testCar.getString("id")))
                 .body("rentStartDate", notNullValue())
                 .statusCode(200);
     }
@@ -85,8 +85,8 @@ public class RentTestsByCustomer {
                 .get("rent/" + testRent.getString("id"))
                 .then()
                 .assertThat()
-                .body("customer.id", containsString(testRent.getJSONObject("customer").getString("id")))
-                .body("car.id", containsString(testRent.getJSONObject("car").getString("id")))
+                .body("customerId", containsString(testRent.getString("customerId")))
+                .body("carId", containsString(testRent.getString("carId")))
                 .body("rentStartDate", containsString(testRent.getString("rentStartDate")))
                 .statusCode(200);
     }
@@ -113,8 +113,8 @@ public class RentTestsByCustomer {
         );
 
         int lastIndex = customersReservations.length() - 1;
-        Assert.assertEquals(customersReservations.getJSONObject(lastIndex).getJSONObject("customer").getString("login"), testCustomer.getString("login"));
-        Assert.assertEquals(customersReservations.getJSONObject(lastIndex - 1).getJSONObject("customer").getString("login"), testCustomer.getString("login"));
+        Assert.assertEquals(customersReservations.getJSONObject(lastIndex).getString("customerId"), testCustomer.getString("id"));
+        Assert.assertEquals(customersReservations.getJSONObject(lastIndex - 1).getString("customerId"), testCustomer.getString("id"));
     }
 
     public JSONObject addTestCustomer() {

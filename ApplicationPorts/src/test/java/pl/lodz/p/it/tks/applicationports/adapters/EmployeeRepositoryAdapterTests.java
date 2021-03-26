@@ -18,7 +18,7 @@ public class EmployeeRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
-        employeeRepositoryAdapter = new EmployeeRepositoryAdapter();
+        employeeRepositoryAdapter = new EmployeeRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
         Field field = employeeRepositoryAdapter.getClass().getDeclaredField("userEntRepository");
         field.setAccessible(true);

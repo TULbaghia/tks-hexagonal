@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 public class AdminRepositoryAdapter implements AddAdminPort, UpdateAdminPort, GetAllAdminPort,
         GetAdminByLoginPort, GetAdminByIdPort {
 
+    private final UserEntRepository userEntRepository;
+
     @Inject
-    private UserEntRepository userEntRepository;
+    public AdminRepositoryAdapter(UserEntRepository userEntRepository) {
+        this.userEntRepository = userEntRepository;
+    }
 
     @Override
     public Admin add(Admin admin) throws RepositoryAdapterException {

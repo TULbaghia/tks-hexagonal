@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 public class CustomerRepositoryAdapter implements AddCustomerPort, UpdateCustomerPort, GetAllCustomerPort,
         GetCustomerByLoginPort, GetCustomerByIdPort {
 
+    private final UserEntRepository userEntRepository;
+
     @Inject
-    private UserEntRepository userEntRepository;
+    public CustomerRepositoryAdapter(UserEntRepository userEntRepository) {
+        this.userEntRepository = userEntRepository;
+    }
 
     @Override
     public Customer add(Customer customer) throws RepositoryAdapterException {

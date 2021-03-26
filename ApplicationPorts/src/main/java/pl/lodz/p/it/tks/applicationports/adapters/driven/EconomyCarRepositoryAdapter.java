@@ -19,8 +19,13 @@ import java.util.stream.Collectors;
 public class EconomyCarRepositoryAdapter implements AddEconomyCarPort, GetEconomyCarByIdPort,
         GetAllEconomyCarPort, UpdateEconomyCarPort, DeleteEconomyCarPort, GetEconomyCarByVinPort {
 
+    private final CarEntRepository carEntRepository;
+
     @Inject
-    private CarEntRepository carEntRepository;
+    public EconomyCarRepositoryAdapter(CarEntRepository carEntRepository) {
+        this.carEntRepository = carEntRepository;
+    }
+
 
     @Override
     public EconomyCar add(EconomyCar economyCar) throws RepositoryAdapterException {

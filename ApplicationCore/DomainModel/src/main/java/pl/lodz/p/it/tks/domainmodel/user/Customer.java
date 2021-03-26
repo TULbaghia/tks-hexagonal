@@ -29,14 +29,4 @@ public class Customer extends User {
     public double getDiscount(double price) throws CustomerException {
         return customerType.calculateDiscount(price);
     }
-
-    @JSONPropertyIgnore
-    public CustomerType getCustomerType() {
-        return customerType;
-    }
-
-    @JSONPropertyIgnore
-    public int getRentsNumber() {
-        return rentsNumber;
-    }
 }

@@ -15,22 +15,26 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class ExclusiveCarService implements ExclusiveCarUseCase {
+    private final AddExclusiveCarPort addExclusiveCarPort;
+    private final GetExclusiveCarByIdPort getExclusiveCarByIdPort;
+    private final GetAllExclusiveCarPort getAllExclusiveCarPort;
+    private final UpdateExclusiveCarPort updateExclusiveCarPort;
+    private final DeleteExclusiveCarPort deleteExclusiveCarPort;
+    private final GetExclusiveCarByVinPort getExclusiveCarByVinPort;
+    private final GetAllRentPort getAllRentPort;
+    private final UpdateRentPort updateRentPort;
+
     @Inject
-    private AddExclusiveCarPort addExclusiveCarPort;
-    @Inject
-    private GetExclusiveCarByIdPort getExclusiveCarByIdPort;
-    @Inject
-    private GetAllExclusiveCarPort getAllExclusiveCarPort;
-    @Inject
-    private UpdateExclusiveCarPort updateExclusiveCarPort;
-    @Inject
-    private DeleteExclusiveCarPort deleteExclusiveCarPort;
-    @Inject
-    private GetExclusiveCarByVinPort getExclusiveCarByVinPort;
-    @Inject
-    private GetAllRentPort getAllRentPort;
-    @Inject
-    private UpdateRentPort updateRentPort;
+    public ExclusiveCarService(AddExclusiveCarPort addExclusiveCarPort, GetExclusiveCarByIdPort getExclusiveCarByIdPort, GetAllExclusiveCarPort getAllExclusiveCarPort, UpdateExclusiveCarPort updateExclusiveCarPort, DeleteExclusiveCarPort deleteExclusiveCarPort, GetExclusiveCarByVinPort getExclusiveCarByVinPort, GetAllRentPort getAllRentPort, UpdateRentPort updateRentPort) {
+        this.addExclusiveCarPort = addExclusiveCarPort;
+        this.getExclusiveCarByIdPort = getExclusiveCarByIdPort;
+        this.getAllExclusiveCarPort = getAllExclusiveCarPort;
+        this.updateExclusiveCarPort = updateExclusiveCarPort;
+        this.deleteExclusiveCarPort = deleteExclusiveCarPort;
+        this.getExclusiveCarByVinPort = getExclusiveCarByVinPort;
+        this.getAllRentPort = getAllRentPort;
+        this.updateRentPort = updateRentPort;
+    }
 
     @Override
     public ExclusiveCar add(ExclusiveCar car) throws RepositoryAdapterException {
@@ -64,7 +68,7 @@ public class ExclusiveCarService implements ExclusiveCarUseCase {
     @Override
     public void delete(UUID id) throws RepositoryAdapterException {
         long length = getAllRentPort.getAll().stream().filter(x -> x.getRentEndDate() == null && x.getCar().getId().equals(id)).count();
-        if(length > 0) {
+        if (length > 0) {
             throw new RepositoryAdapterException("Cannot delete already reserved vehicle");
         }
         deleteExclusiveCarPort.delete(id);

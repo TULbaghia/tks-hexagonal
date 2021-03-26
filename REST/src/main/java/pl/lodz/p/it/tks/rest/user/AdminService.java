@@ -21,11 +21,15 @@ import java.util.stream.Collectors;
 @Consumes({ MediaType.APPLICATION_JSON })
 @Path("user/admin")
 public class AdminService {
+    private final AdminUseCase adminUseCase;
+
     @Inject
-    private AdminUseCase adminUseCase;
+    public AdminService(AdminUseCase adminUseCase) {
+        this.adminUseCase = adminUseCase;
+    }
 
     @POST
-    public String addAdmin(@AddUserValid UserDto userDto) throws RepositoryAdapterException {
+    public String addAdmin(@AddUserValid UserDto userDto) {
         Admin newUser = Admin.builder()
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
@@ -33,7 +37,7 @@ public class AdminService {
                 .password(userDto.getPassword())
                 .build();
         try {
-            return JSONObject.wrap(adminUseCase.add(newUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(adminUseCase.add(newUser))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -41,7 +45,7 @@ public class AdminService {
 
     @GET
     public String getAllAdmins() {
-        return JSONObject.valueToString(adminUseCase.getAll().stream().filter(x -> x instanceof Admin).collect(Collectors.toList()));
+        return JSONObject.valueToString(adminUseCase.getAll().stream().map(UserDto::toDto).collect(Collectors.toList()));
     }
 
     @Path("/{uuid}")
@@ -53,11 +57,11 @@ public class AdminService {
         } catch (IllegalArgumentException | RepositoryAdapterException e) {
             user = adminUseCase.get(id);
         }
-        return JSONObject.wrap(adminUseCase.get(user.getId())).toString();
+        return JSONObject.wrap(UserDto.toDto(adminUseCase.get(user.getId()))).toString();
     }
 
     @PUT
-    public String updateAdmin(@UpdateUserValid UserDto userDto) throws RepositoryAdapterException {
+    public String updateAdmin(@UpdateUserValid UserDto userDto) {
         Admin editingUser = Admin.builder()
                 .id(UUID.fromString(userDto.getId()))
                 .login(userDto.getLogin())
@@ -66,7 +70,7 @@ public class AdminService {
                 .lastname(userDto.getLastname())
                 .build();
         try {
-            return JSONObject.wrap(adminUseCase.update(editingUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(adminUseCase.update(editingUser))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -74,7 +78,7 @@ public class AdminService {
 
     @PATCH
     public String activateAdmin(@ActivateUserValid UserDto userDto) throws RepositoryAdapterException {
-        Admin user = (Admin) adminUseCase.get(UUID.fromString(userDto.getId()));
+        Admin user = adminUseCase.get(UUID.fromString(userDto.getId()));
 
         Admin activatedUser = Admin.builder()
                 .id(UUID.fromString(userDto.getId()))
@@ -82,10 +86,10 @@ public class AdminService {
                 .lastname(user.getLastname())
                 .login(user.getLogin())
                 .password(user.getPassword())
-                .isActive(userDto.getIsActive())
+                .isActive(userDto.getActive())
                 .build();
         try {
-            return JSONObject.wrap(adminUseCase.update(activatedUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(adminUseCase.update(activatedUser))).toString();
         } catch (RepositoryAdapterException e ) {
             throw new RestException(e.getMessage());
         }

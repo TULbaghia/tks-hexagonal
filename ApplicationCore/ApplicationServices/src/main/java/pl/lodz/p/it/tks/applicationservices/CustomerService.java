@@ -13,16 +13,20 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class CustomerService implements CustomerUseCase {
+    private final AddCustomerPort addCustomerPort;
+    private final UpdateCustomerPort updateCustomerPort;
+    private final GetAllCustomerPort getAllCustomerPort;
+    private final GetCustomerByIdPort getCustomerByIdPort;
+    private final GetCustomerByLoginPort getCustomerByLoginPort;
+
     @Inject
-    private AddCustomerPort addCustomerPort;
-    @Inject
-    private UpdateCustomerPort updateCustomerPort;
-    @Inject
-    private GetAllCustomerPort getAllCustomerPort;
-    @Inject
-    private GetCustomerByIdPort getCustomerByIdPort;
-    @Inject
-    private GetCustomerByLoginPort getCustomerByLoginPort;
+    public CustomerService(AddCustomerPort addCustomerPort, UpdateCustomerPort updateCustomerPort, GetAllCustomerPort getAllCustomerPort, GetCustomerByIdPort getCustomerByIdPort, GetCustomerByLoginPort getCustomerByLoginPort) {
+        this.addCustomerPort = addCustomerPort;
+        this.updateCustomerPort = updateCustomerPort;
+        this.getAllCustomerPort = getAllCustomerPort;
+        this.getCustomerByIdPort = getCustomerByIdPort;
+        this.getCustomerByLoginPort = getCustomerByLoginPort;
+    }
 
     @Override
     public Customer add(Customer customer) throws RepositoryAdapterException {
@@ -57,9 +61,9 @@ public class CustomerService implements CustomerUseCase {
         return getCustomerByLoginPort.get(login);
     }
 
-    private void checkPassword(String password) throws CoreServiceException {
+    private void checkPassword(String password) throws RepositoryAdapterException {
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new CoreServiceException("Password is not secure.");
+            throw new RepositoryAdapterException("Password is not secure.");
         }
     }
 }

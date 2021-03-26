@@ -18,7 +18,7 @@ public class CustomerRepositoryAdapterTests {
 
     @BeforeMethod
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
-        customerRepositoryAdapter = new CustomerRepositoryAdapter();
+        customerRepositoryAdapter = new CustomerRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
         Field field = customerRepositoryAdapter.getClass().getDeclaredField("userEntRepository");
         field.setAccessible(true);

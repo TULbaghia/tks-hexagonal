@@ -25,7 +25,7 @@ public class ActivateUserValidator implements ConstraintValidator<ActivateUserVa
             id = false;
         }
 
-        if (userDto.getIsActive() == null) {
+        if (userDto.getActive() == null) {
             constraintValidatorContext.buildConstraintViolationWithTemplate("IsActive cannot be null.").addConstraintViolation();
             isActive = false;
         }

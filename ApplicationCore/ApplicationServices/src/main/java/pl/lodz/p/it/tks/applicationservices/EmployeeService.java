@@ -13,16 +13,20 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class EmployeeService implements EmployeeUseCase {
+    private final AddEmployeePort addEmployeePort;
+    private final UpdateEmployeePort updateEmployeePort;
+    private final GetAllEmployeePort getAllEmployeePort;
+    private final GetEmployeeByIdPort getEmployeeByIdPort;
+    private final GetEmployeeByLoginPort getEmployeeByLoginPort;
+
     @Inject
-    private AddEmployeePort addEmployeePort;
-    @Inject
-    private UpdateEmployeePort updateEmployeePort;
-    @Inject
-    private GetAllEmployeePort getAllEmployeePort;
-    @Inject
-    private GetEmployeeByIdPort getEmployeeByIdPort;
-    @Inject
-    private GetEmployeeByLoginPort getEmployeeByLoginPort;
+    public EmployeeService(AddEmployeePort addEmployeePort, UpdateEmployeePort updateEmployeePort, GetAllEmployeePort getAllEmployeePort, GetEmployeeByIdPort getEmployeeByIdPort, GetEmployeeByLoginPort getEmployeeByLoginPort) {
+        this.addEmployeePort = addEmployeePort;
+        this.updateEmployeePort = updateEmployeePort;
+        this.getAllEmployeePort = getAllEmployeePort;
+        this.getEmployeeByIdPort = getEmployeeByIdPort;
+        this.getEmployeeByLoginPort = getEmployeeByLoginPort;
+    }
 
     @Override
     public Employee add(Employee employee) throws RepositoryAdapterException {
@@ -57,9 +61,9 @@ public class EmployeeService implements EmployeeUseCase {
         return getEmployeeByLoginPort.get(login);
     }
 
-    private void checkPassword(String password) throws CoreServiceException {
+    private void checkPassword(String password) throws RepositoryAdapterException {
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new CoreServiceException("Password is not secure.");
+            throw new RepositoryAdapterException("Password is not secure.");
         }
     }
 }

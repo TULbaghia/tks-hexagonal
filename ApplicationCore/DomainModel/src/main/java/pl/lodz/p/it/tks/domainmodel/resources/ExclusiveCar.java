@@ -13,12 +13,10 @@ import javax.validation.constraints.Size;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class ExclusiveCar extends Car {
-    @JsonProperty
     @NonNull
     @NotNull(message = "driverEquipment cannot be null.")
     @Size(min = 1, max = 255, message = "brand length should be 1-255 chars.")
     private String driverEquipment;
-    @JsonProperty
     @NonNull
     @NotNull(message = "boardPcName cannot be null.")
     @Size(min = 1, max = 25, message = "brand length should be 1-255 chars.")

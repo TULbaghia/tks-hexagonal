@@ -14,18 +14,22 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
 @Path("car/economy")
 public class EconomyCarService {
+    private final EconomyCarUseCase economyCarUseCase;
+
     @Inject
-    private EconomyCarUseCase economyCarUseCase;
+    public EconomyCarService(EconomyCarUseCase economyCarUseCase) {
+        this.economyCarUseCase = economyCarUseCase;
+    }
 
     @POST
     public String addEconomyCar(@Valid EconomyCarDto economyCarDto) {
         EconomyCar economyCar = EconomyCar.builder()
-                .id(economyCarDto.getId())
                 .engineCapacity(economyCarDto.getEngineCapacity())
                 .vin(economyCarDto.getVin())
                 .brand(economyCarDto.getBrand())
@@ -34,7 +38,7 @@ public class EconomyCarService {
                 .driverEquipment(economyCarDto.getDriverEquipment())
                 .build();
         try {
-            return JSONObject.wrap(economyCarUseCase.add(economyCar)).toString();
+            return JSONObject.wrap(EconomyCarDto.toDto(economyCarUseCase.add(economyCar))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -42,7 +46,7 @@ public class EconomyCarService {
 
     @GET
     public String getAllEconomyCars() {
-        return JSONObject.valueToString(economyCarUseCase.getAll());
+        return JSONObject.valueToString(economyCarUseCase.getAll().stream().map(EconomyCarDto::toDto).collect(Collectors.toList()));
     }
 
     @Path("/{uuid}")
@@ -55,7 +59,7 @@ public class EconomyCarService {
             uuid = null;
         }
 
-        Car car;
+        EconomyCar car;
 
         if(uuid == null) {
             try {
@@ -71,13 +75,13 @@ public class EconomyCarService {
             }
         }
 
-        return JSONObject.wrap(car).toString();
+        return JSONObject.wrap(EconomyCarDto.toDto(car)).toString();
     }
 
     @PUT
     public String updateEconomyCar(@UpdateCarValid @Valid EconomyCarDto economyCar) {
         EconomyCar editingCar = EconomyCar.builder()
-                .id(economyCar.getId())
+                .id(UUID.fromString(economyCar.getId()))
                 .engineCapacity(economyCar.getEngineCapacity())
                 .vin(economyCar.getVin())
                 .brand(economyCar.getBrand())
@@ -86,7 +90,7 @@ public class EconomyCarService {
                 .driverEquipment(economyCar.getDriverEquipment())
                 .build();
         try {
-            return JSONObject.wrap(economyCarUseCase.update(editingCar)).toString();
+            return JSONObject.wrap(EconomyCarDto.toDto(economyCarUseCase.update(editingCar))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }

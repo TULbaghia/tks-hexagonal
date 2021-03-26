@@ -21,11 +21,5 @@ public class User extends ModelIdTrait {
     private String lastname;
     @Builder.Default
     @NonNull
-    @Getter
     private boolean isActive = true;
-
-    @JSONPropertyIgnore
-    public String getPassword() {
-        return password;
-    }
 }

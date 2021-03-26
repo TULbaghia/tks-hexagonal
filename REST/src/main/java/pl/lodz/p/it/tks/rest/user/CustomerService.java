@@ -21,11 +21,15 @@ import java.util.stream.Collectors;
 @Consumes({ MediaType.APPLICATION_JSON })
 @Path("user/customer")
 public class CustomerService {
+    private final CustomerUseCase customerUseCase;
+
     @Inject
-    private CustomerUseCase customerUseCase;
+    public CustomerService(CustomerUseCase customerUseCase) {
+        this.customerUseCase = customerUseCase;
+    }
 
     @POST
-    public String addCustomer(@AddUserValid UserDto userDto) throws RepositoryAdapterException {
+    public String addCustomer(@AddUserValid UserDto userDto) {
         Customer newUser = Customer.builder()
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
@@ -33,7 +37,7 @@ public class CustomerService {
                 .password(userDto.getPassword())
                 .build();
         try {
-            return JSONObject.wrap(customerUseCase.add(newUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(customerUseCase.add(newUser))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -41,7 +45,7 @@ public class CustomerService {
 
     @GET
     public String getAllCustomers() {
-        return JSONObject.valueToString(customerUseCase.getAll().stream().filter(x -> x instanceof Customer).collect(Collectors.toList()));
+        return JSONObject.valueToString(customerUseCase.getAll().stream().map(UserDto::toDto).collect(Collectors.toList()));
     }
 
     @Path("/{uuid}")
@@ -53,11 +57,11 @@ public class CustomerService {
         } catch (IllegalArgumentException | RepositoryAdapterException e) {
             user = customerUseCase.get(id);
         }
-        return JSONObject.wrap(customerUseCase.get(user.getId())).toString();
+        return JSONObject.wrap(UserDto.toDto(customerUseCase.get(user.getId()))).toString();
     }
 
     @PUT
-    public String updateCustomer(@UpdateUserValid UserDto userDto) throws RepositoryAdapterException {
+    public String updateCustomer(@UpdateUserValid UserDto userDto) {
         Customer editingUser = Customer.builder()
                 .id(UUID.fromString(userDto.getId()))
                 .login(userDto.getLogin())
@@ -66,7 +70,7 @@ public class CustomerService {
                 .lastname(userDto.getLastname())
                 .build();
         try {
-            return JSONObject.wrap(customerUseCase.update(editingUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(customerUseCase.update(editingUser))).toString();
         } catch (RepositoryAdapterException e) {
             throw new RestException(e.getMessage());
         }
@@ -74,7 +78,7 @@ public class CustomerService {
 
     @PATCH
     public String activateCustomer(@ActivateUserValid UserDto userDto) throws RepositoryAdapterException {
-        Customer user = (Customer) customerUseCase.get(UUID.fromString(userDto.getId()));
+        Customer user = customerUseCase.get(UUID.fromString(userDto.getId()));
 
         Customer activatedUser = Customer.builder()
                 .id(UUID.fromString(userDto.getId()))
@@ -82,10 +86,10 @@ public class CustomerService {
                 .lastname(user.getLastname())
                 .login(user.getLogin())
                 .password(user.getPassword())
-                .isActive(userDto.getIsActive())
+                .isActive(userDto.getActive())
                 .build();
         try {
-            return JSONObject.wrap(customerUseCase.update(activatedUser)).toString();
+            return JSONObject.wrap(UserDto.toDto(customerUseCase.update(activatedUser))).toString();
         } catch (RepositoryAdapterException e ) {
             throw new RestException(e.getMessage());
         }
