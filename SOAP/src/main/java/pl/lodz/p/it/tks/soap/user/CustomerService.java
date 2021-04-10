@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "CustomerService")
+@WebService(serviceName = "CustomerAPI")
 public class CustomerService {
 
     @Inject

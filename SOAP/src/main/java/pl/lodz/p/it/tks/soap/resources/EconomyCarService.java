@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "EconomyCarService")
+@WebService(serviceName = "EconomyCarAPI")
 public class EconomyCarService {
     @Inject
     private EconomyCarUseCase economyCarUseCase;

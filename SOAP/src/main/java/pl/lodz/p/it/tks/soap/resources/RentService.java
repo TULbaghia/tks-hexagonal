@@ -26,7 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "RentService")
+@WebService(serviceName = "RentAPI")
 public class RentService {
     @Inject
     private RentUseCase rentUseCase;

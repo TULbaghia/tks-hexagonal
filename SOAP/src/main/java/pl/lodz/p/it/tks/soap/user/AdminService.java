@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "AdminService")
+@WebService(serviceName = "AdminAPI")
 public class AdminService {
     @Inject
     private AdminUseCase adminUseCase;

@@ -7,14 +7,18 @@ import pl.lodz.p.it.tks.domainmodel.resources.EconomyCar;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "EconomyCarSoap")
 public class EconomyCarSoap extends CarSoap {
-    @JsonProperty
     @NonNull
     @NotNull(message = "driverEquipment cannot be null.")
     @Size(min = 1, max = 255)

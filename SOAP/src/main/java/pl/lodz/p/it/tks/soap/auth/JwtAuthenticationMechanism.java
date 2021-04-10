@@ -25,9 +25,10 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, HttpMessageContext httpMessageContext) {
-        if(httpServletRequest.getRequestURL().toString().endsWith("/LoginService")) {
+        if(httpServletRequest.getRequestURL().toString().endsWith("/LoginAPI")) {
             return httpMessageContext.doNothing();
         }
+//        return httpMessageContext.doNothing();
 
         String authorizationHeader = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
@@ -46,7 +47,7 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
                     return httpMessageContext.responseUnauthorized();
                 }
 
-                // from now container knows user login and user groups, so web.xml can verify authority
+//                 from now container knows user login and user groups, so web.xml can verify authority
                 return httpMessageContext.notifyContainerAboutLogin(login, new HashSet<>(Arrays.asList(groups.split(","))));
             } catch (ParseException e) {
                 System.err.println(e.getMessage());

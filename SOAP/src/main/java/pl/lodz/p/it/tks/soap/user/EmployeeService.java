@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "EmployeeService")
+@WebService(serviceName = "EmployeeAPI")
 public class EmployeeService {
     @Inject
     private EmployeeUseCase employeeUseCase;

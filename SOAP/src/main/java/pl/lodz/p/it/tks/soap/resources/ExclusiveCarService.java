@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
-@WebService(serviceName = "ExclusiveCarService")
+@WebService(serviceName = "ExclusiveCarAPI")
 public class ExclusiveCarService {
     @Inject
     private ExclusiveCarUseCase exclusiveCarUseCase;

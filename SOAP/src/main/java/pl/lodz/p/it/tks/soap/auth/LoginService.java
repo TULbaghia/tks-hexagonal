@@ -11,7 +11,7 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 
-@WebService(serviceName = "LoginService")
+@WebService(serviceName = "LoginAPI")
 public class LoginService {
 
     @Inject
