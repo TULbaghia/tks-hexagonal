@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ExclusiveCarServiceTests {
-    private final String WSDL_URI = "http://localhost:8080/SOAP-1.0-SNAPSHOT/ExclusiveCarAPI?wsdl";
+    private final String WSDL_URI = "http://localhost:8080/RentSoap/ExclusiveCarAPI?wsdl";
 
     private ExclusiveCarService exclusiveCarService;
     private ExclusiveCar mockExclusiveCar;

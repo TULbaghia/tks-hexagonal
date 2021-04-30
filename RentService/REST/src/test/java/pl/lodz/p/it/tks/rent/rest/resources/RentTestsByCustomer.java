@@ -22,7 +22,6 @@ public class RentTestsByCustomer {
 
     @BeforeClass
     public void setup() {
-        RestAssured.baseURI = "https://localhost/REST-1.0-SNAPSHOT/api/";
         RestAssured.port = 8181;
         RestAssured.useRelaxedHTTPSValidation();
 
@@ -30,6 +29,10 @@ public class RentTestsByCustomer {
     }
 
     public String login(String username, String password) {
+        RestAssured.port = 8181;
+        RestAssured.useRelaxedHTTPSValidation();
+
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
         JSONObject jsonObj = new JSONObject()
                 .put("login", username)
                 .put("password", password);
@@ -41,6 +44,8 @@ public class RentTestsByCustomer {
                 .statusCode(202)
                 .extract()
                 .response();
+
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
 
         return r.getBody().asString();
     }
@@ -120,11 +125,23 @@ public class RentTestsByCustomer {
     public JSONObject addTestCustomer() {
         int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
         JSONObject jsonObj = new JSONObject()
-                .put("login","TestCaseUser" + randomNum)
-                .put("password","zaq1@WSX")
-                .put("firstname","TestCaseUser")
-                .put("lastname","TestCaseUser");
+                .put("login","TestRestCustomer" + randomNum)
+                .put("firstname","TestRestCustomer")
+                .put("lastname","TestRestCustomer");
 
+        JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
+
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        given().contentType(ContentType.JSON)
+                .body(userServiceObj.toString())
+                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+                .post("user")
+                .then()
+                .extract()
+                .body()
+                .asString();
+
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
         return new JSONObject(
                 given().contentType(ContentType.JSON)
                         .body(jsonObj.toString())

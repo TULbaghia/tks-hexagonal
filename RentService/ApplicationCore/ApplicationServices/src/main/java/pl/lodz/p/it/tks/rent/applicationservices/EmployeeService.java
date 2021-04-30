@@ -29,7 +29,6 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Override
     public Employee add(Employee employee) throws RepositoryAdapterException {
-        checkPassword(employee.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(employee.getLogin()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -38,7 +37,6 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Override
     public Employee update(Employee employee) throws RepositoryAdapterException {
-        checkPassword(employee.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(employee.getLogin()) && !x.getId().equals(employee.getId()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -58,11 +56,5 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee get(String login) throws RepositoryAdapterException {
         return getEmployeeByLoginPort.get(login);
-    }
-
-    private void checkPassword(String password) throws RepositoryAdapterException {
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new RepositoryAdapterException("Password is not secure.");
-        }
     }
 }

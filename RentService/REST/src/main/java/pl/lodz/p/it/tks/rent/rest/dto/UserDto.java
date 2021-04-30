@@ -21,15 +21,8 @@ public class UserDto {
     @JsonProperty
     private String login;
     @JsonProperty
-    private String password;
-    @JsonProperty
     @Getter
     private Boolean active;
-
-    @JSONPropertyIgnore
-    public String getPassword() {
-        return password;
-    }
 
     public static UserDto toDto(User user) {
         return UserDto.builder()
@@ -37,7 +30,6 @@ public class UserDto {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .login(user.getLogin())
-                .password(user.getPassword())
                 .active(user.isActive())
                 .build();
     }

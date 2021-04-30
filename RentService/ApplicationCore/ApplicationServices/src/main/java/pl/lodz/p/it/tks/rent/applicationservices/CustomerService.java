@@ -29,7 +29,6 @@ public class CustomerService implements CustomerUseCase {
 
     @Override
     public Customer add(Customer customer) throws RepositoryAdapterException {
-        checkPassword(customer.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(customer.getLogin()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -38,7 +37,6 @@ public class CustomerService implements CustomerUseCase {
 
     @Override
     public Customer update(Customer customer) throws RepositoryAdapterException {
-        checkPassword(customer.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(customer.getLogin()) && !x.getId().equals(customer.getId()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -58,11 +56,5 @@ public class CustomerService implements CustomerUseCase {
     @Override
     public Customer get(String login) throws RepositoryAdapterException {
         return getCustomerByLoginPort.get(login);
-    }
-
-    private void checkPassword(String password) throws RepositoryAdapterException {
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new RepositoryAdapterException("Password is not secure.");
-        }
     }
 }

@@ -32,7 +32,6 @@ public class AdminRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -47,7 +46,6 @@ public class AdminRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -61,7 +59,6 @@ public class AdminRepositoryAdapterTests {
         Assert.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
         Assert.assertEquals(getAdmin.getLastname(), admin.getLastname());
         Assert.assertEquals(getAdmin.getLogin(), admin.getLogin());
-        Assert.assertEquals(getAdmin.getPassword(), admin.getPassword());
     }
 
     @Test
@@ -70,7 +67,6 @@ public class AdminRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -84,7 +80,6 @@ public class AdminRepositoryAdapterTests {
         Assert.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
         Assert.assertEquals(getAdmin.getLastname(), admin.getLastname());
         Assert.assertEquals(getAdmin.getLogin(), admin.getLogin());
-        Assert.assertEquals(getAdmin.getPassword(), admin.getPassword());
     }
 
     @Test
@@ -95,7 +90,6 @@ public class AdminRepositoryAdapterTests {
                     .firstname("Customer" + i)
                     .lastname("Kowalski")
                     .login("Klient" + i)
-                    .password("zaq1@WSX")
                     .build();
             userEntRepository.add(adminEnt);
         }
@@ -109,7 +103,6 @@ public class AdminRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(adminEnt);
@@ -121,7 +114,6 @@ public class AdminRepositoryAdapterTests {
                 .login(adminEnt.getLogin())
                 .firstname("Admin")
                 .lastname("TestoweNazwisko")
-                .password("zaq1@WSX")
                 .build();
 
         adminRepositoryAdapter.update(updatedAdmin);
@@ -133,13 +125,11 @@ public class AdminRepositoryAdapterTests {
         Assert.assertEquals(getUpdatedAdmin.getFirstname(), updatedAdmin.getFirstname());
         Assert.assertEquals(getUpdatedAdmin.getLastname(), updatedAdmin.getLastname());
         Assert.assertEquals(getUpdatedAdmin.getLogin(), updatedAdmin.getLogin());
-        Assert.assertEquals(getUpdatedAdmin.getPassword(), updatedAdmin.getPassword());
 
         Admin updatedAdmin2 = Admin.builder()
                 .login(adminEnt.getLogin())
                 .firstname("Admin")
                 .lastname("TestoweNazwisko")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertThrows(RepositoryAdapterException.class, () -> adminRepositoryAdapter.update(updatedAdmin2));

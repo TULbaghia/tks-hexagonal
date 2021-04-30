@@ -41,7 +41,43 @@ public class UserEntRepository extends EntRepository<UserEnt> {
     @PostConstruct
     private void postConstruct() {
         try {
-            add(UserEnt.builder().firstname("TestUser").lastname("TestUser").login("TestUser").password("zaq1@WSX").userTypeEnt(UserTypeEnt.ADMIN).build());
+            for (int i = 1; i < 5; i++) {
+                add(UserEnt.builder()
+                        .firstname("Customer" + i)
+                        .lastname("Kowalski" + i)
+                        .login("Klient" + i)
+                        .password("zaq1@WSX")
+                        .userTypeEnt(UserTypeEnt.CUSTOMER)
+                        .build()
+                );
+            }
+
+            add(UserEnt.builder()
+                    .firstname("TestCustomer")
+                    .lastname("TestCustomer")
+                    .login("TestCustomer")
+                    .password("zaq1@WSX")
+                    .userTypeEnt(UserTypeEnt.CUSTOMER)
+                    .build()
+            );
+
+            add(UserEnt.builder()
+                    .firstname("TestEmployee")
+                    .lastname("TestEmployee")
+                    .login("TestEmployee")
+                    .password("zaq1@WSX")
+                    .userTypeEnt(UserTypeEnt.EMPLOYEE)
+                    .build()
+            );
+
+            add(UserEnt.builder()
+                    .firstname("TestAdmin")
+                    .lastname("TestAdmin")
+                    .login("TestAdmin")
+                    .password("zaq1@WSX")
+                    .userTypeEnt(UserTypeEnt.ADMIN)
+                    .build()
+            );
         } catch (RepositoryEntException e) {
             e.printStackTrace();
         }

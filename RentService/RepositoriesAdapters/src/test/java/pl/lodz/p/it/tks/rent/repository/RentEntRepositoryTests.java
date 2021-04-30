@@ -39,7 +39,6 @@ public class RentEntRepositoryTests {
                     .firstname("Customer")
                     .lastname("Kowalski")
                     .login("Klient" + i)
-                    .password("zaq1@WSX")
                     .build();
 
             userEntRepository.add(customerEnt);

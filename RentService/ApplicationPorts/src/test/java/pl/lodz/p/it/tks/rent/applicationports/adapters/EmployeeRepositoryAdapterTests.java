@@ -31,7 +31,6 @@ public class EmployeeRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -46,7 +45,6 @@ public class EmployeeRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -60,7 +58,6 @@ public class EmployeeRepositoryAdapterTests {
         Assert.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
         Assert.assertEquals(getEmployee.getLastname(), employee.getLastname());
         Assert.assertEquals(getEmployee.getLogin(), employee.getLogin());
-        Assert.assertEquals(getEmployee.getPassword(), employee.getPassword());
     }
 
     @Test
@@ -69,7 +66,6 @@ public class EmployeeRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertEquals(userEntRepository.getAll().size(), 0);
@@ -83,7 +79,6 @@ public class EmployeeRepositoryAdapterTests {
         Assert.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
         Assert.assertEquals(getEmployee.getLastname(), employee.getLastname());
         Assert.assertEquals(getEmployee.getLogin(), employee.getLogin());
-        Assert.assertEquals(getEmployee.getPassword(), employee.getPassword());
     }
 
     @Test
@@ -94,7 +89,6 @@ public class EmployeeRepositoryAdapterTests {
                     .firstname("Customer" + i)
                     .lastname("Kowalski")
                     .login("Klient" + i)
-                    .password("zaq1@WSX")
                     .build();
             userEntRepository.add(employeeEnt);
         }
@@ -108,7 +102,6 @@ public class EmployeeRepositoryAdapterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(employeeEnt);
@@ -120,7 +113,6 @@ public class EmployeeRepositoryAdapterTests {
                 .login(employeeEnt.getLogin())
                 .firstname("Employee")
                 .lastname("TestoweNazwisko")
-                .password("zaq1@WSX")
                 .build();
 
         employeeRepositoryAdapter.update(updatedEmployee);
@@ -132,13 +124,11 @@ public class EmployeeRepositoryAdapterTests {
         Assert.assertEquals(getUpdatedEmployee.getFirstname(), updatedEmployee.getFirstname());
         Assert.assertEquals(getUpdatedEmployee.getLastname(), updatedEmployee.getLastname());
         Assert.assertEquals(getUpdatedEmployee.getLogin(), updatedEmployee.getLogin());
-        Assert.assertEquals(getUpdatedEmployee.getPassword(), updatedEmployee.getPassword());
 
         Employee updatedEmployee2 = Employee.builder()
                 .login(employeeEnt.getLogin())
                 .firstname("Employee")
                 .lastname("TestoweNazwisko")
-                .password("zaq1@WSX")
                 .build();
 
         Assert.assertThrows(RepositoryAdapterException.class, () -> employeeRepositoryAdapter.update(updatedEmployee2));

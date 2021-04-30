@@ -13,8 +13,6 @@ public class UserEnt extends ModelIdTraitEnt {
     @NonNull
     private String login;
     @NonNull
-    private String password;
-    @NonNull
     private String firstname;
     @NonNull
     private String lastname;
@@ -22,8 +20,4 @@ public class UserEnt extends ModelIdTraitEnt {
     @NonNull
     @Getter
     private boolean isActive = true;
-
-    public String getPassword() {
-        return password;
-    }
 }

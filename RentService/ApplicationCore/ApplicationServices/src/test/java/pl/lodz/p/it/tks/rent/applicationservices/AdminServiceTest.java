@@ -22,41 +22,37 @@ public class AdminServiceTest {
 
     @Test
     public void addAdminTest() throws RepositoryAdapterException {
-        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin").build());
+        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin").build());
         Assert.assertThrows(RepositoryAdapterException.class, () ->
-                adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin").build()));
+                adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin").build()));
 
         Assert.assertEquals(adminRepositoryAdapter.get("admin").getLogin(), "admin");
         Assert.assertEquals(adminRepositoryAdapter.get("admin").getLastname(), "Admin");
         Assert.assertEquals(adminRepositoryAdapter.get("admin").getFirstname(), "Jan");
-        Assert.assertEquals(adminRepositoryAdapter.get("admin").getPassword(), "zaq1@WSX");
     }
 
     @Test
     public void updateAdminTest() throws RepositoryAdapterException {
-        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin").build());
+        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin").build());
 
         Admin old = adminService.get("admin");
         old.setFirstname("T1");
         old.setLastname("T2");
-        old.setPassword("ZAQ!2wsx");
 
         Admin update = adminService.update(old);
 
         Assert.assertEquals(update.getFirstname(), "T1");
         Assert.assertEquals(update.getLastname(), "T2");
-        Assert.assertEquals(update.getPassword(), "ZAQ!2wsx");
 
         Assert.assertEquals(adminRepositoryAdapter.get("admin").getFirstname(), "T1");
         Assert.assertEquals(adminRepositoryAdapter.get("admin").getLastname(), "T2");
-        Assert.assertEquals(adminRepositoryAdapter.get("admin").getPassword(), "ZAQ!2wsx");
     }
 
     @Test
     public void getAllAdminTest() throws RepositoryAdapterException {
-        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin1").build());
-        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin2").build());
-        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin3").build());
+        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin1").build());
+        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin2").build());
+        adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin3").build());
 
         List<Admin> adminList = adminService.getAll();
 
@@ -69,7 +65,7 @@ public class AdminServiceTest {
 
     @Test
     public void getByUUIDAdminTest() throws RepositoryAdapterException {
-        Admin a = adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin1").build());
+        Admin a = adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin1").build());
 
         Admin get = adminService.get(a.getId());
 
@@ -78,7 +74,7 @@ public class AdminServiceTest {
 
     @Test
     public void getByLoginAdminTest() throws RepositoryAdapterException {
-        Admin a = adminService.add(Admin.builder().firstname("Jan").lastname("Admin").password("zaq1@WSX").login("admin1").build());
+        Admin a = adminService.add(Admin.builder().firstname("Jan").lastname("Admin").login("admin1").build());
 
         Admin get = adminService.get(a.getLogin());
 

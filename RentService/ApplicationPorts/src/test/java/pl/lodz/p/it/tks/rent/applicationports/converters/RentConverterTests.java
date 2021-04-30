@@ -26,7 +26,6 @@ public class RentConverterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         Rent rent = Rent.builder()
@@ -63,7 +62,6 @@ public class RentConverterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         RentEnt rentEnt = RentEnt.builder()

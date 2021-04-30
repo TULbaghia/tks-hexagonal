@@ -2,6 +2,7 @@ package pl.lodz.p.it.tks.user.rest.auth;
 
 import org.json.JSONObject;
 import pl.lodz.p.it.tks.user.domainmodel.user.User;
+import pl.lodz.p.it.tks.user.rest.dto.UserDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,7 +23,7 @@ public class SelfService {
     @GET
     public String getSelf(@Context SecurityContext securityContext) {
         User user = restIdentityStore.getUserByLogin(securityContext.getUserPrincipal().getName());
-        String filterApplied = JSONObject.wrap(user).toString();
+        String filterApplied = JSONObject.wrap(UserDto.toDto(user)).toString();
         JSONObject jsonObject = new JSONObject(filterApplied);
         jsonObject.put("group", user.getClass().getSimpleName());
 

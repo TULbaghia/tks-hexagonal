@@ -48,7 +48,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
                         .firstname("Customer" + i)
                         .lastname("Kowalski" + i)
                         .login("Klient" + i)
-                        .password("zaq1@WSX")
                         .build()
                 );
             }
@@ -57,7 +56,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
                     .firstname("TestCustomer")
                     .lastname("TestCustomer")
                     .login("TestCustomer")
-                    .password("zaq1@WSX")
                     .build()
             );
 
@@ -65,7 +63,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
                     .firstname("TestEmployee")
                     .lastname("TestEmployee")
                     .login("TestEmployee")
-                    .password("zaq1@WSX")
                     .build()
             );
 
@@ -73,7 +70,6 @@ public class UserEntRepository extends EntRepository<UserEnt> {
                     .firstname("TestAdmin")
                     .lastname("TestAdmin")
                     .login("TestAdmin")
-                    .password("zaq1@WSX")
                     .build()
             );
         } catch (RepositoryEntException e) {

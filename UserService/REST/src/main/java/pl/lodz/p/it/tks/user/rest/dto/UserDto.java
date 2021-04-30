@@ -66,13 +66,13 @@ public class UserDto {
     }
 
     private static UserType toUserType(String userType) {
-        if (UserType.ADMIN.getValue().equals(userType)) {
+        if (UserType.ADMIN.getValue().equalsIgnoreCase(userType)) {
             return UserType.ADMIN;
         }
-        if (UserType.CUSTOMER.getValue().equals(userType)) {
+        if (UserType.CUSTOMER.getValue().equalsIgnoreCase(userType)) {
             return UserType.CUSTOMER;
         }
-        if(UserType.EMPLOYEE.getValue().equals(userType)) {
+        if(UserType.EMPLOYEE.getValue().equalsIgnoreCase(userType)) {
             return UserType.EMPLOYEE;
         }
         throw new RuntimeException("");

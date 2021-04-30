@@ -14,7 +14,6 @@ public class UserConverter {
                 .firstname(customer.getFirstname())
                 .lastname(customer.getLastname())
                 .login(customer.getLogin())
-                .password(customer.getPassword())
                 .isActive(customer.isActive())
                 .rentsNumber(customer.getRentsNumber())
                 .build();
@@ -26,7 +25,6 @@ public class UserConverter {
                 .firstname(customerEnt.getFirstname())
                 .lastname(customerEnt.getLastname())
                 .login(customerEnt.getLogin())
-                .password(customerEnt.getPassword())
                 .isActive(customerEnt.isActive())
                 .rentsNumber(customerEnt.getRentsNumber())
                 .build();
@@ -38,7 +36,6 @@ public class UserConverter {
                 .firstname(employee.getFirstname())
                 .lastname(employee.getLastname())
                 .login(employee.getLogin())
-                .password(employee.getPassword())
                 .isActive(employee.isActive())
                 .build();
     }
@@ -49,7 +46,6 @@ public class UserConverter {
                 .firstname(employeeEnt.getFirstname())
                 .lastname(employeeEnt.getLastname())
                 .login(employeeEnt.getLogin())
-                .password(employeeEnt.getPassword())
                 .isActive(employeeEnt.isActive())
                 .build();
     }
@@ -60,7 +56,6 @@ public class UserConverter {
                 .firstname(admin.getFirstname())
                 .lastname(admin.getLastname())
                 .login(admin.getLogin())
-                .password(admin.getPassword())
                 .isActive(admin.isActive())
                 .build();
     }
@@ -71,7 +66,6 @@ public class UserConverter {
                 .firstname(adminEnt.getFirstname())
                 .lastname(adminEnt.getLastname())
                 .login(adminEnt.getLogin())
-                .password(adminEnt.getPassword())
                 .isActive(adminEnt.isActive())
                 .build();
     }

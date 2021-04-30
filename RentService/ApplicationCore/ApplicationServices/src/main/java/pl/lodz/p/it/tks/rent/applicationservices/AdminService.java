@@ -29,7 +29,6 @@ public class AdminService implements AdminUseCase {
 
     @Override
     public Admin add(Admin admin) throws RepositoryAdapterException {
-        checkPassword(admin.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(admin.getLogin()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -38,7 +37,6 @@ public class AdminService implements AdminUseCase {
 
     @Override
     public Admin update(Admin admin) throws RepositoryAdapterException {
-        checkPassword(admin.getPassword());
         if (getAll().stream().anyMatch(x -> x.getLogin().equals(admin.getLogin()) && !x.getId().equals(admin.getId()))) {
             throw new RepositoryAdapterException("User with this login already exists.");
         }
@@ -58,11 +56,5 @@ public class AdminService implements AdminUseCase {
     @Override
     public Admin get(String login) throws RepositoryAdapterException {
         return getAdminByLoginPort.get(login);
-    }
-
-    private void checkPassword(String password) throws RepositoryAdapterException {
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new RepositoryAdapterException("Password is not secure.");
-        }
     }
 }

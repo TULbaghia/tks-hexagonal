@@ -34,7 +34,6 @@ public class CustomerService {
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
                 .login(userDto.getLogin())
-                .password(userDto.getPassword())
                 .build();
         try {
             return JSONObject.wrap(UserDto.toDto(customerUseCase.add(newUser))).toString();
@@ -65,7 +64,6 @@ public class CustomerService {
         Customer editingUser = Customer.builder()
                 .id(UUID.fromString(userDto.getId()))
                 .login(userDto.getLogin())
-                .password(userDto.getPassword())
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
                 .build();
@@ -85,7 +83,6 @@ public class CustomerService {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .login(user.getLogin())
-                .password(user.getPassword())
                 .isActive(userDto.getActive())
                 .build();
         try {

@@ -39,9 +39,9 @@ public class RentServiceTest {
         customerAdapter = new CustomerRepositoryAdapter(userEntRepository);
         rentService = new RentService(rentRepositoryAdapter, rentRepositoryAdapter, rentRepositoryAdapter, rentRepositoryAdapter, rentRepositoryAdapter, customerAdapter);
 
-        userEntRepository.add(CustomerEnt.builder().login("customer1").password("zaq1@WSX").firstname("Custo1").lastname("mer1").build());
-        userEntRepository.add(CustomerEnt.builder().login("customer2").password("zaq1@WSX").firstname("Custo2").lastname("mer2").build());
-        userEntRepository.add(CustomerEnt.builder().login("customer3").password("zaq1@WSX").firstname("Custo3").lastname("mer3").build());
+        userEntRepository.add(CustomerEnt.builder().login("customer1").firstname("Custo1").lastname("mer1").build());
+        userEntRepository.add(CustomerEnt.builder().login("customer2").firstname("Custo2").lastname("mer2").build());
+        userEntRepository.add(CustomerEnt.builder().login("customer3").firstname("Custo3").lastname("mer3").build());
 
         carEntRepository.add(EconomyCarEnt.builder().vin("12345678901234560").basePricePerDay(50).brand("Fiat").doorNumber(3).driverEquipment("BRAK").engineCapacity(999).build());
         carEntRepository.add(EconomyCarEnt.builder().vin("12345678901234561").basePricePerDay(10).brand("Opel").doorNumber(5).driverEquipment("BRAK").engineCapacity(1000).build());

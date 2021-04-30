@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>rt</artifactId>
-            <version>2.3.1</version>
+            <version>2.3.2</version>
         </dependency>
 
         <dependency>
@@ -188,32 +188,6 @@
                     </execution>
 
                     <execution>
-                        <id>wsgen</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsgen-test</goal>
-                        </goals>
-                        <configuration>
-                            <sei>pl.lodz.p.it.tks.rent.soap.user.AdminService</sei>
-                            <genWsdl>true</genWsdl>
-                            <resourceDestDir>target/test-classes/pl/soap/target</resourceDestDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>wsimport</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsimport-test</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlDirectory>target/test-classes/pl/soap/target</wsdlDirectory>
-                            <packageName>pl.soap.target</packageName>
-                            <wsdlLocation>http://localhost:8080/SOAP-1.0-SNAPSHOT/AdminAPI?wsdl</wsdlLocation>
-                            <staleFile>target/jaxws/stale/StaleX5.stale</staleFile>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>wsgen-rent</id>
                         <phase>generate-test-sources</phase>
                         <goals>
@@ -236,58 +210,6 @@
                             <packageName>pl.soap.target</packageName>
                             <wsdlLocation>http://localhost:8080/SOAP-1.0-SNAPSHOT/RentAPI?wsdl</wsdlLocation>
                             <staleFile>target/jaxws/stale/StaleX4.stale</staleFile>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>wsgen-customer</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsgen-test</goal>
-                        </goals>
-                        <configuration>
-                            <sei>pl.lodz.p.it.tks.rent.soap.user.CustomerService</sei>
-                            <genWsdl>true</genWsdl>
-                            <resourceDestDir>target/test-classes/pl/soap/target</resourceDestDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>wsimport-customer</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsimport-test</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlDirectory>target/test-classes/pl/soap/target</wsdlDirectory>
-                            <packageName>pl.soap.target</packageName>
-                            <wsdlLocation>http://localhost:8080/SOAP-1.0-SNAPSHOT/CustomerAPI?wsdl</wsdlLocation>
-                            <staleFile>target/jaxws/stale/StaleX3.stale</staleFile>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>wsgen-employee</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsgen-test</goal>
-                        </goals>
-                        <configuration>
-                            <sei>pl.lodz.p.it.tks.rent.soap.user.EmployeeService</sei>
-                            <genWsdl>true</genWsdl>
-                            <resourceDestDir>target/test-classes/pl/soap/target</resourceDestDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>wsimport-employee</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsimport-test</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlDirectory>target/test-classes/pl/soap/target</wsdlDirectory>
-                            <packageName>pl.soap.target</packageName>
-                            <wsdlLocation>http://localhost:8080/SOAP-1.0-SNAPSHOT/EmployeeAPI?wsdl</wsdlLocation>
-                            <staleFile>target/jaxws/stale/StaleX2.stale</staleFile>
                         </configuration>
                     </execution>
 
@@ -317,31 +239,6 @@
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>wsgen-login</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsgen-test</goal>
-                        </goals>
-                        <configuration>
-                            <sei>pl.lodz.p.it.tks.rent.soap.auth.LoginService</sei>
-                            <genWsdl>true</genWsdl>
-                            <resourceDestDir>target/test-classes/pl/soap/target</resourceDestDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>wsimport-login</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>wsimport-test</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlDirectory>target/test-classes/pl/soap/target</wsdlDirectory>
-                            <packageName>pl.soap.target</packageName>
-                            <wsdlLocation>http://localhost:8080/SOAP-1.0-SNAPSHOT/LoginAPI?wsdl</wsdlLocation>
-                            <staleFile>target/jaxws/stale/StaleX9.stale</staleFile>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>

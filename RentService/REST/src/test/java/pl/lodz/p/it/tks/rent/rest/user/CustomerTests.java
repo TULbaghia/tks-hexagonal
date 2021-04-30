@@ -23,7 +23,7 @@ public class CustomerTests {
 
     @BeforeClass
     public void setup() {
-        RestAssured.baseURI = "https://localhost/REST-1.0-SNAPSHOT/api/";
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
         RestAssured.port = 8181;
         RestAssured.useRelaxedHTTPSValidation();
 
@@ -39,6 +39,8 @@ public class CustomerTests {
                 .extract()
                 .response();
 
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
+
         JWT_TOKEN = r.getBody().asString();
     }
 
@@ -46,20 +48,35 @@ public class CustomerTests {
     public void addCustomerTest() {
         int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
         JSONObject jsonObj = new JSONObject()
-                .put("login","loginTest" + randomNum)
-                .put("password","zaq1@WSX")
-                .put("firstname","firstnameTest")
-                .put("lastname","lastnameTest");
+                .put("login","AddCustomerTest" + randomNum)
+                .put("firstname","AddCustomerTest")
+                .put("lastname","AddCustomerTest");
 
+        JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
+
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        given().contentType(ContentType.JSON)
+                .body(userServiceObj.toString())
+                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+                .post("user")
+                .then()
+                .assertThat()
+                .body("login", containsString("AddCustomerTest" + randomNum))
+                .body("firstname", containsString("AddCustomerTest"))
+                .body("lastname", containsString("AddCustomerTest"))
+                .body("active", equalTo(true))
+                .statusCode(200);
+
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
         given().contentType(ContentType.JSON)
                 .body(jsonObj.toString())
                 .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
                 .post("user/customer")
                 .then()
                 .assertThat()
-                .body("login", containsString("loginTest" + randomNum))
-                .body("firstname", containsString("firstnameTest"))
-                .body("lastname", containsString("lastnameTest"))
+                .body("login", containsString("AddCustomerTest" + randomNum))
+                .body("firstname", containsString("AddCustomerTest"))
+                .body("lastname", containsString("AddCustomerTest"))
                 .body("active", equalTo(true))
                 .statusCode(200);
     }
@@ -162,11 +179,23 @@ public class CustomerTests {
     public JSONObject addTestCustomer() {
         int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
         JSONObject jsonObj = new JSONObject()
-                .put("login","TestCaseUser" + randomNum)
-                .put("password","zaq1@WSX")
-                .put("firstname","TestCaseUser")
-                .put("lastname","TestCaseUser");
+                .put("login","TestCaseCustomer" + randomNum)
+                .put("firstname","TestCaseCustomer")
+                .put("lastname","TestCaseCustomer");
 
+        JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
+
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        given().contentType(ContentType.JSON)
+                .body(userServiceObj.toString())
+                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+                .post("user")
+                .then()
+                .extract()
+                .body()
+                .asString();
+
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
         return new JSONObject(
                 given().contentType(ContentType.JSON)
                         .body(jsonObj.toString())

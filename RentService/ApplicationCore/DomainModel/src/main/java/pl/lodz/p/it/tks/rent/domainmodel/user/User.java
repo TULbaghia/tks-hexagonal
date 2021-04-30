@@ -13,8 +13,6 @@ public class User extends ModelIdTrait {
     @NonNull
     private String login;
     @NonNull
-    private String password;
-    @NonNull
     private String firstname;
     @NonNull
     private String lastname;

@@ -21,14 +21,13 @@ public class AddUserValidator implements ConstraintValidator<AddUserValid, UserD
         boolean firstname = checkConstraint(constraintValidatorContext, userDto.getFirstname(), "Firstname cannot be null or empty.");
         boolean lastname = checkConstraint(constraintValidatorContext, userDto.getLogin(), "Lastname cannot be null or empty.");
         boolean login = checkConstraint(constraintValidatorContext, userDto.getLastname(), "Login cannot be null or empty.");
-        boolean password = checkConstraint(constraintValidatorContext, userDto.getPassword(), "Password cannot be null or empty.");
 
         boolean id = true;
         if (userDto.getId() != null) {
             constraintValidatorContext.buildConstraintViolationWithTemplate("Id cannot be set while sending a request.").addConstraintViolation();
             id = false;
         }
-        return id && firstname && lastname && login && password;
+        return id && firstname && lastname && login;
     }
 
     private boolean checkConstraint(ConstraintValidatorContext constraintValidatorContext, String field, String message) {

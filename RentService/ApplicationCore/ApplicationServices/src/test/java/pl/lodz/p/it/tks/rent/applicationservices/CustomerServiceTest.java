@@ -23,41 +23,37 @@ public class CustomerServiceTest {
 
     @Test
     public void addCustomerTest() throws RepositoryAdapterException {
-        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer").build());
+        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer").build());
         Assert.assertThrows(RepositoryAdapterException.class, () ->
-                customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer").build()));
+                customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer").build()));
 
         Assert.assertEquals(customerRepositoryAdapter.get("customer").getLogin(), "customer");
         Assert.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "Customer");
         Assert.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "Jan");
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getPassword(), "zaq1@WSX");
     }
 
     @Test
     public void updateCustomerTest() throws RepositoryAdapterException {
-        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer").build());
+        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer").build());
 
         Customer old = customerService.get("customer");
         old.setFirstname("T1");
         old.setLastname("T2");
-        old.setPassword("ZAQ!2wsx");
 
         Customer update = customerService.update(old);
 
         Assert.assertEquals(update.getFirstname(), "T1");
         Assert.assertEquals(update.getLastname(), "T2");
-        Assert.assertEquals(update.getPassword(), "ZAQ!2wsx");
 
         Assert.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "T1");
         Assert.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "T2");
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getPassword(), "ZAQ!2wsx");
     }
 
     @Test
     public void getAllCustomerTest() throws RepositoryAdapterException {
-        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer1").build());
-        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer2").build());
-        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer3").build());
+        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer1").build());
+        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer2").build());
+        customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer3").build());
 
         List<Customer> customerList = customerService.getAll();
 
@@ -70,7 +66,7 @@ public class CustomerServiceTest {
 
     @Test
     public void getByUUIDCustomerTest() throws RepositoryAdapterException {
-        Customer a = customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer1").build());
+        Customer a = customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer1").build());
 
         Customer get = customerService.get(a.getId());
 
@@ -79,7 +75,7 @@ public class CustomerServiceTest {
 
     @Test
     public void getByLoginCustomerTest() throws RepositoryAdapterException {
-        Customer a = customerService.add(Customer.builder().firstname("Jan").lastname("Customer").password("zaq1@WSX").login("customer1").build());
+        Customer a = customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer1").build());
 
         Customer get = customerService.get(a.getLogin());
 

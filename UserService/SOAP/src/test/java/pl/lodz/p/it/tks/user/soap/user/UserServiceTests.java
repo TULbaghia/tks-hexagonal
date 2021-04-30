@@ -28,7 +28,7 @@ public class UserServiceTests {
     public void beforeEach() {
         UserAPI userAPI = new UserAPI(UserAPI.class.getResource("UserAPI.wsdl"));
         userService = userAPI.getUserServicePort();
-        Util.authenticateUser((BindingProvider) userService, "TestUser", "zaq1@WSX");
+        Util.authenticateUser((BindingProvider) userService, "TestAdmin", "zaq1@WSX");
         ((BindingProvider) userService).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, WSDL_URI);
 
         int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);

@@ -21,10 +21,9 @@ public class UpdateUserValidator implements ConstraintValidator<UpdateUserValid,
         boolean firstname = checkConstraint(constraintValidatorContext, userDto.getFirstname(), "Firstname cannot be null or empty.");
         boolean lastname = checkConstraint(constraintValidatorContext, userDto.getLastname(), "Lastname cannot be null or empty.");
         boolean login = checkConstraint(constraintValidatorContext, userDto.getLogin(), "Login cannot be null or empty.");
-        boolean password = checkConstraint(constraintValidatorContext, userDto.getPassword(), "Password cannot be null or empty.");
         boolean id = checkConstraint(constraintValidatorContext, userDto.getId(), "Id cannot be null.");
 
-        return id && firstname && lastname && login && password;
+        return id && firstname && lastname && login;
     }
 
     private boolean checkConstraint(ConstraintValidatorContext constraintValidatorContext, String field, String message) {

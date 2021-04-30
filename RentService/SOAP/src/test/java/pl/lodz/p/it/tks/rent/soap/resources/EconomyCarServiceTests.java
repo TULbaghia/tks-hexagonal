@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class EconomyCarServiceTests {
-    private final String WSDL_URI = "http://localhost:8080/SOAP-1.0-SNAPSHOT/EconomyCarAPI?wsdl";
+    private final String WSDL_URI = "http://localhost:8080/RentSoap/EconomyCarAPI?wsdl";
 
     private EconomyCarService economyCarService;
     private EconomyCar mockEconomyCar;

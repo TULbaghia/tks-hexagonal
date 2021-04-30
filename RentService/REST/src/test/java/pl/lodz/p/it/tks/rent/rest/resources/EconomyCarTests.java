@@ -21,7 +21,7 @@ public class EconomyCarTests {
 
     @BeforeClass
     public void setup() {
-        RestAssured.baseURI = "https://localhost/REST-1.0-SNAPSHOT/api/";
+        RestAssured.baseURI = "https://localhost/UserRest/api/";
         RestAssured.port = 8181;
         RestAssured.useRelaxedHTTPSValidation();
 
@@ -37,7 +37,12 @@ public class EconomyCarTests {
                 .extract()
                 .response();
 
+        RestAssured.baseURI = "https://localhost/RentRest/api/";
+
         JWT_TOKEN = r.getBody().asString();
+
+
+
     }
 
     @Test

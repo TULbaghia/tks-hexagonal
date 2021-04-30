@@ -34,7 +34,6 @@ public class AdminService {
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
                 .login(userDto.getLogin())
-                .password(userDto.getPassword())
                 .build();
         try {
             return JSONObject.wrap(UserDto.toDto(adminUseCase.add(newUser))).toString();
@@ -65,7 +64,6 @@ public class AdminService {
         Admin editingUser = Admin.builder()
                 .id(UUID.fromString(userDto.getId()))
                 .login(userDto.getLogin())
-                .password(userDto.getPassword())
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
                 .build();
@@ -85,7 +83,6 @@ public class AdminService {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .login(user.getLogin())
-                .password(user.getPassword())
                 .isActive(userDto.getActive())
                 .build();
         try {

@@ -4,6 +4,8 @@
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
    version="4.0">
 
+    <default-context-path>RentSoap</default-context-path>
+
     <security-role>
         <role-name>Admin</role-name>
     </security-role>
@@ -36,7 +38,6 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Customer resources cars</web-resource-name>
-            <url-pattern>/CustomerAPI</url-pattern>
             <url-pattern>/ExclusiveCarAPI</url-pattern>
             <url-pattern>/EconomyCarAPI</url-pattern>
             <http-method>GET</http-method>
@@ -50,11 +51,10 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Employee resources</web-resource-name>
-            <url-pattern>/RentAPI</url-pattern>
-            <url-pattern>/CustomerAPI</url-pattern>
-            <url-pattern>/EmployeeAPI</url-pattern>
             <url-pattern>/ExclusiveCarAPI</url-pattern>
             <url-pattern>/EconomyCarAPI</url-pattern>
+            <url-pattern>/RentAPI</url-pattern>
+            <url-pattern>/RentAPI*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
@@ -62,27 +62,6 @@
             <role-name>Employee</role-name>
         </auth-constraint>
     </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Admin resources</web-resource-name>
-            <url-pattern>/EmployeeAPI</url-pattern>
-            <url-pattern>/AdminAPI</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>Admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-
-
-
-
-
-
-
 
     <env-entry>
         <env-entry-name>SECRET</env-entry-name>

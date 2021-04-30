@@ -17,7 +17,6 @@ public class UserConverterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         CustomerEnt customerEnt = UserConverter.convertDomainToEnt(customer);
@@ -27,7 +26,6 @@ public class UserConverterTests {
         Assert.assertEquals(customerEnt.getFirstname(), customer.getFirstname());
         Assert.assertEquals(customerEnt.getLastname(), customer.getLastname());
         Assert.assertEquals(customerEnt.getLogin(), customer.getLogin());
-        Assert.assertEquals(customerEnt.getPassword(), customer.getPassword());
         Assert.assertEquals(customerEnt.getRentsNumber(), customer.getRentsNumber());
     }
 
@@ -37,7 +35,6 @@ public class UserConverterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         EmployeeEnt employeeEnt = UserConverter.convertDomainToEnt(employee);
@@ -47,7 +44,6 @@ public class UserConverterTests {
         Assert.assertEquals(employeeEnt.getFirstname(), employee.getFirstname());
         Assert.assertEquals(employeeEnt.getLastname(), employee.getLastname());
         Assert.assertEquals(employeeEnt.getLogin(), employee.getLogin());
-        Assert.assertEquals(employeeEnt.getPassword(), employee.getPassword());
     }
 
     @Test
@@ -56,7 +52,6 @@ public class UserConverterTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         AdminEnt adminEnt = UserConverter.convertDomainToEnt(admin);
@@ -66,6 +61,5 @@ public class UserConverterTests {
         Assert.assertEquals(adminEnt.getFirstname(), admin.getFirstname());
         Assert.assertEquals(adminEnt.getLastname(), admin.getLastname());
         Assert.assertEquals(adminEnt.getLogin(), admin.getLogin());
-        Assert.assertEquals(adminEnt.getPassword(), admin.getPassword());
     }
 }

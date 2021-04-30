@@ -23,7 +23,6 @@ public class UserEntRepositoryTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(customerEnt);
@@ -38,7 +37,6 @@ public class UserEntRepositoryTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(customerEnt);
@@ -51,7 +49,6 @@ public class UserEntRepositoryTests {
         Assert.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
         Assert.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
         Assert.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
-        Assert.assertEquals(getCustomer.getPassword(), customerEnt.getPassword());
         Assert.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
 
         Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.get(UUID.randomUUID()));
@@ -63,7 +60,6 @@ public class UserEntRepositoryTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(customerEnt);
@@ -76,7 +72,6 @@ public class UserEntRepositoryTests {
         Assert.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
         Assert.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
         Assert.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
-        Assert.assertEquals(getCustomer.getPassword(), customerEnt.getPassword());
         Assert.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
 
         Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.get("."));
@@ -90,7 +85,6 @@ public class UserEntRepositoryTests {
                     .firstname("Customer" + i)
                     .lastname("Kowalski")
                     .login("Klient" + i)
-                    .password("zaq1@WSX")
                     .build();
             userEntRepository.add(customerEnt);
         }
@@ -104,7 +98,6 @@ public class UserEntRepositoryTests {
                 .firstname("Customer")
                 .lastname("Kowalski")
                 .login("Klient")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.add(customerEnt);
@@ -116,7 +109,6 @@ public class UserEntRepositoryTests {
                 .login(customerEnt.getLogin())
                 .firstname("Customer")
                 .lastname("TestoweNazwisko")
-                .password("zaq1@WSX")
                 .build();
 
         userEntRepository.update(updatedCustomer);
@@ -128,7 +120,6 @@ public class UserEntRepositoryTests {
         Assert.assertEquals(getUpdatedCustomer.getFirstname(), updatedCustomer.getFirstname());
         Assert.assertEquals(getUpdatedCustomer.getLastname(), updatedCustomer.getLastname());
         Assert.assertEquals(getUpdatedCustomer.getLogin(), updatedCustomer.getLogin());
-        Assert.assertEquals(getUpdatedCustomer.getPassword(), updatedCustomer.getPassword());
         Assert.assertEquals(getUpdatedCustomer.getRentsNumber(), updatedCustomer.getRentsNumber());
 
 
