@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Repositories Test Suite">
+    <test name="domain-model-suite">
+        <packages>
+            <package name="pl.lodz.p.it.tks.user.repository.*"/>
+        </packages>
+    </test>
+</suite>
