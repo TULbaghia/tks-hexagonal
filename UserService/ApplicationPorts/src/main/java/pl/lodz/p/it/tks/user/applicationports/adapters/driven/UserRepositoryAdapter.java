@@ -1,5 +1,7 @@
 package pl.lodz.p.it.tks.user.applicationports.adapters.driven;
 
+import fish.payara.cluster.Clustered;
+import lombok.NoArgsConstructor;
 import pl.lodz.p.it.tks.user.applicationports.converters.UserConverter;
 import pl.lodz.p.it.tks.user.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.user.applicationports.infrastructure.user.*;
@@ -10,15 +12,17 @@ import pl.lodz.p.it.tks.user.repository.exception.RepositoryEntException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class UserRepositoryAdapter implements AddUserPort, UpdateUserPort, GetAllUserPort,
-        GetUserByLoginPort, GetUserByIdPort {
+public class UserRepositoryAdapter implements Serializable, AddUserPort, UpdateUserPort, GetAllUserPort,
+        GetUserByLoginPort, GetUserByIdPort, DeleteUserPort {
 
-    private final UserEntRepository userEntRepository;
+    @Inject
+    private UserEntRepository userEntRepository;
 
     @Inject
     public UserRepositoryAdapter(UserEntRepository userEntRepository) {
@@ -64,7 +68,16 @@ public class UserRepositoryAdapter implements AddUserPort, UpdateUserPort, GetAl
     public User update(User user) throws RepositoryAdapterException {
         UserEnt userEnt = UserConverter.toEnt(user);
         try {
-            return UserConverter.toDomain( userEntRepository.update(userEnt));
+            return UserConverter.toDomain(userEntRepository.update(userEnt));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        try {
+            userEntRepository.delete(uuid);
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }

@@ -1,7 +1,7 @@
 package pl.lodz.p.it.tks.user.soap.user;
 
 import lombok.NoArgsConstructor;
-import pl.lodz.p.it.tks.user.domainmodel.user.UserType;
+import org.json.JSONObject;
 import pl.lodz.p.it.tks.user.soap.dtosoap.UserSoap;
 import pl.lodz.p.it.tks.user.soap.exception.SoapException;
 import pl.lodz.p.it.tks.user.soap.validation.user.ActivateUserValid;
@@ -11,11 +11,14 @@ import pl.lodz.p.it.tks.user.applicationports.exception.RepositoryAdapterExcepti
 import pl.lodz.p.it.tks.user.applicationports.ui.UserUseCase;
 import pl.lodz.p.it.tks.user.domainmodel.user.User;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.jms.*;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,26 +26,72 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @WebService(serviceName = "UserAPI")
 public class UserService {
+
     @Inject
     private UserUseCase userUseCase;
 
+    @Inject
+    private JMSContext jmsContext;
+
+    private Topic topic;
+
+    @PostConstruct
+    private void initTopic() {
+        topic = jmsContext.createTopic("UserTopic");
+    }
+
     @WebMethod
     @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-    public UserSoap addUser(@AddUserValid UserSoap userSoap) {
-        User newUser = User.builder()
-                .firstname(userSoap.getFirstname())
-                .lastname(userSoap.getLastname())
-                .login(userSoap.getLogin())
-                .password(userSoap.getPassword())
-                .userType(UserType.ADMIN)
-                .build();
+    public UserSoap addUser(@AddUserValid UserSoap userSoap) throws RepositoryAdapterException {
+        User newUser = UserSoap.fromSoap(userSoap);
+        newUser.setId(UUID.randomUUID());
+
+        TemporaryQueue addTemporaryQueue = null;
         try {
-            UserSoap addSoap = UserSoap.toSoap(userUseCase.add(newUser));
-            addSoap.setPassword(null);
-            return addSoap;
-        } catch (RepositoryAdapterException e) {
+            addTemporaryQueue = sendPayload("user.create", JSONObject.wrap(newUser).toString());
+            List<Message> messages = receive(addTemporaryQueue);
+
+            boolean allSucceed = messages.stream().map(x -> {
+                try {
+                    return x.getStringProperty("result");
+                } catch (JMSException e) {
+                    throw new SoapException(e.getMessage());
+                }
+            }).allMatch(x -> x.equals("success"));
+
+            if (!allSucceed) {
+                TemporaryQueue deleteTemporaryQueue = sendPayload("user.delete", JSONObject.wrap(newUser).toString());
+            }
+        } catch (JMSException e) {
             throw new SoapException(e.getMessage());
         }
+        return UserSoap.toSoap(userUseCase.get(newUser.getId()));
+    }
+
+    private TemporaryQueue sendPayload(String action, String payload) throws JMSException {
+        TemporaryQueue tq = jmsContext.createTemporaryQueue();
+        Message msg = jmsContext.createMessage();
+        msg.setStringProperty("action", action);
+        msg.setStringProperty("payload", payload);
+        msg.setJMSReplyTo(tq);
+        msg.setJMSCorrelationID(UUID.randomUUID().toString());
+        JMSProducer jmsProducer = jmsContext.createProducer();
+        jmsProducer.send(topic, msg);
+        return tq;
+    }
+
+    private List<Message> receive(TemporaryQueue tq) {
+        JMSConsumer jmsConsumer = jmsContext.createConsumer(tq);
+        Message msg = null;
+        List<Message> messageList = new ArrayList<>();
+        do {
+            msg = jmsConsumer.receive(5000);
+            if (msg != null) {
+                messageList.add(msg);
+            }
+        } while (msg != null);
+
+        return messageList;
     }
 
     @WebMethod
@@ -67,31 +116,69 @@ public class UserService {
 
     @WebMethod
     @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-    public UserSoap updateUser(@UpdateUserValid UserSoap userSoap) {
-        User editingUser = UserSoap.fromSoap(userSoap);
+    public UserSoap updateUser(@UpdateUserValid UserSoap userDto) throws RepositoryAdapterException {
+        User oldUser = userUseCase.get(UUID.fromString(userDto.getId()));
+
+        User editingUser = UserSoap.fromSoap(userDto);
+        editingUser.setActive(oldUser.isActive());
+
+        TemporaryQueue addTemporaryQueue = null;
         try {
-            UserSoap addSoap = UserSoap.toSoap(userUseCase.update(editingUser));
-            addSoap.setPassword(null);
-            return addSoap;
-        } catch (RepositoryAdapterException e) {
+            addTemporaryQueue = sendPayload("user.update", JSONObject.wrap(editingUser).toString());
+            List<Message> messages = receive(addTemporaryQueue);
+
+            boolean allSucceed = messages.stream().map(x -> {
+                try {
+                    return x.getStringProperty("result");
+                } catch (JMSException e) {
+                    throw new SoapException(e.getMessage());
+                }
+            }).allMatch(x -> x.equals("success"));
+
+            if (!allSucceed) {
+                TemporaryQueue deleteTemporaryQueue = sendPayload("user.update", JSONObject.wrap(oldUser).toString());
+            }
+        } catch (JMSException e) {
             throw new SoapException(e.getMessage());
         }
+
+        UserSoap userSoap = UserSoap.toSoap(userUseCase.get(editingUser.getId()));
+        userSoap.setPassword(null);
+
+        return userSoap;
     }
 
     @WebMethod
     @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
     public UserSoap activateUser(@ActivateUserValid UserSoap userSoap) throws RepositoryAdapterException {
-        User user = userUseCase.get(UUID.fromString(userSoap.getId()));
+        User oldUser = userUseCase.get(UUID.fromString(userSoap.getId()));
 
-        User activatedUser = UserSoap.fromSoap(UserSoap.toSoap(user));
-        user.setActive(userSoap.getActive());
+        User editingUser = UserSoap.fromSoap(UserSoap.toSoap(oldUser));
+        editingUser.setActive(userSoap.getActive());
 
+        TemporaryQueue addTemporaryQueue = null;
         try {
-            UserSoap addSoap = UserSoap.toSoap(userUseCase.update(activatedUser));
-            addSoap.setPassword(null);
-            return addSoap;
-        } catch (RepositoryAdapterException e ) {
+            addTemporaryQueue = sendPayload("user.update", JSONObject.wrap(editingUser).toString());
+            List<Message> messages = receive(addTemporaryQueue);
+
+            boolean allSucceed = messages.stream().map(x -> {
+                try {
+                    return x.getStringProperty("result");
+                } catch (JMSException e) {
+                    throw new SoapException(e.getMessage());
+                }
+            }).allMatch(x -> x.equals("success"));
+
+            if (!allSucceed) {
+                TemporaryQueue deleteTemporaryQueue = sendPayload("user.update", JSONObject.wrap(oldUser).toString());
+            }
+        } catch (JMSException e) {
             throw new SoapException(e.getMessage());
         }
+
+        UserSoap userSoapChanged = UserSoap.toSoap(userUseCase.get(editingUser.getId()));
+        userSoapChanged.setPassword(null);
+
+        return userSoapChanged;
     }
 }

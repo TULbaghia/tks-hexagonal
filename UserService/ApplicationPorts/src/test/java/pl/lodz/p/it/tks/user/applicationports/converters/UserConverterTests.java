@@ -1,7 +1,7 @@
 package pl.lodz.p.it.tks.user.applicationports.converters;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.user.data.user.UserEnt;
 import pl.lodz.p.it.tks.user.data.user.UserTypeEnt;
 import pl.lodz.p.it.tks.user.domainmodel.user.User;
@@ -21,12 +21,12 @@ public class UserConverterTests {
 
         UserEnt customerEnt = UserConverter.toEnt(user);
 
-        Assert.assertEquals(customerEnt.getId(), user.getId());
-        Assert.assertEquals(customerEnt.isActive(), user.isActive());
-        Assert.assertEquals(customerEnt.getFirstname(), user.getFirstname());
-        Assert.assertEquals(customerEnt.getLastname(), user.getLastname());
-        Assert.assertEquals(customerEnt.getLogin(), user.getLogin());
-        Assert.assertEquals(customerEnt.getPassword(), user.getPassword());
-        Assert.assertEquals(customerEnt.getUserTypeEnt(), UserTypeEnt.ADMIN);
+        Assertions.assertEquals(customerEnt.getId(), user.getId());
+        Assertions.assertEquals(customerEnt.isActive(), user.isActive());
+        Assertions.assertEquals(customerEnt.getFirstname(), user.getFirstname());
+        Assertions.assertEquals(customerEnt.getLastname(), user.getLastname());
+        Assertions.assertEquals(customerEnt.getLogin(), user.getLogin());
+        Assertions.assertEquals(customerEnt.getPassword(), user.getPassword());
+        Assertions.assertEquals(customerEnt.getUserTypeEnt(), UserTypeEnt.ADMIN);
     }
 }

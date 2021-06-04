@@ -11,7 +11,7 @@ import javax.ws.rs.core.SecurityContext;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
-@Path("/errors")
+@Path("/soap/errors")
 public class ErrorsService {
 
     @GET

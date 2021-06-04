@@ -20,6 +20,26 @@
         </session-timeout>
     </session-config>
 
+    <!--    <filter>-->
+    <!--        <filter-name>CORS</filter-name>-->
+    <!--        <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>CORS</filter-name>-->
+    <!--        <url-pattern>/api/*</url-pattern>-->
+    <!--    </filter-mapping>-->
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Customer resources</web-resource-name>
+            <url-pattern>/api</url-pattern>
+            <url-pattern>/api/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
     <env-entry>
         <env-entry-name>SECRET</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>

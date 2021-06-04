@@ -16,6 +16,8 @@
         <module>ApplicationCore</module>
         <module>RepositoriesAdapters</module>
         <module>ApplicationPorts</module>
+        <module>UserServiceApp</module>
+        <module>UserServiceMQ</module>
         <module>REST</module>
         <module>SOAP</module>
     </modules>
@@ -24,5 +26,4 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-
 </project>
