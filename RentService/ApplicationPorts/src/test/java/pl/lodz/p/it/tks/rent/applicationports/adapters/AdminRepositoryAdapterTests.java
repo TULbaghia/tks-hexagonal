@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.applicationports.adapters;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.AdminRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.data.user.AdminEnt;
@@ -14,10 +14,10 @@ import java.lang.reflect.Field;
 
 public class AdminRepositoryAdapterTests {
 
-    private AdminRepositoryAdapter adminRepositoryAdapter;
-    private UserEntRepository userEntRepository;
+    private static AdminRepositoryAdapter adminRepositoryAdapter;
+    private static UserEntRepository userEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
         adminRepositoryAdapter = new AdminRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
@@ -34,10 +34,10 @@ public class AdminRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         adminRepositoryAdapter.add(admin);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotSame(userEntRepository.get("Klient"), admin);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotSame(userEntRepository.get("Klient"), admin);
     }
 
     @Test
@@ -48,17 +48,17 @@ public class AdminRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(admin);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Admin getAdmin = adminRepositoryAdapter.get(admin.getId());
-        Assert.assertNotSame(getAdmin, admin);
-        Assert.assertEquals(getAdmin.getId(), admin.getId());
-        Assert.assertEquals(getAdmin.isActive(), admin.isActive());
-        Assert.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
-        Assert.assertEquals(getAdmin.getLastname(), admin.getLastname());
-        Assert.assertEquals(getAdmin.getLogin(), admin.getLogin());
+        Assertions.assertNotSame(getAdmin, admin);
+        Assertions.assertEquals(getAdmin.getId(), admin.getId());
+        Assertions.assertEquals(getAdmin.isActive(), admin.isActive());
+        Assertions.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
+        Assertions.assertEquals(getAdmin.getLastname(), admin.getLastname());
+        Assertions.assertEquals(getAdmin.getLogin(), admin.getLogin());
     }
 
     @Test
@@ -69,17 +69,17 @@ public class AdminRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(admin);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Admin getAdmin = adminRepositoryAdapter.get("Klient");
-        Assert.assertNotSame(getAdmin, admin);
-        Assert.assertEquals(getAdmin.getId(), admin.getId());
-        Assert.assertEquals(getAdmin.isActive(), admin.isActive());
-        Assert.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
-        Assert.assertEquals(getAdmin.getLastname(), admin.getLastname());
-        Assert.assertEquals(getAdmin.getLogin(), admin.getLogin());
+        Assertions.assertNotSame(getAdmin, admin);
+        Assertions.assertEquals(getAdmin.getId(), admin.getId());
+        Assertions.assertEquals(getAdmin.isActive(), admin.isActive());
+        Assertions.assertEquals(getAdmin.getFirstname(), admin.getFirstname());
+        Assertions.assertEquals(getAdmin.getLastname(), admin.getLastname());
+        Assertions.assertEquals(getAdmin.getLogin(), admin.getLogin());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class AdminRepositoryAdapterTests {
             userEntRepository.add(adminEnt);
         }
 
-        Assert.assertEquals(adminRepositoryAdapter.getAll().size(), usersCount);
+        Assertions.assertEquals(adminRepositoryAdapter.getAll().size(), usersCount);
     }
 
     @Test
@@ -106,8 +106,8 @@ public class AdminRepositoryAdapterTests {
                 .build();
 
         userEntRepository.add(adminEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(adminEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(adminEnt.getId(), null);
 
         Admin updatedAdmin = Admin.builder()
                 .id(adminEnt.getId())
@@ -117,14 +117,14 @@ public class AdminRepositoryAdapterTests {
                 .build();
 
         adminRepositoryAdapter.update(updatedAdmin);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         AdminEnt getUpdatedAdmin = (AdminEnt) userEntRepository.get(adminEnt.getId());
-        Assert.assertEquals(getUpdatedAdmin.getId(), updatedAdmin.getId());
-        Assert.assertEquals(getUpdatedAdmin.isActive(), updatedAdmin.isActive());
-        Assert.assertEquals(getUpdatedAdmin.getFirstname(), updatedAdmin.getFirstname());
-        Assert.assertEquals(getUpdatedAdmin.getLastname(), updatedAdmin.getLastname());
-        Assert.assertEquals(getUpdatedAdmin.getLogin(), updatedAdmin.getLogin());
+        Assertions.assertEquals(getUpdatedAdmin.getId(), updatedAdmin.getId());
+        Assertions.assertEquals(getUpdatedAdmin.isActive(), updatedAdmin.isActive());
+        Assertions.assertEquals(getUpdatedAdmin.getFirstname(), updatedAdmin.getFirstname());
+        Assertions.assertEquals(getUpdatedAdmin.getLastname(), updatedAdmin.getLastname());
+        Assertions.assertEquals(getUpdatedAdmin.getLogin(), updatedAdmin.getLogin());
 
         Admin updatedAdmin2 = Admin.builder()
                 .login(adminEnt.getLogin())
@@ -132,6 +132,6 @@ public class AdminRepositoryAdapterTests {
                 .lastname("TestoweNazwisko")
                 .build();
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> adminRepositoryAdapter.update(updatedAdmin2));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> adminRepositoryAdapter.update(updatedAdmin2));
     }
 }

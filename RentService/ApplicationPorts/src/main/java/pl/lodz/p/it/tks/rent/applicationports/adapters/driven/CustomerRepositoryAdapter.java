@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class CustomerRepositoryAdapter implements AddCustomerPort, UpdateCustomerPort, GetAllCustomerPort,
-        GetCustomerByLoginPort, GetCustomerByIdPort {
+        GetCustomerByLoginPort, GetCustomerByIdPort, DeleteCustomerPort {
 
     private final UserEntRepository userEntRepository;
 
@@ -68,6 +68,15 @@ public class CustomerRepositoryAdapter implements AddCustomerPort, UpdateCustome
         CustomerEnt customerEnt = UserConverter.convertDomainToEnt(customer);
         try {
             return UserConverter.convertEntToDomain((CustomerEnt) userEntRepository.update(customerEnt));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        try {
+            userEntRepository.delete(uuid);
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }

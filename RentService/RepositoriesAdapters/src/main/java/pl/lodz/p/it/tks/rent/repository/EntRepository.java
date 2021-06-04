@@ -14,7 +14,7 @@ public abstract class EntRepository<T extends ModelIdTraitEnt> {
 
     public synchronized T add(T item) throws RepositoryEntException {
         if (item.getId() != null) {
-            throw new RepositoryEntException("ID must be null.");
+//            throw new RepositoryEntException("ID must be null.");
         } else {
             item.setId(UUID.randomUUID());
         }

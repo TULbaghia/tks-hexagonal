@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="REST Test Suite">
-    <test name="REST Tests">
-        <packages>
-            <package name="pl.lodz.p.it.tks.rent.rest.*"/>
-        </packages>
-    </test>
-</suite>

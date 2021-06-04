@@ -16,6 +16,8 @@
         <module>ApplicationCore</module>
         <module>RepositoriesAdapters</module>
         <module>ApplicationPorts</module>
+        <module>RentServiceMQ</module>
+        <module>RentServiceApp</module>
         <module>REST</module>
         <module>SOAP</module>
     </modules>

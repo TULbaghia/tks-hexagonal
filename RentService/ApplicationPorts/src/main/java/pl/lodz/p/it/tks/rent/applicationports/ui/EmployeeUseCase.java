@@ -17,4 +17,6 @@ public interface EmployeeUseCase {
     Employee get(UUID uuid) throws RepositoryAdapterException;
 
     Employee get(String login) throws RepositoryAdapterException;
+
+    void delete(UUID uuid) throws RepositoryAdapterException;
 }

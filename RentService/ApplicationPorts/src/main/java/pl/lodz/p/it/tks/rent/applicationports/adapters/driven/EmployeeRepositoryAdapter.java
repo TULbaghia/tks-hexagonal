@@ -2,6 +2,7 @@ package pl.lodz.p.it.tks.rent.applicationports.adapters.driven;
 
 import pl.lodz.p.it.tks.rent.applicationports.converters.UserConverter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
+import pl.lodz.p.it.tks.rent.applicationports.infrastructure.user.customer.DeleteCustomerPort;
 import pl.lodz.p.it.tks.rent.applicationports.infrastructure.user.employee.*;
 import pl.lodz.p.it.tks.rent.data.user.EmployeeEnt;
 import pl.lodz.p.it.tks.rent.domainmodel.user.Employee;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class EmployeeRepositoryAdapter implements AddEmployeePort, UpdateEmployeePort, GetAllEmployeePort,
-        GetEmployeeByLoginPort, GetEmployeeByIdPort {
+        GetEmployeeByLoginPort, GetEmployeeByIdPort, DeleteEmployeePort {
 
     private final UserEntRepository userEntRepository;
 
@@ -68,6 +69,15 @@ public class EmployeeRepositoryAdapter implements AddEmployeePort, UpdateEmploye
         EmployeeEnt employeeEnt = UserConverter.convertDomainToEnt(employee);
         try {
             return UserConverter.convertEntToDomain((EmployeeEnt) userEntRepository.update(employeeEnt));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        try {
+            userEntRepository.delete(uuid);
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }

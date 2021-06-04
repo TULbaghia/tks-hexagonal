@@ -17,14 +17,16 @@ public class AdminService implements AdminUseCase {
     private final GetAllAdminPort getAllAdminPort;
     private final GetAdminByIdPort getAdminByIdPort;
     private final GetAdminByLoginPort getAdminByLoginPort;
+    private final DeleteAdminPort deleteAdminPort;
 
     @Inject
-    public AdminService(AddAdminPort addAdminPort, UpdateAdminPort updateAdminPort, GetAllAdminPort getAllAdminPort, GetAdminByIdPort getAdminByIdPort, GetAdminByLoginPort getAdminByLoginPort) {
+    public AdminService(DeleteAdminPort deleteAdminPort, AddAdminPort addAdminPort, UpdateAdminPort updateAdminPort, GetAllAdminPort getAllAdminPort, GetAdminByIdPort getAdminByIdPort, GetAdminByLoginPort getAdminByLoginPort) {
         this.addAdminPort = addAdminPort;
         this.updateAdminPort = updateAdminPort;
         this.getAllAdminPort = getAllAdminPort;
         this.getAdminByIdPort = getAdminByIdPort;
         this.getAdminByLoginPort = getAdminByLoginPort;
+        this.deleteAdminPort = deleteAdminPort;
     }
 
     @Override
@@ -56,5 +58,10 @@ public class AdminService implements AdminUseCase {
     @Override
     public Admin get(String login) throws RepositoryAdapterException {
         return getAdminByLoginPort.get(login);
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        deleteAdminPort.delete(uuid);
     }
 }

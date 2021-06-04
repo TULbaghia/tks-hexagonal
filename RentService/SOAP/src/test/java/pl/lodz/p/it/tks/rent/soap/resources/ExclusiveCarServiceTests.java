@@ -1,9 +1,11 @@
 package pl.lodz.p.it.tks.rent.soap.resources;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.domainmodel.resources.ExclusiveCar;
+import pl.lodz.p.it.tks.rent.soap.AbstractContainer;
 import pl.lodz.p.it.tks.rent.soap.Util;
 import pl.soap.target.ExclusiveCarAPI;
 import pl.soap.target.ExclusiveCarService;
@@ -15,18 +17,25 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ExclusiveCarServiceTests {
-    private final String WSDL_URI = "http://localhost:8080/RentSoap/ExclusiveCarAPI?wsdl";
+public class ExclusiveCarServiceTests extends AbstractContainer {
+    private static String WSDL_URI = "http://localhost:%d/RentServiceApp-1.0-SNAPSHOT/ExclusiveCarAPI?wsdl";
 
-    private ExclusiveCarService exclusiveCarService;
-    private ExclusiveCar mockExclusiveCar;
+    private static ExclusiveCarService exclusiveCarService;
+    private static ExclusiveCar mockExclusiveCar;
 
-    @BeforeMethod
+    @BeforeAll
+    public static void setup() {
+        getService();
+        WSDL_URI = String.format(WSDL_URI, serviceOne.getMappedPort(8080));
+    }
+
+    @BeforeEach
     public void beforeEach() {
         ExclusiveCarAPI exclusiveCarAPI = new ExclusiveCarAPI(ExclusiveCarAPI.class.getResource("ExclusiveCarAPI.wsdl"));
         exclusiveCarService = exclusiveCarAPI.getExclusiveCarServicePort();
 
-        Util.authenticateUser((BindingProvider) exclusiveCarService, "TestEmployee", "zaq1@WSX");
+        Util.authenticateUser((BindingProvider) exclusiveCarService, "TestEmployee", "zaq1@WSX",
+                serviceOne.getMappedPort(8080));
 
         ((BindingProvider) exclusiveCarService).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, WSDL_URI);
 
@@ -72,27 +81,27 @@ public class ExclusiveCarServiceTests {
         exclusiveCarService.addExclusiveCar(constCarId, engineCapacity, vin, doorNumber, brand, basePricePerDay, driverEquipment, boardPcName);
 
         allCars = exclusiveCarService.getAllExclusiveCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd + 1);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd + 1);
     }
 
     @Test
     public void getExclusiveCarTest() {
         ExclusiveCarSoap exclusiveCarSoap = exclusiveCarService.getExclusiveCar(mockExclusiveCar.getId().toString());
 
-        Assert.assertEquals(exclusiveCarSoap.getId(), mockExclusiveCar.getId().toString());
-        Assert.assertEquals(exclusiveCarSoap.getEngineCapacity(), mockExclusiveCar.getEngineCapacity());
-        Assert.assertEquals(exclusiveCarSoap.getVin(), mockExclusiveCar.getVin());
-        Assert.assertEquals(exclusiveCarSoap.getDoorNumber(), mockExclusiveCar.getDoorNumber());
-        Assert.assertEquals(exclusiveCarSoap.getBrand(), mockExclusiveCar.getBrand());
-        Assert.assertEquals(exclusiveCarSoap.getBasePricePerDay(), mockExclusiveCar.getBasePricePerDay());
-        Assert.assertEquals(exclusiveCarSoap.getDriverEquipment(), mockExclusiveCar.getDriverEquipment());
+        Assertions.assertEquals(exclusiveCarSoap.getId(), mockExclusiveCar.getId().toString());
+        Assertions.assertEquals(exclusiveCarSoap.getEngineCapacity(), mockExclusiveCar.getEngineCapacity());
+        Assertions.assertEquals(exclusiveCarSoap.getVin(), mockExclusiveCar.getVin());
+        Assertions.assertEquals(exclusiveCarSoap.getDoorNumber(), mockExclusiveCar.getDoorNumber());
+        Assertions.assertEquals(exclusiveCarSoap.getBrand(), mockExclusiveCar.getBrand());
+        Assertions.assertEquals(exclusiveCarSoap.getBasePricePerDay(), mockExclusiveCar.getBasePricePerDay());
+        Assertions.assertEquals(exclusiveCarSoap.getDriverEquipment(), mockExclusiveCar.getDriverEquipment());
     }
 
     @Test
     public void getAllExclusiveCarsTest() {
         List<ExclusiveCarSoap> allCars = exclusiveCarService.getAllExclusiveCars();
 
-        Assert.assertNotEquals(allCars.size(), 0);
+        Assertions.assertNotEquals(allCars.size(), 0);
     }
 
     @Test
@@ -112,18 +121,18 @@ public class ExclusiveCarServiceTests {
         exclusiveCarService.updateExclusiveCar(constCarId, engineCapacity, vin, doorNumber, brand, basePricePerDay, driverEquipment, boardPcName);
 
         allCars = exclusiveCarService.getAllExclusiveCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd);
 
 
         ExclusiveCarSoap exclusiveCarSoap = exclusiveCarService.getExclusiveCar(mockExclusiveCar.getId().toString());
 
-        Assert.assertEquals(exclusiveCarSoap.getId(), mockExclusiveCar.getId().toString());
-        Assert.assertEquals(exclusiveCarSoap.getEngineCapacity(), mockExclusiveCar.getEngineCapacity());
-        Assert.assertEquals(exclusiveCarSoap.getVin(), mockExclusiveCar.getVin());
-        Assert.assertEquals(exclusiveCarSoap.getDoorNumber(), Integer.toUnsignedLong(doorNumber.value));
-        Assert.assertEquals(exclusiveCarSoap.getBrand(), brand.value);
-        Assert.assertEquals(exclusiveCarSoap.getBasePricePerDay(), mockExclusiveCar.getBasePricePerDay());
-        Assert.assertEquals(exclusiveCarSoap.getDriverEquipment(), mockExclusiveCar.getDriverEquipment());
+        Assertions.assertEquals(exclusiveCarSoap.getId(), mockExclusiveCar.getId().toString());
+        Assertions.assertEquals(exclusiveCarSoap.getEngineCapacity(), mockExclusiveCar.getEngineCapacity());
+        Assertions.assertEquals(exclusiveCarSoap.getVin(), mockExclusiveCar.getVin());
+        Assertions.assertEquals(exclusiveCarSoap.getDoorNumber(), Integer.toUnsignedLong(doorNumber.value));
+        Assertions.assertEquals(exclusiveCarSoap.getBrand(), brand.value);
+        Assertions.assertEquals(exclusiveCarSoap.getBasePricePerDay(), mockExclusiveCar.getBasePricePerDay());
+        Assertions.assertEquals(exclusiveCarSoap.getDriverEquipment(), mockExclusiveCar.getDriverEquipment());
     }
 
     @Test
@@ -134,6 +143,6 @@ public class ExclusiveCarServiceTests {
         exclusiveCarService.deleteExclusiveCar(mockExclusiveCar.getId().toString());
 
         allCars = exclusiveCarService.getAllExclusiveCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd - 1);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd - 1);
     }
 }

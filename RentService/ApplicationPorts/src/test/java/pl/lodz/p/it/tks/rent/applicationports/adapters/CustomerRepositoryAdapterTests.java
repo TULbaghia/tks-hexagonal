@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.applicationports.adapters;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.CustomerRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.data.user.CustomerEnt;
@@ -13,10 +13,10 @@ import pl.lodz.p.it.tks.rent.repository.exception.RepositoryEntException;
 import java.lang.reflect.Field;
 
 public class CustomerRepositoryAdapterTests {
-    private CustomerRepositoryAdapter customerRepositoryAdapter;
-    private UserEntRepository userEntRepository;
+    private static CustomerRepositoryAdapter customerRepositoryAdapter;
+    private static UserEntRepository userEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
         customerRepositoryAdapter = new CustomerRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
@@ -33,10 +33,10 @@ public class CustomerRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         customerRepositoryAdapter.add(customer);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotSame(userEntRepository.get("Klient"), customer);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotSame(userEntRepository.get("Klient"), customer);
     }
 
     @Test
@@ -47,17 +47,17 @@ public class CustomerRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(customer);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Customer getAdmin = customerRepositoryAdapter.get(customer.getId());
-        Assert.assertNotSame(getAdmin, customer);
-        Assert.assertEquals(getAdmin.getId(), customer.getId());
-        Assert.assertEquals(getAdmin.isActive(), customer.isActive());
-        Assert.assertEquals(getAdmin.getFirstname(), customer.getFirstname());
-        Assert.assertEquals(getAdmin.getLastname(), customer.getLastname());
-        Assert.assertEquals(getAdmin.getLogin(), customer.getLogin());
+        Assertions.assertNotSame(getAdmin, customer);
+        Assertions.assertEquals(getAdmin.getId(), customer.getId());
+        Assertions.assertEquals(getAdmin.isActive(), customer.isActive());
+        Assertions.assertEquals(getAdmin.getFirstname(), customer.getFirstname());
+        Assertions.assertEquals(getAdmin.getLastname(), customer.getLastname());
+        Assertions.assertEquals(getAdmin.getLogin(), customer.getLogin());
     }
 
     @Test
@@ -68,17 +68,17 @@ public class CustomerRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(customer);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Customer getAdmin = customerRepositoryAdapter.get("Klient");
-        Assert.assertNotSame(getAdmin, customer);
-        Assert.assertEquals(getAdmin.getId(), customer.getId());
-        Assert.assertEquals(getAdmin.isActive(), customer.isActive());
-        Assert.assertEquals(getAdmin.getFirstname(), customer.getFirstname());
-        Assert.assertEquals(getAdmin.getLastname(), customer.getLastname());
-        Assert.assertEquals(getAdmin.getLogin(), customer.getLogin());
+        Assertions.assertNotSame(getAdmin, customer);
+        Assertions.assertEquals(getAdmin.getId(), customer.getId());
+        Assertions.assertEquals(getAdmin.isActive(), customer.isActive());
+        Assertions.assertEquals(getAdmin.getFirstname(), customer.getFirstname());
+        Assertions.assertEquals(getAdmin.getLastname(), customer.getLastname());
+        Assertions.assertEquals(getAdmin.getLogin(), customer.getLogin());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class CustomerRepositoryAdapterTests {
             userEntRepository.add(adminEnt);
         }
 
-        Assert.assertEquals(customerRepositoryAdapter.getAll().size(), usersCount);
+        Assertions.assertEquals(customerRepositoryAdapter.getAll().size(), usersCount);
     }
 
     @Test
@@ -105,8 +105,8 @@ public class CustomerRepositoryAdapterTests {
                 .build();
 
         userEntRepository.add(adminEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(adminEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(adminEnt.getId(), null);
 
         Customer updatedCustomer = Customer.builder()
                 .id(adminEnt.getId())
@@ -116,14 +116,14 @@ public class CustomerRepositoryAdapterTests {
                 .build();
 
         customerRepositoryAdapter.update(updatedCustomer);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         CustomerEnt getUpdatedAdmin = (CustomerEnt) userEntRepository.get(adminEnt.getId());
-        Assert.assertEquals(getUpdatedAdmin.getId(), updatedCustomer.getId());
-        Assert.assertEquals(getUpdatedAdmin.isActive(), updatedCustomer.isActive());
-        Assert.assertEquals(getUpdatedAdmin.getFirstname(), updatedCustomer.getFirstname());
-        Assert.assertEquals(getUpdatedAdmin.getLastname(), updatedCustomer.getLastname());
-        Assert.assertEquals(getUpdatedAdmin.getLogin(), updatedCustomer.getLogin());
+        Assertions.assertEquals(getUpdatedAdmin.getId(), updatedCustomer.getId());
+        Assertions.assertEquals(getUpdatedAdmin.isActive(), updatedCustomer.isActive());
+        Assertions.assertEquals(getUpdatedAdmin.getFirstname(), updatedCustomer.getFirstname());
+        Assertions.assertEquals(getUpdatedAdmin.getLastname(), updatedCustomer.getLastname());
+        Assertions.assertEquals(getUpdatedAdmin.getLogin(), updatedCustomer.getLogin());
 
         Customer updatedCustomer2 = Customer.builder()
                 .login(adminEnt.getLogin())
@@ -131,6 +131,6 @@ public class CustomerRepositoryAdapterTests {
                 .lastname("TestoweNazwisko")
                 .build();
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> customerRepositoryAdapter.update(updatedCustomer2));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> customerRepositoryAdapter.update(updatedCustomer2));
     }
 }

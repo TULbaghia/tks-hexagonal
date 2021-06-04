@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="REST Test Suite">
-    <test name="SOAP Tests">
-        <packages>
-            <package name="pl.lodz.p.it.tks.rent.soap.*"/>
-        </packages>
-    </test>
-</suite>

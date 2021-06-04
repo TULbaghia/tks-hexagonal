@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.applicationports.adapters;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.ExclusiveCarRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.data.resources.ExclusiveCarEnt;
@@ -14,10 +14,10 @@ import java.lang.reflect.Field;
 import java.util.UUID;
 
 public class ExclusiveCarRepositoryAdapterTests {
-    private ExclusiveCarRepositoryAdapter exclusiveCarRepositoryAdapter;
-    private CarEntRepository carEntRepository;
+    private static ExclusiveCarRepositoryAdapter exclusiveCarRepositoryAdapter;
+    private static CarEntRepository carEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
         exclusiveCarRepositoryAdapter = new ExclusiveCarRepositoryAdapter(new CarEntRepository());
         carEntRepository = new CarEntRepository();
@@ -39,9 +39,9 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         exclusiveCarRepositoryAdapter.add(exclusiveCar);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.add(exclusiveCar));
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.add(exclusiveCar));
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
     }
 
     @Test
@@ -57,20 +57,20 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         ExclusiveCar getCar = exclusiveCarRepositoryAdapter.get(car.getId());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
-        Assert.assertEquals(getCar.getBoardPcName(), car.getBoardPcName());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getBoardPcName(), car.getBoardPcName());
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.get(UUID.randomUUID()));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.get(UUID.randomUUID()));
     }
 
     @Test
@@ -86,20 +86,20 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         ExclusiveCar getCar = exclusiveCarRepositoryAdapter.getExclusiveCarByVin(car.getVin());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
-        Assert.assertEquals(getCar.getBoardPcName(), car.getBoardPcName());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getBoardPcName(), car.getBoardPcName());
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.getExclusiveCarByVin("VIN"));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.getExclusiveCarByVin("VIN"));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class ExclusiveCarRepositoryAdapterTests {
             carEntRepository.add(car);
         }
 
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getAll().size(), carsCount);
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getAll().size(), carsCount);
     }
 
     @Test
@@ -134,8 +134,8 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         ExclusiveCar updatedCar = ExclusiveCar.builder()
                 .id(car.getId())
@@ -149,18 +149,18 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         exclusiveCarRepositoryAdapter.update(updatedCar);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
 
         ExclusiveCarEnt getUpdatedCar = (ExclusiveCarEnt) carEntRepository.get(car.getId());
 
-        Assert.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
-        Assert.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
-        Assert.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
-        Assert.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
-        Assert.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
-        Assert.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
-        Assert.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
-        Assert.assertEquals(getUpdatedCar.getBoardPcName(), updatedCar.getBoardPcName());
+        Assertions.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
+        Assertions.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
+        Assertions.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
+        Assertions.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
+        Assertions.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
+        Assertions.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
+        Assertions.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
+        Assertions.assertEquals(getUpdatedCar.getBoardPcName(), updatedCar.getBoardPcName());
 
         ExclusiveCar noUpdateCar = ExclusiveCar.builder()
                 .vin("11111111111111111")
@@ -172,7 +172,7 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .boardPcName("boardPc")
                 .build();
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.update(noUpdateCar));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.update(noUpdateCar));
     }
 
     @Test
@@ -188,12 +188,12 @@ public class ExclusiveCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         exclusiveCarRepositoryAdapter.delete(car.getId());
-        Assert.assertEquals(carEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 0);
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.delete(car.getId()));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> exclusiveCarRepositoryAdapter.delete(car.getId()));
     }
 }

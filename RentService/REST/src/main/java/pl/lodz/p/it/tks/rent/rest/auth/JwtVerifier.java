@@ -5,11 +5,13 @@ import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.text.ParseException;
 
+@ApplicationScoped
 public class JwtVerifier {
 
     private static final String SECRET;

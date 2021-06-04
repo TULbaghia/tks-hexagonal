@@ -1,7 +1,7 @@
 package pl.lodz.p.it.tks.rent.applicationports.converters;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.data.resources.ExclusiveCarEnt;
 import pl.lodz.p.it.tks.rent.data.resources.RentEnt;
 import pl.lodz.p.it.tks.rent.data.user.CustomerEnt;
@@ -37,13 +37,13 @@ public class RentConverterTests {
         ExclusiveCarEnt exclusiveCarEnt = CarConverter.convertDomainToEnt(exclusiveCar);
         RentEnt rentEnt = RentConverter.convertDomainToEnt(rent, customerEnt, exclusiveCarEnt);
 
-        Assert.assertEquals(rentEnt.getId(), rent.getId());
-        Assert.assertEquals(rentEnt.getCar().getId(), rent.getCar().getId());
-        Assert.assertSame(rentEnt.getCar(), exclusiveCarEnt);
-        Assert.assertEquals(rentEnt.getCustomer().getId(), rent.getCustomer().getId());
-        Assert.assertSame(rentEnt.getCustomer(), customerEnt);
-        Assert.assertEquals(rentEnt.getRentStartDate(), rent.getRentStartDate());
-        Assert.assertEquals(rentEnt.getPrice(), rent.getPrice());
+        Assertions.assertEquals(rentEnt.getId(), rent.getId());
+        Assertions.assertEquals(rentEnt.getCar().getId(), rent.getCar().getId());
+        Assertions.assertSame(rentEnt.getCar(), exclusiveCarEnt);
+        Assertions.assertEquals(rentEnt.getCustomer().getId(), rent.getCustomer().getId());
+        Assertions.assertSame(rentEnt.getCustomer(), customerEnt);
+        Assertions.assertEquals(rentEnt.getRentStartDate(), rent.getRentStartDate());
+        Assertions.assertEquals(rentEnt.getPrice(), rent.getPrice());
     }
 
     @Test
@@ -71,10 +71,10 @@ public class RentConverterTests {
 
         Rent rent = RentConverter.convertEntToDomain(rentEnt);
 
-        Assert.assertEquals(rent.getId(), rentEnt.getId());
-        Assert.assertEquals(rent.getCar().getId(), rentEnt.getCar().getId());
-        Assert.assertEquals(rent.getCustomer().getId(), rentEnt.getCustomer().getId());
-        Assert.assertEquals(rent.getRentStartDate(), rentEnt.getRentStartDate());
-        Assert.assertEquals(rent.getPrice(), rentEnt.getPrice());
+        Assertions.assertEquals(rent.getId(), rentEnt.getId());
+        Assertions.assertEquals(rent.getCar().getId(), rentEnt.getCar().getId());
+        Assertions.assertEquals(rent.getCustomer().getId(), rentEnt.getCustomer().getId());
+        Assertions.assertEquals(rent.getRentStartDate(), rentEnt.getRentStartDate());
+        Assertions.assertEquals(rent.getPrice(), rentEnt.getPrice());
     }
 }

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class AdminRepositoryAdapter implements AddAdminPort, UpdateAdminPort, GetAllAdminPort,
-        GetAdminByLoginPort, GetAdminByIdPort {
+        GetAdminByLoginPort, GetAdminByIdPort, DeleteAdminPort {
 
     private final UserEntRepository userEntRepository;
 
@@ -68,6 +68,15 @@ public class AdminRepositoryAdapter implements AddAdminPort, UpdateAdminPort, Ge
         AdminEnt adminEnt = UserConverter.convertDomainToEnt(admin);
         try {
             return UserConverter.convertEntToDomain((AdminEnt) userEntRepository.update(adminEnt));
+        } catch (RepositoryEntException e) {
+            throw new RepositoryAdapterException(e);
+        }
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        try {
+            userEntRepository.delete(uuid);
         } catch (RepositoryEntException e) {
             throw new RepositoryAdapterException(e);
         }

@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="ApplicationPorts_TestSuite">
-    <test name="ApplicationPorts_Tests">
-        <packages>
-            <package name="pl.lodz.p.it.tks.rent.applicationports.*"/>
-        </packages>
-    </test>
-</suite>

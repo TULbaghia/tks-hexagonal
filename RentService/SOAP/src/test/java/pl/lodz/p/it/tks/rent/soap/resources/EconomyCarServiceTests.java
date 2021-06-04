@@ -1,9 +1,11 @@
 package pl.lodz.p.it.tks.rent.soap.resources;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.domainmodel.resources.EconomyCar;
+import pl.lodz.p.it.tks.rent.soap.AbstractContainer;
 import pl.lodz.p.it.tks.rent.soap.Util;
 import pl.soap.target.EconomyCarAPI;
 import pl.soap.target.EconomyCarService;
@@ -15,18 +17,25 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class EconomyCarServiceTests {
-    private final String WSDL_URI = "http://localhost:8080/RentSoap/EconomyCarAPI?wsdl";
+public class EconomyCarServiceTests extends AbstractContainer {
+    private static String WSDL_URI = "http://localhost:%d/RentServiceApp-1.0-SNAPSHOT/EconomyCarAPI?wsdl";
 
-    private EconomyCarService economyCarService;
-    private EconomyCar mockEconomyCar;
+    private static EconomyCarService economyCarService;
+    private static EconomyCar mockEconomyCar;
 
-    @BeforeMethod
+    @BeforeAll
+    public static void setup() {
+        getService();
+        WSDL_URI = String.format(WSDL_URI, serviceOne.getMappedPort(8080));
+    }
+
+    @BeforeEach
     public void beforeEach() {
         EconomyCarAPI economyCarAPI = new EconomyCarAPI(EconomyCarAPI.class.getResource("EconomyCarAPI.wsdl"));
         economyCarService = economyCarAPI.getEconomyCarServicePort();
 
-        Util.authenticateUser((BindingProvider) economyCarService, "TestEmployee", "zaq1@WSX");
+        Util.authenticateUser((BindingProvider) economyCarService, "TestEmployee", "zaq1@WSX",
+                serviceOne.getMappedPort(8080));
 
         ((BindingProvider) economyCarService).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, WSDL_URI);
 
@@ -69,27 +78,27 @@ public class EconomyCarServiceTests {
         economyCarService.addEconomyCar(constCarId, engineCapacity, vin, doorNumber, brand, basePricePerDay, driverEquipment);
 
         allCars = economyCarService.getAllEconomyCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd + 1);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd + 1);
     }
 
     @Test
     public void getEconomyCarTest() {
         EconomyCarSoap economyCarSoap = economyCarService.getEconomyCar(mockEconomyCar.getId().toString());
 
-        Assert.assertEquals(economyCarSoap.getId(), mockEconomyCar.getId().toString());
-        Assert.assertEquals(economyCarSoap.getEngineCapacity(), mockEconomyCar.getEngineCapacity());
-        Assert.assertEquals(economyCarSoap.getVin(), mockEconomyCar.getVin());
-        Assert.assertEquals(economyCarSoap.getDoorNumber(), mockEconomyCar.getDoorNumber());
-        Assert.assertEquals(economyCarSoap.getBrand(), mockEconomyCar.getBrand());
-        Assert.assertEquals(economyCarSoap.getBasePricePerDay(), mockEconomyCar.getBasePricePerDay());
-        Assert.assertEquals(economyCarSoap.getDriverEquipment(), mockEconomyCar.getDriverEquipment());
+        Assertions.assertEquals(economyCarSoap.getId(), mockEconomyCar.getId().toString());
+        Assertions.assertEquals(economyCarSoap.getEngineCapacity(), mockEconomyCar.getEngineCapacity());
+        Assertions.assertEquals(economyCarSoap.getVin(), mockEconomyCar.getVin());
+        Assertions.assertEquals(economyCarSoap.getDoorNumber(), mockEconomyCar.getDoorNumber());
+        Assertions.assertEquals(economyCarSoap.getBrand(), mockEconomyCar.getBrand());
+        Assertions.assertEquals(economyCarSoap.getBasePricePerDay(), mockEconomyCar.getBasePricePerDay());
+        Assertions.assertEquals(economyCarSoap.getDriverEquipment(), mockEconomyCar.getDriverEquipment());
     }
 
     @Test
     public void getAllEconomyCarsTest() {
         List<EconomyCarSoap> allCars = economyCarService.getAllEconomyCars();
 
-        Assert.assertNotEquals(allCars.size(), 0);
+        Assertions.assertNotEquals(allCars.size(), 0);
     }
 
     @Test
@@ -108,18 +117,18 @@ public class EconomyCarServiceTests {
         economyCarService.updateEconomyCar(constCarId, engineCapacity, vin, doorNumber, brand, basePricePerDay, driverEquipment);
 
         allCars = economyCarService.getAllEconomyCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd);
 
 
         EconomyCarSoap economyCarSoap = economyCarService.getEconomyCar(mockEconomyCar.getId().toString());
 
-        Assert.assertEquals(economyCarSoap.getId(), mockEconomyCar.getId().toString());
-        Assert.assertEquals(economyCarSoap.getEngineCapacity(), mockEconomyCar.getEngineCapacity());
-        Assert.assertEquals(economyCarSoap.getVin(), mockEconomyCar.getVin());
-        Assert.assertEquals(economyCarSoap.getDoorNumber(), Integer.toUnsignedLong(doorNumber.value));
-        Assert.assertEquals(economyCarSoap.getBrand(), brand.value);
-        Assert.assertEquals(economyCarSoap.getBasePricePerDay(), mockEconomyCar.getBasePricePerDay());
-        Assert.assertEquals(economyCarSoap.getDriverEquipment(), mockEconomyCar.getDriverEquipment());
+        Assertions.assertEquals(economyCarSoap.getId(), mockEconomyCar.getId().toString());
+        Assertions.assertEquals(economyCarSoap.getEngineCapacity(), mockEconomyCar.getEngineCapacity());
+        Assertions.assertEquals(economyCarSoap.getVin(), mockEconomyCar.getVin());
+        Assertions.assertEquals(economyCarSoap.getDoorNumber(), Integer.toUnsignedLong(doorNumber.value));
+        Assertions.assertEquals(economyCarSoap.getBrand(), brand.value);
+        Assertions.assertEquals(economyCarSoap.getBasePricePerDay(), mockEconomyCar.getBasePricePerDay());
+        Assertions.assertEquals(economyCarSoap.getDriverEquipment(), mockEconomyCar.getDriverEquipment());
     }
 
     @Test
@@ -130,6 +139,6 @@ public class EconomyCarServiceTests {
         economyCarService.deleteEconomyCar(mockEconomyCar.getId().toString());
 
         allCars = economyCarService.getAllEconomyCars();
-        Assert.assertEquals(allCars.size(), sizeBeforeAdd - 1);
+        Assertions.assertEquals(allCars.size(), sizeBeforeAdd - 1);
     }
 }

@@ -4,12 +4,13 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import pl.lodz.p.it.tks.rent.rest.AbstractContainer;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,14 +18,16 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-public class CustomerTests {
+@Testcontainers
+public class CustomerTests extends AbstractContainer {
 
-    private String JWT_TOKEN;
+    private static String JWT_TOKEN;
 
-    @BeforeClass
-    public void setup() {
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
-        RestAssured.port = 8181;
+    @BeforeAll
+    public static void setup() {
+        getService();
+        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
+        RestAssured.port = serviceOne.getMappedPort(8181);
         RestAssured.useRelaxedHTTPSValidation();
 
         JSONObject jsonObj = new JSONObject()
@@ -39,47 +42,47 @@ public class CustomerTests {
                 .extract()
                 .response();
 
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
+        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
 
         JWT_TOKEN = r.getBody().asString();
     }
 
-    @Test
-    public void addCustomerTest() {
-        int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
-        JSONObject jsonObj = new JSONObject()
-                .put("login","AddCustomerTest" + randomNum)
-                .put("firstname","AddCustomerTest")
-                .put("lastname","AddCustomerTest");
-
-        JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
-
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
-        given().contentType(ContentType.JSON)
-                .body(userServiceObj.toString())
-                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                .post("user")
-                .then()
-                .assertThat()
-                .body("login", containsString("AddCustomerTest" + randomNum))
-                .body("firstname", containsString("AddCustomerTest"))
-                .body("lastname", containsString("AddCustomerTest"))
-                .body("active", equalTo(true))
-                .statusCode(200);
-
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
-        given().contentType(ContentType.JSON)
-                .body(jsonObj.toString())
-                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                .post("user/customer")
-                .then()
-                .assertThat()
-                .body("login", containsString("AddCustomerTest" + randomNum))
-                .body("firstname", containsString("AddCustomerTest"))
-                .body("lastname", containsString("AddCustomerTest"))
-                .body("active", equalTo(true))
-                .statusCode(200);
-    }
+//    @Test
+//    public void addCustomerTest() {
+//        int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
+//        JSONObject jsonObj = new JSONObject()
+//                .put("login","AddCustomerTest" + randomNum)
+//                .put("firstname","AddCustomerTest")
+//                .put("lastname","AddCustomerTest");
+//
+//        JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
+//
+//        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
+//        given().contentType(ContentType.JSON)
+//                .body(userServiceObj.toString())
+//                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+//                .post("user")
+//                .then()
+//                .assertThat()
+//                .body("login", containsString("AddCustomerTest" + randomNum))
+//                .body("firstname", containsString("AddCustomerTest"))
+//                .body("lastname", containsString("AddCustomerTest"))
+//                .body("active", equalTo(true))
+//                .statusCode(200);
+//
+//        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
+//        given().contentType(ContentType.JSON)
+//                .body(jsonObj.toString())
+//                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+//                .post("user/customer")
+//                .then()
+//                .assertThat()
+//                .body("login", containsString("AddCustomerTest" + randomNum))
+//                .body("firstname", containsString("AddCustomerTest"))
+//                .body("lastname", containsString("AddCustomerTest"))
+//                .body("active", equalTo(true))
+//                .statusCode(200);
+//    }
 
     @Test
     public void getAllCustomersTests() {
@@ -95,9 +98,9 @@ public class CustomerTests {
                 .body().asString());
 
         int lastIndex = customersArray.length() - 1;
-        Assert.assertEquals(customersArray.getJSONObject(lastIndex).getString("id"), testCustomer3.getString("id"));
-        Assert.assertEquals(customersArray.getJSONObject(lastIndex - 1).getString("id"), testCustomer2.getString("id"));
-        Assert.assertEquals(customersArray.getJSONObject(lastIndex - 2).getString("id"), testCustomer1.getString("id"));
+        Assertions.assertEquals(customersArray.getJSONObject(lastIndex).getString("id"), testCustomer3.getString("id"));
+        Assertions.assertEquals(customersArray.getJSONObject(lastIndex - 1).getString("id"), testCustomer2.getString("id"));
+        Assertions.assertEquals(customersArray.getJSONObject(lastIndex - 2).getString("id"), testCustomer1.getString("id"));
     }
 
     @Test
@@ -115,66 +118,66 @@ public class CustomerTests {
                 .statusCode(200);
     }
 
-    @Test
-    public void updateCustomerTest() {
-        JSONObject testUser = addTestCustomer();
-        JSONObject jsonObj = new JSONObject()
-                .put("id", testUser.get("id"))
-                .put("login", testUser.get("login"))
-                .put("password","zaq1@WSX")
-                .put("firstname","UpdatedFirstname")
-                .put("lastname","UpdatedLastname");
+//    @Test
+//    public void updateCustomerTest() {
+//        JSONObject testUser = addTestCustomer();
+//        JSONObject jsonObj = new JSONObject()
+//                .put("id", testUser.get("id"))
+//                .put("login", testUser.get("login"))
+//                .put("password","zaq1@WSX")
+//                .put("firstname","UpdatedFirstname")
+//                .put("lastname","UpdatedLastname");
+//
+//        given().contentType(ContentType.JSON)
+//                .body(jsonObj.toString())
+//                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+//                .put("user/customer")
+//                .then()
+//                .assertThat()
+//                .body("login", containsString(testUser.getString("login")))
+//                .body("firstname", containsString("UpdatedFirstname"))
+//                .body("lastname", containsString("UpdatedLastname"))
+//                .body("active", equalTo(true))
+//                .statusCode(200);
+//
+//        jsonObj = new JSONObject()
+//                .put("id", testUser.get("id"))
+//                .put("login", "TestCustomer")
+//                .put("password","zaq1@WSX")
+//                .put("firstname","UpdatedFirstname")
+//                .put("lastname","UpdatedLastname");
+//
+//        given().contentType(ContentType.JSON)
+//                .body(jsonObj.toString())
+//                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+//                .put("user/customer")
+//                .then()
+//                .assertThat()
+//                .body("constraint", containsString("User with this login already exists."))
+//                .statusCode(400);
+//    }
 
-        given().contentType(ContentType.JSON)
-                .body(jsonObj.toString())
-                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                .put("user/customer")
-                .then()
-                .assertThat()
-                .body("login", containsString(testUser.getString("login")))
-                .body("firstname", containsString("UpdatedFirstname"))
-                .body("lastname", containsString("UpdatedLastname"))
-                .body("active", equalTo(true))
-                .statusCode(200);
-
-        jsonObj = new JSONObject()
-                .put("id", testUser.get("id"))
-                .put("login", "TestCustomer")
-                .put("password","zaq1@WSX")
-                .put("firstname","UpdatedFirstname")
-                .put("lastname","UpdatedLastname");
-
-        given().contentType(ContentType.JSON)
-                .body(jsonObj.toString())
-                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                .put("user/customer")
-                .then()
-                .assertThat()
-                .body("constraint", containsString("User with this login already exists."))
-                .statusCode(400);
-    }
-
-    @Test
-    public void activateCustomerTest() {
-        JSONObject testUser = addTestCustomer();
-        JSONObject jsonObj = new JSONObject()
-                .put("id", testUser.get("id"))
-                .put("active", false);
-
-        RequestSpecification rs = RestAssured.given();
-
-        rs.contentType(ContentType.JSON)
-                .body(jsonObj.toString())
-                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                .patch("user/customer")
-                .then()
-                .assertThat()
-                .body("login", containsString(testUser.getString("login")))
-                .body("firstname", containsString(testUser.getString("firstname")))
-                .body("lastname", containsString(testUser.getString("lastname")))
-                .body("active", equalTo(false))
-                .statusCode(200);
-    }
+//    @Test
+//    public void activateCustomerTest() {
+//        JSONObject testUser = addTestCustomer();
+//        JSONObject jsonObj = new JSONObject()
+//                .put("id", testUser.get("id"))
+//                .put("active", false);
+//
+//        RequestSpecification rs = RestAssured.given();
+//
+//        rs.contentType(ContentType.JSON)
+//                .body(jsonObj.toString())
+//                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+//                .patch("user/customer")
+//                .then()
+//                .assertThat()
+//                .body("login", containsString(testUser.getString("login")))
+//                .body("firstname", containsString(testUser.getString("firstname")))
+//                .body("lastname", containsString(testUser.getString("lastname")))
+//                .body("active", equalTo(false))
+//                .statusCode(200);
+//    }
 
     public JSONObject addTestCustomer() {
         int randomNum = ThreadLocalRandom.current().nextInt(112312, 888888);
@@ -185,7 +188,7 @@ public class CustomerTests {
 
         JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
 
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
         given().contentType(ContentType.JSON)
                 .body(userServiceObj.toString())
                 .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
@@ -195,16 +198,16 @@ public class CustomerTests {
                 .body()
                 .asString();
 
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
-        return new JSONObject(
-                given().contentType(ContentType.JSON)
-                        .body(jsonObj.toString())
-                        .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                        .post("user/customer")
-                        .then()
-                        .extract()
-                        .body()
-                        .asString()
-        );
+
+        String obj = given().contentType(ContentType.JSON)
+                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+                .get("user/" + jsonObj.getString("login"))
+                .then()
+                .extract()
+                .body()
+                .asString();
+
+        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
+        return new JSONObject(obj);
     }
 }

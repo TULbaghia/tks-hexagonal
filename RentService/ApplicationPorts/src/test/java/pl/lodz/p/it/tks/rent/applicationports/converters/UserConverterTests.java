@@ -1,7 +1,7 @@
 package pl.lodz.p.it.tks.rent.applicationports.converters;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.data.user.AdminEnt;
 import pl.lodz.p.it.tks.rent.data.user.CustomerEnt;
 import pl.lodz.p.it.tks.rent.data.user.EmployeeEnt;
@@ -21,12 +21,12 @@ public class UserConverterTests {
 
         CustomerEnt customerEnt = UserConverter.convertDomainToEnt(customer);
 
-        Assert.assertEquals(customerEnt.getId(), customer.getId());
-        Assert.assertEquals(customerEnt.isActive(), customer.isActive());
-        Assert.assertEquals(customerEnt.getFirstname(), customer.getFirstname());
-        Assert.assertEquals(customerEnt.getLastname(), customer.getLastname());
-        Assert.assertEquals(customerEnt.getLogin(), customer.getLogin());
-        Assert.assertEquals(customerEnt.getRentsNumber(), customer.getRentsNumber());
+        Assertions.assertEquals(customerEnt.getId(), customer.getId());
+        Assertions.assertEquals(customerEnt.isActive(), customer.isActive());
+        Assertions.assertEquals(customerEnt.getFirstname(), customer.getFirstname());
+        Assertions.assertEquals(customerEnt.getLastname(), customer.getLastname());
+        Assertions.assertEquals(customerEnt.getLogin(), customer.getLogin());
+        Assertions.assertEquals(customerEnt.getRentsNumber(), customer.getRentsNumber());
     }
 
     @Test
@@ -39,11 +39,11 @@ public class UserConverterTests {
 
         EmployeeEnt employeeEnt = UserConverter.convertDomainToEnt(employee);
 
-        Assert.assertEquals(employeeEnt.getId(), employee.getId());
-        Assert.assertEquals(employeeEnt.isActive(), employee.isActive());
-        Assert.assertEquals(employeeEnt.getFirstname(), employee.getFirstname());
-        Assert.assertEquals(employeeEnt.getLastname(), employee.getLastname());
-        Assert.assertEquals(employeeEnt.getLogin(), employee.getLogin());
+        Assertions.assertEquals(employeeEnt.getId(), employee.getId());
+        Assertions.assertEquals(employeeEnt.isActive(), employee.isActive());
+        Assertions.assertEquals(employeeEnt.getFirstname(), employee.getFirstname());
+        Assertions.assertEquals(employeeEnt.getLastname(), employee.getLastname());
+        Assertions.assertEquals(employeeEnt.getLogin(), employee.getLogin());
     }
 
     @Test
@@ -56,10 +56,10 @@ public class UserConverterTests {
 
         AdminEnt adminEnt = UserConverter.convertDomainToEnt(admin);
 
-        Assert.assertEquals(adminEnt.getId(), admin.getId());
-        Assert.assertEquals(adminEnt.isActive(), admin.isActive());
-        Assert.assertEquals(adminEnt.getFirstname(), admin.getFirstname());
-        Assert.assertEquals(adminEnt.getLastname(), admin.getLastname());
-        Assert.assertEquals(adminEnt.getLogin(), admin.getLogin());
+        Assertions.assertEquals(adminEnt.getId(), admin.getId());
+        Assertions.assertEquals(adminEnt.isActive(), admin.isActive());
+        Assertions.assertEquals(adminEnt.getFirstname(), admin.getFirstname());
+        Assertions.assertEquals(adminEnt.getLastname(), admin.getLastname());
+        Assertions.assertEquals(adminEnt.getLogin(), admin.getLogin());
     }
 }

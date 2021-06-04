@@ -1,8 +1,9 @@
 package pl.lodz.p.it.tks.rent.applicationservices;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.CustomerRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.domainmodel.user.Customer;
@@ -12,24 +13,24 @@ import java.util.List;
 
 public class CustomerServiceTest {
 
-    private CustomerService customerService;
-    private CustomerRepositoryAdapter customerRepositoryAdapter;
+    private static CustomerService customerService;
+    private static CustomerRepositoryAdapter customerRepositoryAdapter;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeMethod() {
         customerRepositoryAdapter = new CustomerRepositoryAdapter(new UserEntRepository());
-        customerService = new CustomerService(customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter);
+        customerService = new CustomerService(customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter, customerRepositoryAdapter);
     }
 
     @Test
     public void addCustomerTest() throws RepositoryAdapterException {
         customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer").build());
-        Assert.assertThrows(RepositoryAdapterException.class, () ->
+        Assertions.assertThrows(RepositoryAdapterException.class, () ->
                 customerService.add(Customer.builder().firstname("Jan").lastname("Customer").login("customer").build()));
 
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getLogin(), "customer");
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "Customer");
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "Jan");
+        Assertions.assertEquals(customerRepositoryAdapter.get("customer").getLogin(), "customer");
+        Assertions.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "Customer");
+        Assertions.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "Jan");
     }
 
     @Test
@@ -42,11 +43,11 @@ public class CustomerServiceTest {
 
         Customer update = customerService.update(old);
 
-        Assert.assertEquals(update.getFirstname(), "T1");
-        Assert.assertEquals(update.getLastname(), "T2");
+        Assertions.assertEquals(update.getFirstname(), "T1");
+        Assertions.assertEquals(update.getLastname(), "T2");
 
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "T1");
-        Assert.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "T2");
+        Assertions.assertEquals(customerRepositoryAdapter.get("customer").getFirstname(), "T1");
+        Assertions.assertEquals(customerRepositoryAdapter.get("customer").getLastname(), "T2");
     }
 
     @Test
@@ -57,10 +58,10 @@ public class CustomerServiceTest {
 
         List<Customer> customerList = customerService.getAll();
 
-        Assert.assertEquals(customerList.size(), 3);
-        Assert.assertEquals(customerList.get(0).getLogin(), "customer1");
-        Assert.assertEquals(customerList.get(1).getLogin(), "customer2");
-        Assert.assertEquals(customerList.get(2).getLogin(), "customer3");
+        Assertions.assertEquals(customerList.size(), 3);
+        Assertions.assertEquals(customerList.get(0).getLogin(), "customer1");
+        Assertions.assertEquals(customerList.get(1).getLogin(), "customer2");
+        Assertions.assertEquals(customerList.get(2).getLogin(), "customer3");
 
     }
 
@@ -70,7 +71,7 @@ public class CustomerServiceTest {
 
         Customer get = customerService.get(a.getId());
 
-        Assert.assertEquals(get, a);
+        Assertions.assertEquals(get, a);
     }
 
     @Test
@@ -79,6 +80,6 @@ public class CustomerServiceTest {
 
         Customer get = customerService.get(a.getLogin());
 
-        Assert.assertEquals(get, a);
+        Assertions.assertEquals(get, a);
     }
 }

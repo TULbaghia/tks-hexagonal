@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.applicationports.adapters;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.EconomyCarRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.data.resources.EconomyCarEnt;
@@ -15,10 +15,10 @@ import java.util.UUID;
 
 public class EconomyCarRepositoryAdapterTests {
 
-    private EconomyCarRepositoryAdapter economyCarRepositoryAdapter;
-    private CarEntRepository carEntRepository;
+    private static EconomyCarRepositoryAdapter economyCarRepositoryAdapter;
+    private static CarEntRepository carEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
         economyCarRepositoryAdapter = new EconomyCarRepositoryAdapter(new CarEntRepository());
         carEntRepository = new CarEntRepository();
@@ -39,9 +39,9 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         economyCarRepositoryAdapter.add(economyCar);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.add(economyCar));
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.add(economyCar));
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
     }
 
     @Test
@@ -56,19 +56,19 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCar getCar = economyCarRepositoryAdapter.get(car.getId());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.get(UUID.randomUUID()));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.get(UUID.randomUUID()));
     }
 
     @Test
@@ -83,19 +83,19 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCar getCar = economyCarRepositoryAdapter.getEconomyCarByVin(car.getVin());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.getEconomyCarByVin("VIN"));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.getEconomyCarByVin("VIN"));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class EconomyCarRepositoryAdapterTests {
             carEntRepository.add(car);
         }
 
-        Assert.assertEquals(economyCarRepositoryAdapter.getAll().size(), carsCount);
+        Assertions.assertEquals(economyCarRepositoryAdapter.getAll().size(), carsCount);
     }
 
     @Test
@@ -128,8 +128,8 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCar updatedCar = EconomyCar.builder()
                 .id(car.getId())
@@ -142,17 +142,17 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         economyCarRepositoryAdapter.update(updatedCar);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
 
         EconomyCarEnt getUpdatedCar = (EconomyCarEnt) carEntRepository.get(car.getId());
 
-        Assert.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
-        Assert.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
-        Assert.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
-        Assert.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
-        Assert.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
-        Assert.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
-        Assert.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
+        Assertions.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
+        Assertions.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
+        Assertions.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
+        Assertions.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
+        Assertions.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
+        Assertions.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
+        Assertions.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
 
         EconomyCar noUpdateCar = EconomyCar.builder()
                 .vin("11111111111111111")
@@ -163,7 +163,7 @@ public class EconomyCarRepositoryAdapterTests {
                 .driverEquipment("Immobilizer")
                 .build();
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.update(noUpdateCar));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.update(noUpdateCar));
     }
 
     @Test
@@ -178,12 +178,12 @@ public class EconomyCarRepositoryAdapterTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         economyCarRepositoryAdapter.delete(car.getId());
-        Assert.assertEquals(carEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 0);
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.delete(car.getId()));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> economyCarRepositoryAdapter.delete(car.getId()));
     }
 }

@@ -40,6 +40,11 @@ public class UserEntRepository extends EntRepository<UserEnt> {
         return super.update(item);
     }
 
+    @Override
+    public synchronized void delete(UUID id) throws RepositoryEntException {
+        super.delete(id);
+    }
+
     @PostConstruct
     public void loadSampleData() {
         try {
@@ -67,9 +72,9 @@ public class UserEntRepository extends EntRepository<UserEnt> {
             );
 
             add(AdminEnt.builder()
-                    .firstname("TestAdmin")
+                    .firstname("TestowyError")
                     .lastname("TestAdmin")
-                    .login("TestAdmin")
+                    .login("TestowyError")
                     .build()
             );
         } catch (RepositoryEntException e) {

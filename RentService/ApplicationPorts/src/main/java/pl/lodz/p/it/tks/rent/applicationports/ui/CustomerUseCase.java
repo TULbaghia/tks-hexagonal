@@ -17,4 +17,6 @@ public interface CustomerUseCase {
     Customer get(UUID uuid) throws RepositoryAdapterException;
 
     Customer get(String login) throws RepositoryAdapterException;
+
+    void delete(UUID uuid) throws RepositoryAdapterException;
 }

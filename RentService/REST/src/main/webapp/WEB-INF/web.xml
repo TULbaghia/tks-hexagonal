@@ -118,15 +118,15 @@
         </user-data-constraint>
     </security-constraint>
 
-    <error-page>
-        <error-code>403</error-code>
-        <location>/api/errors/403</location>
-    </error-page>
+<!--    <error-page>-->
+<!--        <error-code>403</error-code>-->
+<!--        <location>/api/errors/403</location>-->
+<!--    </error-page>-->
 
-    <error-page>
-        <error-code>401</error-code>
-        <location>/api/errors/401</location>
-    </error-page>
+<!--    <error-page>-->
+<!--        <error-code>401</error-code>-->
+<!--        <location>/api/errors/401</location>-->
+<!--    </error-page>-->
 
     <env-entry>
         <env-entry-name>SECRET</env-entry-name>

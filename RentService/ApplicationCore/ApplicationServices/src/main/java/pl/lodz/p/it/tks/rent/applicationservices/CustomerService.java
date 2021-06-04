@@ -1,6 +1,7 @@
 package pl.lodz.p.it.tks.rent.applicationservices;
 
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
+import pl.lodz.p.it.tks.rent.applicationports.infrastructure.user.admin.DeleteAdminPort;
 import pl.lodz.p.it.tks.rent.applicationports.infrastructure.user.customer.*;
 import pl.lodz.p.it.tks.rent.applicationports.ui.CustomerUseCase;
 import pl.lodz.p.it.tks.rent.domainmodel.user.Customer;
@@ -17,14 +18,16 @@ public class CustomerService implements CustomerUseCase {
     private final GetAllCustomerPort getAllCustomerPort;
     private final GetCustomerByIdPort getCustomerByIdPort;
     private final GetCustomerByLoginPort getCustomerByLoginPort;
+    private final DeleteCustomerPort deleteCustomerPort;
 
     @Inject
-    public CustomerService(AddCustomerPort addCustomerPort, UpdateCustomerPort updateCustomerPort, GetAllCustomerPort getAllCustomerPort, GetCustomerByIdPort getCustomerByIdPort, GetCustomerByLoginPort getCustomerByLoginPort) {
+    public CustomerService(DeleteCustomerPort deleteCustomerPort, AddCustomerPort addCustomerPort, UpdateCustomerPort updateCustomerPort, GetAllCustomerPort getAllCustomerPort, GetCustomerByIdPort getCustomerByIdPort, GetCustomerByLoginPort getCustomerByLoginPort) {
         this.addCustomerPort = addCustomerPort;
         this.updateCustomerPort = updateCustomerPort;
         this.getAllCustomerPort = getAllCustomerPort;
         this.getCustomerByIdPort = getCustomerByIdPort;
         this.getCustomerByLoginPort = getCustomerByLoginPort;
+        this.deleteCustomerPort = deleteCustomerPort;
     }
 
     @Override
@@ -56,5 +59,10 @@ public class CustomerService implements CustomerUseCase {
     @Override
     public Customer get(String login) throws RepositoryAdapterException {
         return getCustomerByLoginPort.get(login);
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        deleteCustomerPort.delete(uuid);
     }
 }

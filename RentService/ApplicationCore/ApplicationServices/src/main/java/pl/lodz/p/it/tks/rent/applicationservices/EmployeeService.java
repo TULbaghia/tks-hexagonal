@@ -17,14 +17,16 @@ public class EmployeeService implements EmployeeUseCase {
     private final GetAllEmployeePort getAllEmployeePort;
     private final GetEmployeeByIdPort getEmployeeByIdPort;
     private final GetEmployeeByLoginPort getEmployeeByLoginPort;
+    private final DeleteEmployeePort deleteEmployeePort;
 
     @Inject
-    public EmployeeService(AddEmployeePort addEmployeePort, UpdateEmployeePort updateEmployeePort, GetAllEmployeePort getAllEmployeePort, GetEmployeeByIdPort getEmployeeByIdPort, GetEmployeeByLoginPort getEmployeeByLoginPort) {
+    public EmployeeService(DeleteEmployeePort deleteEmployeePort, AddEmployeePort addEmployeePort, UpdateEmployeePort updateEmployeePort, GetAllEmployeePort getAllEmployeePort, GetEmployeeByIdPort getEmployeeByIdPort, GetEmployeeByLoginPort getEmployeeByLoginPort) {
         this.addEmployeePort = addEmployeePort;
         this.updateEmployeePort = updateEmployeePort;
         this.getAllEmployeePort = getAllEmployeePort;
         this.getEmployeeByIdPort = getEmployeeByIdPort;
         this.getEmployeeByLoginPort = getEmployeeByLoginPort;
+        this.deleteEmployeePort = deleteEmployeePort;
     }
 
     @Override
@@ -56,5 +58,10 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee get(String login) throws RepositoryAdapterException {
         return getEmployeeByLoginPort.get(login);
+    }
+
+    @Override
+    public void delete(UUID uuid) throws RepositoryAdapterException {
+        deleteEmployeePort.delete(uuid);
     }
 }

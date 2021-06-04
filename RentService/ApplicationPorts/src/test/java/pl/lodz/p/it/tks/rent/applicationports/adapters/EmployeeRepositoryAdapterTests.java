@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.applicationports.adapters;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.EmployeeRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.data.user.EmployeeEnt;
@@ -13,10 +13,10 @@ import pl.lodz.p.it.tks.rent.repository.exception.RepositoryEntException;
 import java.lang.reflect.Field;
 
 public class EmployeeRepositoryAdapterTests {
-    private EmployeeRepositoryAdapter employeeRepositoryAdapter;
-    private UserEntRepository userEntRepository;
+    private static EmployeeRepositoryAdapter employeeRepositoryAdapter;
+    private static UserEntRepository userEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() throws IllegalAccessException, NoSuchFieldException {
         employeeRepositoryAdapter = new EmployeeRepositoryAdapter(new UserEntRepository());
         userEntRepository = new UserEntRepository();
@@ -33,10 +33,10 @@ public class EmployeeRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         employeeRepositoryAdapter.add(employee);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotSame(userEntRepository.get("Klient"), employee);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotSame(userEntRepository.get("Klient"), employee);
     }
 
     @Test
@@ -47,17 +47,17 @@ public class EmployeeRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(employee);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Employee getEmployee = employeeRepositoryAdapter.get(employee.getId());
-        Assert.assertNotSame(getEmployee, employee);
-        Assert.assertEquals(getEmployee.getId(), employee.getId());
-        Assert.assertEquals(getEmployee.isActive(), employee.isActive());
-        Assert.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
-        Assert.assertEquals(getEmployee.getLastname(), employee.getLastname());
-        Assert.assertEquals(getEmployee.getLogin(), employee.getLogin());
+        Assertions.assertNotSame(getEmployee, employee);
+        Assertions.assertEquals(getEmployee.getId(), employee.getId());
+        Assertions.assertEquals(getEmployee.isActive(), employee.isActive());
+        Assertions.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
+        Assertions.assertEquals(getEmployee.getLastname(), employee.getLastname());
+        Assertions.assertEquals(getEmployee.getLogin(), employee.getLogin());
     }
 
     @Test
@@ -68,17 +68,17 @@ public class EmployeeRepositoryAdapterTests {
                 .login("Klient")
                 .build();
 
-        Assert.assertEquals(userEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 0);
         userEntRepository.add(employee);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         Employee getEmployee = employeeRepositoryAdapter.get("Klient");
-        Assert.assertNotSame(getEmployee, employee);
-        Assert.assertEquals(getEmployee.getId(), employee.getId());
-        Assert.assertEquals(getEmployee.isActive(), employee.isActive());
-        Assert.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
-        Assert.assertEquals(getEmployee.getLastname(), employee.getLastname());
-        Assert.assertEquals(getEmployee.getLogin(), employee.getLogin());
+        Assertions.assertNotSame(getEmployee, employee);
+        Assertions.assertEquals(getEmployee.getId(), employee.getId());
+        Assertions.assertEquals(getEmployee.isActive(), employee.isActive());
+        Assertions.assertEquals(getEmployee.getFirstname(), employee.getFirstname());
+        Assertions.assertEquals(getEmployee.getLastname(), employee.getLastname());
+        Assertions.assertEquals(getEmployee.getLogin(), employee.getLogin());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class EmployeeRepositoryAdapterTests {
             userEntRepository.add(employeeEnt);
         }
 
-        Assert.assertEquals(employeeRepositoryAdapter.getAll().size(), usersCount);
+        Assertions.assertEquals(employeeRepositoryAdapter.getAll().size(), usersCount);
     }
 
     @Test
@@ -105,8 +105,8 @@ public class EmployeeRepositoryAdapterTests {
                 .build();
 
         userEntRepository.add(employeeEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(employeeEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(employeeEnt.getId(), null);
 
         Employee updatedEmployee = Employee.builder()
                 .id(employeeEnt.getId())
@@ -116,14 +116,14 @@ public class EmployeeRepositoryAdapterTests {
                 .build();
 
         employeeRepositoryAdapter.update(updatedEmployee);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         EmployeeEnt getUpdatedEmployee = (EmployeeEnt) userEntRepository.get(employeeEnt.getId());
-        Assert.assertEquals(getUpdatedEmployee.getId(), updatedEmployee.getId());
-        Assert.assertEquals(getUpdatedEmployee.isActive(), updatedEmployee.isActive());
-        Assert.assertEquals(getUpdatedEmployee.getFirstname(), updatedEmployee.getFirstname());
-        Assert.assertEquals(getUpdatedEmployee.getLastname(), updatedEmployee.getLastname());
-        Assert.assertEquals(getUpdatedEmployee.getLogin(), updatedEmployee.getLogin());
+        Assertions.assertEquals(getUpdatedEmployee.getId(), updatedEmployee.getId());
+        Assertions.assertEquals(getUpdatedEmployee.isActive(), updatedEmployee.isActive());
+        Assertions.assertEquals(getUpdatedEmployee.getFirstname(), updatedEmployee.getFirstname());
+        Assertions.assertEquals(getUpdatedEmployee.getLastname(), updatedEmployee.getLastname());
+        Assertions.assertEquals(getUpdatedEmployee.getLogin(), updatedEmployee.getLogin());
 
         Employee updatedEmployee2 = Employee.builder()
                 .login(employeeEnt.getLogin())
@@ -131,6 +131,6 @@ public class EmployeeRepositoryAdapterTests {
                 .lastname("TestoweNazwisko")
                 .build();
 
-        Assert.assertThrows(RepositoryAdapterException.class, () -> employeeRepositoryAdapter.update(updatedEmployee2));
+        Assertions.assertThrows(RepositoryAdapterException.class, () -> employeeRepositoryAdapter.update(updatedEmployee2));
     }
 }

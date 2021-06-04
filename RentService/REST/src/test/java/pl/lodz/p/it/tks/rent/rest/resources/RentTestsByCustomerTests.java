@@ -6,9 +6,11 @@ import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import pl.lodz.p.it.tks.rent.rest.AbstractContainer;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,22 +19,24 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class RentTestsByCustomer {
-    private String JWT_TOKEN;
+@Testcontainers
+public class RentTestsByCustomerTests extends AbstractContainer {
+    private static String JWT_TOKEN;
 
-    @BeforeClass
-    public void setup() {
-        RestAssured.port = 8181;
+    @BeforeAll
+    public static void setup() {
+        getService();
+        RestAssured.port = serviceOne.getMappedPort(8181);
         RestAssured.useRelaxedHTTPSValidation();
 
         JWT_TOKEN = login("TestEmployee", "zaq1@WSX");
     }
 
-    public String login(String username, String password) {
-        RestAssured.port = 8181;
+    public static String login(String username, String password) {
+        RestAssured.port = serviceOne.getMappedPort(8181);
         RestAssured.useRelaxedHTTPSValidation();
 
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
         JSONObject jsonObj = new JSONObject()
                 .put("login", username)
                 .put("password", password);
@@ -45,7 +49,7 @@ public class RentTestsByCustomer {
                 .extract()
                 .response();
 
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
+        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
 
         return r.getBody().asString();
     }
@@ -118,8 +122,8 @@ public class RentTestsByCustomer {
         );
 
         int lastIndex = customersReservations.length() - 1;
-        Assert.assertEquals(customersReservations.getJSONObject(lastIndex).getString("customerId"), testCustomer.getString("id"));
-        Assert.assertEquals(customersReservations.getJSONObject(lastIndex - 1).getString("customerId"), testCustomer.getString("id"));
+        Assertions.assertEquals(customersReservations.getJSONObject(lastIndex).getString("customerId"), testCustomer.getString("id"));
+        Assertions.assertEquals(customersReservations.getJSONObject(lastIndex - 1).getString("customerId"), testCustomer.getString("id"));
     }
 
     public JSONObject addTestCustomer() {
@@ -131,7 +135,7 @@ public class RentTestsByCustomer {
 
         JSONObject userServiceObj = new JSONObject(jsonObj.toString()).put("userType", "CUSTOMER").put("password", "zaq1@WSX");
 
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
+        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
         given().contentType(ContentType.JSON)
                 .body(userServiceObj.toString())
                 .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
@@ -141,17 +145,16 @@ public class RentTestsByCustomer {
                 .body()
                 .asString();
 
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
-        return new JSONObject(
-                given().contentType(ContentType.JSON)
-                        .body(jsonObj.toString())
-                        .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
-                        .post("user/customer")
-                        .then()
-                        .extract()
-                        .body()
-                        .asString()
-        );
+        String obj = given().contentType(ContentType.JSON)
+                .header(new Header("Authorization", "Bearer " + JWT_TOKEN))
+                .get("user/" + jsonObj.getString("login"))
+                .then()
+                .extract()
+                .body()
+                .asString();
+
+        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
+        return new JSONObject(obj);
     }
 
     public JSONObject addTestCar() {

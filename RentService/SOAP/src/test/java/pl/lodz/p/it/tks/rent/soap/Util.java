@@ -21,9 +21,10 @@ import java.util.Map;
 
 public class Util {
 
-    private static final String LOGINAPI_URI = "http://localhost:8080/UserSoap/LoginAPI?wsdl";
+    private static String LOGINAPI_URI = "http://localhost:%d/UserServiceApp-1.0-SNAPSHOT/LoginAPI?wsdl";
 
-    public static void authenticateUser(BindingProvider bindingProvider, String user, String password) {
+    public static void authenticateUser(BindingProvider bindingProvider, String user, String password, int mappedPort) {
+        LOGINAPI_URI = String.format(LOGINAPI_URI, mappedPort);
         Map<String, List<String>> requestHeaders = new HashMap<>();
         requestHeaders.put("Authorization", Collections.singletonList("Bearer " + authenticate(user, password)));
         bindingProvider.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, requestHeaders);

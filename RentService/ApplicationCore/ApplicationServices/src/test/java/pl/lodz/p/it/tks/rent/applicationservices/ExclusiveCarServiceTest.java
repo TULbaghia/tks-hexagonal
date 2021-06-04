@@ -1,24 +1,26 @@
 package pl.lodz.p.it.tks.rent.applicationservices;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.ExclusiveCarRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.adapters.driven.RentRepositoryAdapter;
 import pl.lodz.p.it.tks.rent.applicationports.exception.RepositoryAdapterException;
 import pl.lodz.p.it.tks.rent.domainmodel.resources.ExclusiveCar;
 import pl.lodz.p.it.tks.rent.repository.CarEntRepository;
-import pl.lodz.p.it.tks.rent.repository.RentEntRepository;import pl.lodz.p.it.tks.rent.repository.UserEntRepository;
+import pl.lodz.p.it.tks.rent.repository.RentEntRepository;
+import pl.lodz.p.it.tks.rent.repository.UserEntRepository;
 
 import java.util.List;
 
 public class ExclusiveCarServiceTest {
 
-    private ExclusiveCarService exclusiveCarService;
-    private ExclusiveCarRepositoryAdapter exclusiveCarRepositoryAdapter;
-    private RentRepositoryAdapter rentRepositoryAdapter;
+    private static ExclusiveCarService exclusiveCarService;
+    private static ExclusiveCarRepositoryAdapter exclusiveCarRepositoryAdapter;
+    private static RentRepositoryAdapter rentRepositoryAdapter;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeMethod() {
         CarEntRepository carEntRepository = new CarEntRepository();
         exclusiveCarRepositoryAdapter = new ExclusiveCarRepositoryAdapter(carEntRepository);
@@ -29,14 +31,14 @@ public class ExclusiveCarServiceTest {
     @Test
     public void addExclusiveCarTest() throws RepositoryAdapterException {
         exclusiveCarService.add(ExclusiveCar.builder().driverEquipment("TEST").brand("Mazda").basePricePerDay(50).doorNumber(5).engineCapacity(998).vin("12345678901234567").boardPcName("").build());
-        Assert.assertThrows(RepositoryAdapterException.class, () ->
+        Assertions.assertThrows(RepositoryAdapterException.class, () ->
                 exclusiveCarService.add(ExclusiveCar.builder().driverEquipment("TEST").brand("Mazda").basePricePerDay(50).doorNumber(5).engineCapacity(998).vin("12345678901234567").boardPcName("").build()));
 
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDriverEquipment(), "TEST");
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBrand(), "Mazda");
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBasePricePerDay(), 50);
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDoorNumber(), 5);
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getEngineCapacity(), 998);
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDriverEquipment(), "TEST");
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBrand(), "Mazda");
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBasePricePerDay(), 50);
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDoorNumber(), 5);
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getEngineCapacity(), 998);
     }
 
     @Test
@@ -50,13 +52,13 @@ public class ExclusiveCarServiceTest {
 
         ExclusiveCar update = exclusiveCarRepositoryAdapter.update(old);
 
-        Assert.assertEquals(update.getBrand(), "Tesla");
-        Assert.assertEquals(update.getDriverEquipment(), "Radio");
-        Assert.assertEquals(update.getEngineCapacity(), 1244);
+        Assertions.assertEquals(update.getBrand(), "Tesla");
+        Assertions.assertEquals(update.getDriverEquipment(), "Radio");
+        Assertions.assertEquals(update.getEngineCapacity(), 1244);
 
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBrand(), "Tesla");
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDriverEquipment(), "Radio");
-        Assert.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getEngineCapacity(), 1244);
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getBrand(), "Tesla");
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getDriverEquipment(), "Radio");
+        Assertions.assertEquals(exclusiveCarRepositoryAdapter.getExclusiveCarByVin("12345678901234567").getEngineCapacity(), 1244);
     }
 
     @Test
@@ -67,10 +69,10 @@ public class ExclusiveCarServiceTest {
 
         List<ExclusiveCar> adminList = exclusiveCarService.getAll();
 
-        Assert.assertEquals(adminList.size(), 3);
-        Assert.assertEquals(adminList.get(0).getVin(), "12345678901234561");
-        Assert.assertEquals(adminList.get(1).getVin(), "12345678901234562");
-        Assert.assertEquals(adminList.get(2).getVin(), "12345678901234563");
+        Assertions.assertEquals(adminList.size(), 3);
+        Assertions.assertEquals(adminList.get(0).getVin(), "12345678901234561");
+        Assertions.assertEquals(adminList.get(1).getVin(), "12345678901234562");
+        Assertions.assertEquals(adminList.get(2).getVin(), "12345678901234563");
     }
 
     @Test
@@ -79,7 +81,7 @@ public class ExclusiveCarServiceTest {
 
         ExclusiveCar get = exclusiveCarService.get(a.getId());
 
-        Assert.assertEquals(get, a);
+        Assertions.assertEquals(get, a);
     }
 
     @Test
@@ -88,6 +90,6 @@ public class ExclusiveCarServiceTest {
 
         ExclusiveCar get = exclusiveCarService.get(a.getVin());
 
-        Assert.assertEquals(get, a);
+        Assertions.assertEquals(get, a);
     }
 }

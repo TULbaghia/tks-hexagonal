@@ -6,9 +6,11 @@ import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import pl.lodz.p.it.tks.rent.rest.AbstractContainer;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,13 +18,15 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-public class ExclusiveCarTests {
-    private String JWT_TOKEN;
+@Testcontainers
+public class ExclusiveCarTests extends AbstractContainer {
+    private static String JWT_TOKEN;
 
-    @BeforeClass
-    public void setup() {
-        RestAssured.baseURI = "https://localhost/UserRest/api/";
-        RestAssured.port = 8181;
+    @BeforeAll
+    public static void setup() {
+        getService();
+        RestAssured.baseURI = "https://localhost/UserServiceApp-1.0-SNAPSHOT/api/";
+        RestAssured.port = serviceOne.getMappedPort(8181);
         RestAssured.useRelaxedHTTPSValidation();
 
         JSONObject jsonObj = new JSONObject()
@@ -37,7 +41,7 @@ public class ExclusiveCarTests {
                 .extract()
                 .response();
 
-        RestAssured.baseURI = "https://localhost/RentRest/api/";
+        RestAssured.baseURI = "https://localhost/RentServiceApp-1.0-SNAPSHOT/api/";
 
         JWT_TOKEN = r.getBody().asString();
     }
@@ -106,9 +110,9 @@ public class ExclusiveCarTests {
         );
 
         int lastIndex = exclusiveCars.length() - 1;
-        Assert.assertEquals(exclusiveCars.getJSONObject(lastIndex).getString("id"), testCar3.getString("id"));
-        Assert.assertEquals(exclusiveCars.getJSONObject(lastIndex - 1).getString("id"), testCar2.getString("id"));
-        Assert.assertEquals(exclusiveCars.getJSONObject(lastIndex - 2).getString("id"), testCar1.getString("id"));
+        Assertions.assertEquals(exclusiveCars.getJSONObject(lastIndex).getString("id"), testCar3.getString("id"));
+        Assertions.assertEquals(exclusiveCars.getJSONObject(lastIndex - 1).getString("id"), testCar2.getString("id"));
+        Assertions.assertEquals(exclusiveCars.getJSONObject(lastIndex - 2).getString("id"), testCar1.getString("id"));
     }
 
     @Test

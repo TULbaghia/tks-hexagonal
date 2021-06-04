@@ -16,4 +16,6 @@ public interface AdminUseCase {
     Admin get(UUID uuid) throws RepositoryAdapterException;
 
     Admin get(String login) throws RepositoryAdapterException;
+
+    void delete(UUID uuid) throws RepositoryAdapterException;
 }

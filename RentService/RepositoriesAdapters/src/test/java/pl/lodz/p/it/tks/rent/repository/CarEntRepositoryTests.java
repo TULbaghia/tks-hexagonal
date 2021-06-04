@@ -1,7 +1,8 @@
 package pl.lodz.p.it.tks.rent.repository;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.data.resources.CarEnt;
 import pl.lodz.p.it.tks.rent.data.resources.EconomyCarEnt;
 import pl.lodz.p.it.tks.rent.repository.exception.RepositoryEntException;
@@ -10,9 +11,9 @@ import java.util.UUID;
 
 public class CarEntRepositoryTests {
 
-    private CarEntRepository carEntRepository;
+    private static CarEntRepository carEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() {
         carEntRepository = new CarEntRepository();
     }
@@ -29,9 +30,9 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertThrows(RepositoryEntException.class, () -> carEntRepository.add(car));
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertThrows(RepositoryEntException.class, () -> carEntRepository.add(car));
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
     }
 
     @Test
@@ -46,19 +47,19 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCarEnt getCar = (EconomyCarEnt) carEntRepository.get(car.getId());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
 
-        Assert.assertThrows(RepositoryEntException.class, () -> carEntRepository.get(UUID.randomUUID()));
+        Assertions.assertThrows(RepositoryEntException.class, () -> carEntRepository.get(UUID.randomUUID()));
     }
 
     @Test
@@ -73,19 +74,19 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCarEnt getCar = (EconomyCarEnt) carEntRepository.get(car.getVin());
-        Assert.assertEquals(getCar.getId(), car.getId());
-        Assert.assertEquals(getCar.getVin(), car.getVin());
-        Assert.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
-        Assert.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
-        Assert.assertEquals(getCar.getBrand(), car.getBrand());
-        Assert.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
-        Assert.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
+        Assertions.assertEquals(getCar.getId(), car.getId());
+        Assertions.assertEquals(getCar.getVin(), car.getVin());
+        Assertions.assertEquals(getCar.getEngineCapacity(), car.getEngineCapacity());
+        Assertions.assertEquals(getCar.getDoorNumber(), car.getDoorNumber());
+        Assertions.assertEquals(getCar.getBrand(), car.getBrand());
+        Assertions.assertEquals(getCar.getBasePricePerDay(), car.getBasePricePerDay());
+        Assertions.assertEquals(getCar.getDriverEquipment(), car.getDriverEquipment());
 
-        Assert.assertThrows(RepositoryEntException.class, () -> carEntRepository.get("VIN"));
+        Assertions.assertThrows(RepositoryEntException.class, () -> carEntRepository.get("VIN"));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class CarEntRepositoryTests {
             carEntRepository.add(car);
         }
 
-        Assert.assertEquals(carEntRepository.getAll().size(), carsCount);
+        Assertions.assertEquals(carEntRepository.getAll().size(), carsCount);
     }
 
     @Test
@@ -118,13 +119,13 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         carEntRepository.delete(car.getId());
-        Assert.assertEquals(carEntRepository.getAll().size(), 0);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 0);
 
-        Assert.assertThrows(RepositoryEntException.class, () -> carEntRepository.delete(car.getId()));
+        Assertions.assertThrows(RepositoryEntException.class, () -> carEntRepository.delete(car.getId()));
     }
 
     @Test
@@ -139,8 +140,8 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.add(car);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(car.getId(), null);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(car.getId(), null);
 
         EconomyCarEnt updatedCar = EconomyCarEnt.builder()
                 .id(car.getId())
@@ -153,18 +154,18 @@ public class CarEntRepositoryTests {
                 .build();
 
         carEntRepository.update(updatedCar);
-        Assert.assertEquals(carEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(carEntRepository.getAll().size(), 1);
 
         EconomyCarEnt getUpdatedCar = (EconomyCarEnt) carEntRepository.get(car.getId());
 
-        Assert.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
-        Assert.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
-        Assert.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
-        Assert.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
-        Assert.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
-        Assert.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
-        Assert.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
+        Assertions.assertEquals(getUpdatedCar.getId(), updatedCar.getId());
+        Assertions.assertEquals(getUpdatedCar.getVin(), updatedCar.getVin());
+        Assertions.assertEquals(getUpdatedCar.getEngineCapacity(), updatedCar.getEngineCapacity());
+        Assertions.assertEquals(getUpdatedCar.getDoorNumber(), updatedCar.getDoorNumber());
+        Assertions.assertEquals(getUpdatedCar.getBrand(), updatedCar.getBrand());
+        Assertions.assertEquals(getUpdatedCar.getBasePricePerDay(), updatedCar.getBasePricePerDay());
+        Assertions.assertEquals(getUpdatedCar.getDriverEquipment(), updatedCar.getDriverEquipment());
 
-        Assert.assertThrows(RepositoryEntException.class, () -> carEntRepository.update(new EconomyCarEnt()));
+        Assertions.assertThrows(RepositoryEntException.class, () -> carEntRepository.update(new EconomyCarEnt()));
     }
 }

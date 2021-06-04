@@ -1,8 +1,8 @@
 package pl.lodz.p.it.tks.rent.repository;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.tks.rent.data.user.CustomerEnt;
 import pl.lodz.p.it.tks.rent.repository.exception.RepositoryEntException;
 
@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public class UserEntRepositoryTests {
 
-    private UserEntRepository userEntRepository;
+    private static UserEntRepository userEntRepository;
 
-    @BeforeMethod
+    @BeforeEach
     public void beforeTest() {
         userEntRepository = new UserEntRepository();
     }
@@ -26,9 +26,9 @@ public class UserEntRepositoryTests {
                 .build();
 
         userEntRepository.add(customerEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.add(customerEnt));
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertThrows(RepositoryEntException.class, () -> userEntRepository.add(customerEnt));
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
     }
 
     @Test
@@ -40,18 +40,18 @@ public class UserEntRepositoryTests {
                 .build();
 
         userEntRepository.add(customerEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(customerEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(customerEnt.getId(), null);
 
         CustomerEnt getCustomer = (CustomerEnt) userEntRepository.get(customerEnt.getId());
-        Assert.assertEquals(getCustomer.getId(), customerEnt.getId());
-        Assert.assertEquals(getCustomer.isActive(), customerEnt.isActive());
-        Assert.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
-        Assert.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
-        Assert.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
-        Assert.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
+        Assertions.assertEquals(getCustomer.getId(), customerEnt.getId());
+        Assertions.assertEquals(getCustomer.isActive(), customerEnt.isActive());
+        Assertions.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
+        Assertions.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
+        Assertions.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
+        Assertions.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
 
-        Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.get(UUID.randomUUID()));
+        Assertions.assertThrows(RepositoryEntException.class, () -> userEntRepository.get(UUID.randomUUID()));
     }
 
     @Test
@@ -63,18 +63,18 @@ public class UserEntRepositoryTests {
                 .build();
 
         userEntRepository.add(customerEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(customerEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(customerEnt.getId(), null);
 
         CustomerEnt getCustomer = (CustomerEnt) userEntRepository.get(customerEnt.getLogin());
-        Assert.assertEquals(getCustomer.getId(), customerEnt.getId());
-        Assert.assertEquals(getCustomer.isActive(), customerEnt.isActive());
-        Assert.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
-        Assert.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
-        Assert.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
-        Assert.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
+        Assertions.assertEquals(getCustomer.getId(), customerEnt.getId());
+        Assertions.assertEquals(getCustomer.isActive(), customerEnt.isActive());
+        Assertions.assertEquals(getCustomer.getFirstname(), customerEnt.getFirstname());
+        Assertions.assertEquals(getCustomer.getLastname(), customerEnt.getLastname());
+        Assertions.assertEquals(getCustomer.getLogin(), customerEnt.getLogin());
+        Assertions.assertEquals(getCustomer.getRentsNumber(), customerEnt.getRentsNumber());
 
-        Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.get("."));
+        Assertions.assertThrows(RepositoryEntException.class, () -> userEntRepository.get("."));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class UserEntRepositoryTests {
             userEntRepository.add(customerEnt);
         }
 
-        Assert.assertEquals(userEntRepository.getAll().size(), usersCount);
+        Assertions.assertEquals(userEntRepository.getAll().size(), usersCount);
     }
 
     @Test
@@ -101,8 +101,8 @@ public class UserEntRepositoryTests {
                 .build();
 
         userEntRepository.add(customerEnt);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
-        Assert.assertNotEquals(customerEnt.getId(), null);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertNotEquals(customerEnt.getId(), null);
 
         CustomerEnt updatedCustomer = CustomerEnt.builder()
                 .id(customerEnt.getId())
@@ -112,18 +112,18 @@ public class UserEntRepositoryTests {
                 .build();
 
         userEntRepository.update(updatedCustomer);
-        Assert.assertEquals(userEntRepository.getAll().size(), 1);
+        Assertions.assertEquals(userEntRepository.getAll().size(), 1);
 
         CustomerEnt getUpdatedCustomer = (CustomerEnt) userEntRepository.get(customerEnt.getId());
-        Assert.assertEquals(getUpdatedCustomer.getId(), updatedCustomer.getId());
-        Assert.assertEquals(getUpdatedCustomer.isActive(), updatedCustomer.isActive());
-        Assert.assertEquals(getUpdatedCustomer.getFirstname(), updatedCustomer.getFirstname());
-        Assert.assertEquals(getUpdatedCustomer.getLastname(), updatedCustomer.getLastname());
-        Assert.assertEquals(getUpdatedCustomer.getLogin(), updatedCustomer.getLogin());
-        Assert.assertEquals(getUpdatedCustomer.getRentsNumber(), updatedCustomer.getRentsNumber());
+        Assertions.assertEquals(getUpdatedCustomer.getId(), updatedCustomer.getId());
+        Assertions.assertEquals(getUpdatedCustomer.isActive(), updatedCustomer.isActive());
+        Assertions.assertEquals(getUpdatedCustomer.getFirstname(), updatedCustomer.getFirstname());
+        Assertions.assertEquals(getUpdatedCustomer.getLastname(), updatedCustomer.getLastname());
+        Assertions.assertEquals(getUpdatedCustomer.getLogin(), updatedCustomer.getLogin());
+        Assertions.assertEquals(getUpdatedCustomer.getRentsNumber(), updatedCustomer.getRentsNumber());
 
 
-        Assert.assertThrows(RepositoryEntException.class, () -> userEntRepository.update(new CustomerEnt()));
+        Assertions.assertThrows(RepositoryEntException.class, () -> userEntRepository.update(new CustomerEnt()));
     }
 }
 
