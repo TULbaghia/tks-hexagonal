@@ -4,7 +4,7 @@ Technologies of network components - hexagonal architecture with openmq
 
 ## Team
 
-| Name Surname 		   |
-| -------------------- |
-| Paweł Guzek          |
-| Michał Maksajda 4369 |
+| Name Surname 		|
+| --------------- |
+| Paweł Guzek     |
+| Michał Maksajda |
