@@ -28,20 +28,6 @@ public class AdminService {
         this.adminUseCase = adminUseCase;
     }
 
-    @POST
-    public String addAdmin(@AddUserValid UserDto userDto) {
-        Admin newUser = Admin.builder()
-                .firstname(userDto.getFirstname())
-                .lastname(userDto.getLastname())
-                .login(userDto.getLogin())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(adminUseCase.add(newUser))).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
-        }
-    }
-
     @GET
     public String getAllAdmins() {
         return JSONObject.valueToString(adminUseCase.getAll().stream().map(UserDto::toDto).collect(Collectors.toList()));
@@ -57,38 +43,5 @@ public class AdminService {
             user = adminUseCase.get(id);
         }
         return JSONObject.wrap(UserDto.toDto(adminUseCase.get(user.getId()))).toString();
-    }
-
-    @PUT
-    public String updateAdmin(@UpdateUserValid UserDto userDto) {
-        Admin editingUser = Admin.builder()
-                .id(UUID.fromString(userDto.getId()))
-                .login(userDto.getLogin())
-                .firstname(userDto.getFirstname())
-                .lastname(userDto.getLastname())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(adminUseCase.update(editingUser))).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
-        }
-    }
-
-    @PATCH
-    public String activateAdmin(@ActivateUserValid UserDto userDto) throws RepositoryAdapterException {
-        Admin user = adminUseCase.get(UUID.fromString(userDto.getId()));
-
-        Admin activatedUser = Admin.builder()
-                .id(UUID.fromString(userDto.getId()))
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .login(user.getLogin())
-                .isActive(userDto.getActive())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(adminUseCase.update(activatedUser))).toString();
-        } catch (RepositoryAdapterException e ) {
-            throw new RestException(e.getMessage());
-        }
     }
 }

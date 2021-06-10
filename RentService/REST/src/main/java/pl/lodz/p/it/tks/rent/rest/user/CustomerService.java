@@ -28,20 +28,6 @@ public class CustomerService {
         this.customerUseCase = customerUseCase;
     }
 
-    @POST
-    public String addCustomer(@AddUserValid UserDto userDto) {
-        Customer newUser = Customer.builder()
-                .firstname(userDto.getFirstname())
-                .lastname(userDto.getLastname())
-                .login(userDto.getLogin())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(customerUseCase.add(newUser))).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
-        }
-    }
-
     @GET
     public String getAllCustomers() {
         return JSONObject.valueToString(customerUseCase.getAll().stream().map(UserDto::toDto).collect(Collectors.toList()));
@@ -59,36 +45,4 @@ public class CustomerService {
         return JSONObject.wrap(UserDto.toDto(customerUseCase.get(user.getId()))).toString();
     }
 
-    @PUT
-    public String updateCustomer(@UpdateUserValid UserDto userDto) {
-        Customer editingUser = Customer.builder()
-                .id(UUID.fromString(userDto.getId()))
-                .login(userDto.getLogin())
-                .firstname(userDto.getFirstname())
-                .lastname(userDto.getLastname())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(customerUseCase.update(editingUser))).toString();
-        } catch (RepositoryAdapterException e) {
-            throw new RestException(e.getMessage());
-        }
-    }
-
-    @PATCH
-    public String activateCustomer(@ActivateUserValid UserDto userDto) throws RepositoryAdapterException {
-        Customer user = customerUseCase.get(UUID.fromString(userDto.getId()));
-
-        Customer activatedUser = Customer.builder()
-                .id(UUID.fromString(userDto.getId()))
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .login(user.getLogin())
-                .isActive(userDto.getActive())
-                .build();
-        try {
-            return JSONObject.wrap(UserDto.toDto(customerUseCase.update(activatedUser))).toString();
-        } catch (RepositoryAdapterException e ) {
-            throw new RestException(e.getMessage());
-        }
-    }
 }
